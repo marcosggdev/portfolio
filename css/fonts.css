@@ -1,9 +1,33 @@
+/*font for header title (biggest ones)*/
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 /*for titles*/
 @import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
-
-h1, h2, h3, h4 {
+/*for plain text*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+h1 {
+    font-family: 'Anton';
+    margin: 0;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+h2, h3, h4 {
     font-family: 'Rubik Mono One';
     margin: 0;
     padding-top: 1em;
     padding-bottom: 1em;
+}
+h1 {
+    font-size: 48pt;
+}
+h2 {
+    font-size: 18pt;
+}
+h3 {
+    font-size: 16pt;
+}
+h4 {
+    font-size: 14pt;
+}
+p, small, a {
+    font-family: 'Roboto Slab';
 }

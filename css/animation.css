@@ -1,0 +1,39 @@
+@keyframes highlight-glow {
+    from {
+        font-weight: 400;
+        color: white;
+    }
+    25% {
+        transform: translate(25px, 50px);
+        color: rgb(156, 56, 56);
+    }
+    50% {
+        transform: translate(-15px, 20px);
+        color: rgb(105, 203, 148);
+    }
+    75% {
+        transform: translate(5px, -20px);
+        color: rgb(86, 119, 191);
+    }
+    to {
+        font-weight: bold;
+        text-shadow: 5px;
+    }
+}
+@keyframes bounce {
+    from {
+        transform: translateX(-10px);
+    }
+    25% {
+        transform: translateX(0px);
+    }
+    50% {
+        transform: translateX(10px);
+    }
+    75% {
+        transform: translateX(0px);
+    }
+    to {
+        transform: translateX(-10px);
+    }
+}

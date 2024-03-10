@@ -19,6 +19,7 @@
     width: 100%;
     height: 50vh;
     color: white;
+    user-select: none;
 }
 #header .centered-content::before {
     position: absolute;
@@ -30,4 +31,10 @@
     opacity: 0.6;
     content: " ";
     background-color: black;
+}
+#header h1 {
+    animation-name: highlight-glow;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 }

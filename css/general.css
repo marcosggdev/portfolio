@@ -32,6 +32,7 @@ main > section {
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+    margin-top: 10vh;
 }
 main > section:nth-child(2n) {
     background-color: var(--light-dark);
