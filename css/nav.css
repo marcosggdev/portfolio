@@ -1,0 +1,43 @@
+nav {
+    position: relative;
+    width: 100%;
+    height: 10vh;
+    background: linear-gradient(45deg, #181818, #1f1f1fd9);
+    color: var(--light);
+}
+nav ul {
+    padding: 0;
+    padding-left: 5em;
+    padding-right: 5em;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 3em;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+nav ul li {
+    height: 100%;
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+nav ul li a {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.5s;
+    border-radius: 5px;
+}
+nav ul li a:hover {
+    transform: scale(110%);
+    background-color: var(--light-dark);
+}
