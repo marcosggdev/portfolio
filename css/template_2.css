@@ -40,6 +40,7 @@
     flex-grow: 1;
     transition: all 0.5s;
     justify-content: center;
+    overflow: hidden;
 }
 .template-2 .content .project {
     min-width: 30vw;
