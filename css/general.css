@@ -47,3 +47,7 @@ main > section:nth-child(2n) {
     width: 25px;
     height: 25px;
 }
+.brief-text {
+    width: 40%;
+    text-align: justify;
+}
