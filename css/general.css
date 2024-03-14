@@ -1,5 +1,6 @@
 :root {
     --dark: rgb(52, 52, 52);
+    --darker-dark: rgb(38 38 38);
     --light-dark: rgb(223, 223, 223);
     --light: rgb(239, 239, 239);
 }
@@ -45,7 +46,6 @@ main > section:nth-child(2n) {
 }
 .social-link img {
     width: 25px;
-    height: 25px;
 }
 .brief-text {
     width: 40%;

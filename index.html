@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="css/template_1.css">
     <link rel="stylesheet" href="css/template_2.css">
     <link rel="stylesheet" href="css/template_education.css">
+    <link rel="stylesheet" href="css/template-contact.css">
+    <link rel="stylesheet" href="css/footer.css">
 
     <script src="js/scroll.js"></script>
     <script src="js/project_hover_controller.js"></script>
@@ -34,6 +36,7 @@
     <nav>
         <ul>
             <li><a href="#aboutMe">About Me</a></li>
+            <li><a href="#education">Education</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
@@ -72,8 +75,8 @@
             </div>
             <div class="content">
                 <ul>
-                    <li>
-                        <img class="icon" src="./img/.jpg" alt="">
+                    <li class="education">
+                        <div class="icon" style="background-image: url('./img/bachelor.jpg')"></div>
                         <p>Marcos obtained a Bachellor of Science degree at I.E.S. Bernaldo de Quirós, Mieres. At that
                             time, approximately
                             2016, he had planned on studying for a graduate degree in the University of Oviedo. Since
@@ -87,8 +90,8 @@
                             take a break.
                         </p>
                     </li>
-                    <li>
-                        <img class="icon" src="./img/desktop.jpg" alt="">
+                    <li class="education">
+                        <div class="icon" style="background-image: url('./img/web_development.jpg')"></div>
                         <p>Since Marcos had been studying his whole life, he wasn`t yet qualified for any technic job,
                             so he decided
                             to enroll in the Advanced Specific Vocational Training that the I.E.S. Bernaldo de Quirós
@@ -96,8 +99,8 @@
                             finding a job in the next 2-3 years.
                         </p>
                     </li>
-                    <li>
-                        <img class="icon" src="./img/desktop.jpg" alt="">
+                    <li class="education">
+                        <div class="icon" style="background-image: url('./img/human_resources.jpg')"></div>
                         <p>Nowadays (2024) he has already got his title and is actively looking for a job, working on
                             his portfolio,
                             learning new technologies that enterprises find interesting...
@@ -121,7 +124,7 @@
                         <div class="bg-icon project-icon" style="background-image: url('./img/desktop.jpg')"></div>
                         <h3>BloomJS</h3>
                     </div>
-                    <div class="project-content unfolded">
+                    <div class="project-content">
                         <p>BloomJS was the final project that i did present to pass the Web Applications Development
                             Advanced
                             Specific Vocational Training that is taught at I.E.S. Bernaldo de Quirós, Mieres. BloomJS
@@ -219,28 +222,35 @@
                 </p>
             </div>
         </section>
-        <section id="contact" class="template-3">
+        <section id="contact" class="template-contact">
             <h2>Contact</h2>
-            <p>Contact</p>
+            <p class="brief-text">You can contact me using this email account and phone number</p>
+            <ul>
+                <li><a class="social-link" href="mailto:marcosggdev@gmail.com"><img src="./img/gmail.png" alt="">marcosggdev@gmail.com</a></li>
+                <li class="social-link"><img src="./img/phone.png" alt="">630 115 465</li>
+                <li><a class="social-link" href="https://github.com/marcosggdev" target="_blank"><img src="./img/github.png" alt="">marcosggdev</a></li>
+            </ul>
         </section>
     </main>
     <footer>
-        <div>
+        <div id="socials">
             <h3>Socials</h3>
             <small>My social networks</small>
+            <ul>
+                <li><a class="social-link" href="https://github.com/marcosggdev" target="_blank"><img src="./img/github.png" alt="">Github</a></li>
+                <li><a class="social-link" href="https://www.linkedin.com/in/marcos-garcia-garcia-dev" target="_blank"><img src="./img/linkedin.png" alt="">LinkedIn</a></li>
+            </ul>
         </div>
-        <div>
-            <h3>Navigation</h3>
-            <small>Some interesting links</small>
-        </div>
-        <div>
+        <div id="mentions">
             <h3>Mentions</h3>
             <small>Special mentions</small>
+            <a href="https://ibq.es/" class="social-link" target="_blank"><img src="./img/ibq.jpg" alt="">IES Bernaldo de Quirós</a>
         </div>
         <div id="credits">
+            <h3>Credits</h3>
             <ul>
-                <li><a href="https://www.flaticon.es/iconos-gratis/la-licenciatura" title="la licenciatura iconos">La licenciatura iconos creados por Nuricon - Flaticon</a></li>
-                <li>Imagen de <a href="https://pixabay.com/es/users/openclipart-vectors-30363/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=1294810">OpenClipart-Vectors</a> en <a href="https://pixabay.com/es//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=1294810">Pixabay</a></li>
+                <small>Images origin: <a href="https://www.pngegg.com/es" target="_blank">PNGEgg</a></small>
+                <small>Most of the images have been generated by AI: <a href="https://www.bing.com/images/create" target="_blank">Microsoft Designer</a></small>
             </ul>
         </div>
     </footer>

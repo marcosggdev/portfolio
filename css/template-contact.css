@@ -1,0 +1,31 @@
+.template-contact::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: " ";
+    z-index: -1;
+    opacity: 0.5;
+    background-image: url('../img/paper_office.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: 50% 50%;
+}
+.template-contact {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+}
+.template-contact ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: var(--light);
+    padding: 4em;
+    border-radius: 20px;
+    gap: 1em;
+}
