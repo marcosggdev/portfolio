@@ -25,6 +25,7 @@ body {
 main {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 main > section {
     padding: 10em;

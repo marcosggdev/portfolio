@@ -37,3 +37,11 @@
         transform: translateX(-10px);
     }
 }
+@keyframes scrollAnimation {
+    from {
+        left: 150%;
+    }
+    to {
+        left: 0%;
+    }
+}
