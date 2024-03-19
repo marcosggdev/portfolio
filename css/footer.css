@@ -3,8 +3,9 @@ footer {
     color: var(--light);
     box-sizing: border-box;
     display: flex;
-    align-items: stretch;
+    align-items: flex-start;
     height: 50vh;
+    width: 100%;
 }
 footer a {
     color: rgb(182, 205, 255);
@@ -45,4 +46,13 @@ footer #credits {
     box-sizing: border-box;
     filter: drop-shadow(2px 2px 5px black);
     color: black;
+}
+footer > div {
+    height: 100%;
+}
+footer > div:first-child {
+    background-color: grey;
+    transform: scale(125%);
+    border-radius: 20px;
+    box-shadow: 0x 0x 0x black;
 }

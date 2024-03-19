@@ -17,8 +17,12 @@
     z-index: 0;
     display: flex;
     flex-direction: column;
+    padding: 0;
 }
-.template-contact ul {
+.template-contact header {
+    padding: 8em;
+}
+.template-contact header ul {
     display: flex;
     flex-direction: column;
     list-style: none;

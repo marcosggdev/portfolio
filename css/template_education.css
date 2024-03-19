@@ -8,7 +8,7 @@
     padding: 4em;
     align-items: center;
 }
-.template-education .content ul {
+.template-education .content > ul {
     display: flex;
     flex-direction: column;
     list-style: none;
@@ -16,21 +16,21 @@
     padding: 0;
     margin: 0;
 }
-.template-education .content ul li {
+.template-education .content > ul li {
     position: relative;
     background-color: white;
     border-radius: 20px;
     padding: 4em;
     left: 150%;
 }
-.template-education .content ul li.animation-scroll {
+.template-education .content > ul li.animation-scroll {
     animation-name: scrollAnimation;
     animation-duration: 1s;
     animation-iteration-count: 1;
     animation-timing-function: ease-in;
     animation-fill-mode: forwards;
 }
-.template-education .content ul li .icon {
+.template-education .content > ul li .icon {
     position: absolute;
     top: -50px;
     left: -50px;
@@ -43,4 +43,100 @@
     background-color: var(--dark);
     padding: 10px;
     box-sizing: border-box;
+}
+.template-education .stack ul {
+    display: grid;
+    list-style: none;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    padding: 0;
+    margin: 0;
+    margin-top: 5em;
+    gap: 1em;
+    justify-items: center;
+}
+.template-education .stack ul li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 20px;
+}
+.template-education .stack ul li div {
+    position: relative;
+    transition: all 0.5s;
+    transform: rotateY(0deg);
+    width: 100%;
+    height: 100%;
+    padding: 2em;
+    box-sizing: border-box;
+    border-radius: 20px;
+    background: linear-gradient(7deg, #ffffff3d, transparent);
+}
+.template-education .stack ul li h3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.template-education .stack ul li em {
+    text-align: justify;
+}
+.template-education .stack ul li div.rotateY::before {
+    position: absolute;
+    content: " ";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: black;
+    opacity: 0.6;
+    border-radius: 20px;
+}
+.template-education .stack ul li div.rotateY {
+    transform: rotateY(360deg);
+    color: white;
+}
+.template-education .stack ul li div.programming.rotateY {
+    background: url('../img/programming.jpg');
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.template-education .stack ul li div.database.rotateY {
+    background: url('../img/database.jpg');
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.template-education .stack ul li div.frameworks.rotateY {
+    background: url('../img/frameworks.jpg');
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.template-education .stack ul li div.design.rotateY {
+    background: url('../img/frameworks.jpg');
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.template-education .stack ul li div.vcs.rotateY {
+    background: url('../img/frameworks.jpg');
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.template-education .stack ul li div.workflows.rotateY {
+    background: url('../img/frameworks.jpg');
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.template-education .stack ul li div.other.rotateY {
+    background: url('../img/frameworks.jpg');
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
