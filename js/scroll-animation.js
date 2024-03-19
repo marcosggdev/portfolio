@@ -18,7 +18,7 @@ function updateStates (elements, lastScrollY) {
 
     for (let i = 0; i < elements.length; i++) {
         const top = elements[i].getBoundingClientRect().top;
-        const offset = window.innerHeight / 2;
+        const offset = window.innerHeight;
 
         if (window.scrollY - lastScrollY > 0) {
             //down

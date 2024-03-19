@@ -22,15 +22,6 @@
     background-repeat: no-repeat;
     background-attachment: scroll;
 }
-.template-2 .header div.bloomJS {
-    background: url('../img/desktop.jpg');
-}
-.template-2 .header div.newspaper {
-    background: url('../img/desktop.jpg');
-}
-.template-2 .header div.portfolio {
-    background: url('../img/desktop.jpg');
-}
 .template-2 .content {
     position: relative;
     border-radius: 20px;
@@ -95,13 +86,13 @@
 
 /*projects images*/
 .template-2 .content .project.bloomJS {
-    background-image: url('../img/desktop.jpg');
+    background-image: url('../img/bloomjs_1.png');
 }
 .template-2 .content .project.newspaper {
-    background-image: url('../img/desktop.jpg');
+    background-image: url('../img/newspaper_article.png');
 }
 .template-2 .content .project.game {
-    background-image: url('../img/desktop.jpg');
+    background-image: url('../img/j2dweb_snowmap.png');
 }
 
 /*projects width change depending on hover*/
