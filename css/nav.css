@@ -38,6 +38,7 @@ nav ul li a {
     font-weight: bold;
     transition: all 0.5s;
     border-radius: 5px;
+    user-select: none;
 }
 nav ul li a:hover {
     background-color: rgb(235, 235, 235);

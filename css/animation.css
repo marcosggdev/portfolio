@@ -45,3 +45,31 @@
         left: 0%;
     }
 }
+@keyframes slideToLeft {
+    from {
+        left: 150%;
+    }
+    to {
+        left: 0;
+    }
+}
+@keyframes background-animation {
+    from {
+        background-size: 100%;
+        background-position: 50%;
+        background-attachment: fixed;
+    }
+    to {
+        background-size: 120%;
+        background-position: 50%;
+        background-attachment: fixed;
+    }
+}
+@keyframes show {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.8;
+    }
+}
