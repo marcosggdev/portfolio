@@ -29,7 +29,6 @@
     <script src="js/console.js"></script>
     <script src="js/headerCarousel.js"></script>
     <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-    <script src="js/hcaptcha.js"></script>
 </head>
 
 <body>
@@ -292,7 +291,7 @@
                 <script>
                     document.forms[0].addEventListener('submit', (e) => {
                         e.preventDefault();
-                
+
                         let val = document.querySelector('[name=h-captcha-response]').value;
 
                         if (val === "") {
@@ -302,19 +301,13 @@
                         } else {
 
                             const url = 'https://marcosggdev.000webhostapp.com/portfolio-analytics/analytics.php';
-
-                            let formData = new FormData(document.forms[0]);
-                            let xhr = new XMLHttpRequest();
-                            xhr.onreadystatechange = function () {
-                                if (xhr.readyState == XMLHttpRequest.DONE) {
-                                    console.log(this.response);
-                                }
-                            };
-                            xhr.open('POST', url, true);
-                            xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
-                            xhr.responseType = "json";
-                            xhr.send(formData);
-                            
+                            const formData = new FormData(document.forms[0]);
+                            fetch(url, {
+                                method: "POST",
+                                body: formData,
+                            })
+                            .then(response => response.json())
+                            .then((json) => {alert(json.serverMessage)});
                         }
                     });
                 </script>
