@@ -20,7 +20,16 @@
     padding: 0;
 }
 .template-contact header {
-    padding: 8em;
+    display: flex;  
+    align-items: stretch;
+    gap: 4em;
+}
+.template-contact header > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    padding: 2em;
 }
 .template-contact header ul {
     display: flex;
@@ -29,7 +38,54 @@
     padding: 0;
     margin: 0;
     background-color: var(--light);
-    padding: 4em;
+    padding: 2em;
     border-radius: 20px;
     gap: 1em;
+    width:fit-content;
+}
+.template-contact form {
+    background-color: white;
+    border-radius: 20px;
+    box-sizing: border-box;
+    padding: 4em;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+    margin: 2em;
+}
+.template-contact form input {
+    padding: 10px;
+    border-radius: 5px;
+}
+.template-contact form label {
+    font-weight: bold;
+    color: rgb(169, 169, 169);
+    font-family: 'Roboto Slab';
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.template-contact form button {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgb(80, 106, 183);
+    color: white;
+    padding-left: 2em;
+    padding-right: 2em;
+    border: none;
+    transition: all 0.25s;
+    border: 2px solid transparent;
+}
+.template-contact form button:hover {
+    border: 2px solid white;
+    background-color: rgb(141, 161, 255);
+    cursor: pointer;
+}
+.template-contact form button:active {
+    border: 2px solid transparent;
+    box-shadow: inset 0px 0px 2px black;
+}
+.template-contact form textarea {
+    height: 150px;
+    resize: none;
 }
