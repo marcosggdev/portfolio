@@ -10,7 +10,7 @@
     flex-direction: column;
     overflow: hidden;
 
-    background: url('../img/tech.jpg');
+    background: url('../img/headerCarousel/0.jpg');
 
     transition: background-image 0.3s;
 
@@ -86,6 +86,7 @@
     display: flex;
     align-items: center;
     color: white;
+    white-space: nowrap;
 }
 #header .socials {
     display: flex;

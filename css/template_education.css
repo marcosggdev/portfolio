@@ -99,43 +99,43 @@
     color: white;
 }
 .template-education .stack ul li div.programming.rotateY {
-    background: url('../img/programming.jpg');
+    background: url('../img/stack/programming.jpg');
     background-position: 50% 50%;
     background-size: cover;
     background-repeat: no-repeat;
 }
 .template-education .stack ul li div.database.rotateY {
-    background: url('../img/database.jpg');
+    background: url('../img/stack/database.jpg');
     background-position: 50% 50%;
     background-size: cover;
     background-repeat: no-repeat;
 }
 .template-education .stack ul li div.frameworks.rotateY {
-    background: url('../img/frameworks.jpg');
+    background: url('../img/stack/frameworks.jpg');
     background-position: 50% 50%;
     background-size: cover;
     background-repeat: no-repeat;
 }
 .template-education .stack ul li div.design.rotateY {
-    background: url('../img/frameworks.jpg');
+    background: url('../img/stack/design.jpg');
     background-position: 50% 50%;
     background-size: cover;
     background-repeat: no-repeat;
 }
 .template-education .stack ul li div.vcs.rotateY {
-    background: url('../img/frameworks.jpg');
+    background: url('../img/stack/vcs.jpg');
     background-position: 50% 50%;
     background-size: cover;
     background-repeat: no-repeat;
 }
 .template-education .stack ul li div.workflows.rotateY {
-    background: url('../img/frameworks.jpg');
+    background: url('../img/stack/workflows.png');
     background-position: 50% 50%;
     background-size: cover;
     background-repeat: no-repeat;
 }
 .template-education .stack ul li div.other.rotateY {
-    background: url('../img/frameworks.jpg');
+    background: url('../img/stack/other.jpg');
     background-position: 50% 50%;
     background-size: cover;
     background-repeat: no-repeat;

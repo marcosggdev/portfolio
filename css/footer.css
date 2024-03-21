@@ -1,11 +1,29 @@
+footer::before {
+    position: absolute;
+    content: " ";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.8;
+    background-image: url('../img/footer.jpg');
+    background-size: cover;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    filter: brightness(0.3);
+}
 footer {
-    background-color: var(--dark);
+    position: relative;
     color: var(--light);
     box-sizing: border-box;
-    display: flex;
-    align-items: flex-start;
-    height: 50vh;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
     width: 100%;
+    position: relative;
+    justify-content: space-between;
 }
 footer a {
     color: rgb(182, 205, 255);
@@ -21,38 +39,54 @@ footer ul {
     gap: 10px;
     padding: 10px;
 }
-footer #socials, footer #navigation, footer #mentions {
+footer #socials, footer #credits, footer #mentions {
     min-width: 20%;
     box-sizing: border-box;
     padding: 4em;
-}
-footer #socials {
-    background-color: var(--darker-dark);
-}
-footer #navigation {
-    box-shadow: -5px 0px 5px black;
-}
-footer #credits {
-    flex-grow: 1;
-}
-footer #mentions {
-    box-shadow: -5px 0px 5px black;
-}
-footer #credits {
-    background-color: var(--light-dark);
-    border-radius: 20px;
-    transform: translate(-20px, -40px) rotateZ(-5deg);
-    padding: 1em;
-    box-sizing: border-box;
-    filter: drop-shadow(2px 2px 5px black);
-    color: black;
+    display: flex;
+    flex-direction: column;
 }
 footer > div {
     height: 100%;
 }
-footer > div:first-child {
-    background-color: grey;
-    transform: scale(125%);
-    border-radius: 20px;
-    box-shadow: 0x 0x 0x black;
+footer #copy {
+    display: flex;
+    align-items: flex-end;
+    padding: 2em;
+    box-sizing: border-box;
+}
+footer #mentions {
+    min-width: 20%;
+    box-sizing: border-box;
+    padding: 4em;
+    flex-grow: 1;
+    justify-content: space-between;
+    align-items: center;
+}
+footer #images {
+    grid-area: 2 / 2 / 3 / 4;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1em;
+    padding: 2em;
+    box-sizing: border-box;
+}
+footer #images > div {
+    background-size: contain;
+    background-position: 50%;
+    transition: all 0.5s;
+    background-repeat: no-repeat;
+}
+footer #images > div:hover {
+    transform: scale(110%);
+}
+footer #images div:nth-child(1) {
+    grid-row: 1 / 3;
+}
+footer #images div:nth-child(4) {
+    grid-column: 2 / 4;
+}
+footer a, footer a:visited {
+    color: #cecece;
 }

@@ -38,6 +38,7 @@ main {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    align-items: center;
 }
 main > section {
     padding: 10em;

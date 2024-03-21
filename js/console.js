@@ -41,11 +41,15 @@ function createLineNode () {
 }
 
 function controller (console, lines) {
-    for (let i = 0; i < lines.length; i++) {
-        setTimeout(() => {
-            animateLine(console, lines[i])
-        }, i*2000);
-    }
+    let i = 0;
+    animateLine(console, lines[i++]);
+    const addLines = setInterval(() => { 
+        if (i < lines.length) {
+            animateLine(console, lines[i++]);
+        } else {
+            clearInterval(addLines);
+        }
+     }, 2000);
 }
 
 //animate in 2s

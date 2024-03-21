@@ -2,12 +2,12 @@ window.addEventListener('load', () => {
 
     const header = document.getElementById('header');
     const imagePaths = [];
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 5; i++) {
         imagePaths.push(`./img/headerCarousel/${i}.jpg`);
     }
     
-    //image already set by default
-    setTimeout(() => {carousel(header, imagePaths)}, 5000);
+    setTimeout(() => {carousel(header, imagePaths, 1)}, 5000);
+    
 });
 
 //puts image and sets timeout to put another one recursively 5s later
