@@ -12,7 +12,13 @@ function addNavScrollListener () {
     var nav = document.querySelector('nav');
     var navTop = window.scrollY + nav.getBoundingClientRect().top;
 
+    //reload nav state in case window reload
+    if (nav.getBoundingClientRect().top < window.scrollY) {
+        setNavStyleFixed(nav);
+    }
+
     window.addEventListener('scroll', (e) => {
+
         const delta = window.scrollY - lastScrollY;
         down = (delta > 0); 
         lastScrollY = window.scrollY;
@@ -29,17 +35,14 @@ function addNavScrollListener () {
                 setNavStyleRelative(nav);
             }
         }
+
     });
 }
 
 function setNavStyleFixed (nav) {
-    nav.style.position = "fixed";
-    nav.style.top = "0";
-    nav.style.left = "0";
+    nav.classList.add('fixed');
 }
 
 function setNavStyleRelative (nav) {
-    nav.style.position = "relative";
-    nav.style.top = "auto";
-    nav.style.left = "auto";
+    nav.classList.remove('fixed');
 }

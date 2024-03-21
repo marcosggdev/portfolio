@@ -56,6 +56,24 @@
     margin-top: 8em;
     margin-bottom: 8em;
 }
+.template-contact form .col {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    box-sizing: border-box;
+    gap: 10px;
+}
+.template-contact form .col:nth-child(1) {
+    width: min-content;
+}
+.template-contact form .col:nth-child(2) {
+    flex-grow: 1;
+}
+.template-contact form .row {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
 .template-contact form .button-container {
     display: flex;
     align-items: stretch;

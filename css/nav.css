@@ -6,6 +6,10 @@ nav {
     color: var(--light);
     z-index: 1;
     box-shadow: 0px 2px 10px black;
+    top: auto;
+    left: auto;
+    opacity: 1;
+    transition: opacity 0.25s;
 }
 nav ul {
     padding: 0;
@@ -44,4 +48,13 @@ nav ul li a:hover {
     background-color: rgb(235, 235, 235);
     box-shadow: inset 0px 0px 30px black;
     color: black;
+}
+nav.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0.3;
+}
+nav.fixed:hover {
+    opacity: 1;
 }
