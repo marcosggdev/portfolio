@@ -2,7 +2,7 @@ window.addEventListener('load', () => {
 
     const header = document.getElementById('header');
     const imagePaths = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 4; i++) {
         imagePaths.push(`./img/headerCarousel/${i}.jpg`);
     }
     
