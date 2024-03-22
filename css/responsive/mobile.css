@@ -1,0 +1,160 @@
+/*360x740 mobile screen*/
+@media (max-width: 740px) {
+
+    nav ul {
+        flex-direction: row;
+        padding: 0;
+        gap: 0;
+    }
+
+    nav ul li {
+        width: 25%;
+    }
+
+    #header .socials {
+        display: none;
+    }
+    #console {
+        position: relative;
+        top: auto;
+        left: auto;
+        width: 350px;
+    }
+
+    #header {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #header h1 {
+        font-size: 21pt;
+    }
+    #header h2 {
+        font-size: 16pt;
+        white-space: nowrap;
+    }
+    #header .console {
+        width: 100%;
+    }
+    #header h1, #header h2 {
+        padding: 0;
+        margin: 0;
+    }
+    #header .left-content {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+
+    #aboutMe {
+        flex-direction: column;
+        padding: 1em;
+        overflow: hidden;
+    }
+
+    #aboutMe .content img {
+        width: 100%;
+    }
+    #aboutMe .author {
+        padding: 0;
+        margin: 0;
+        position: relative;
+        border-radius: 5px;
+        padding: 1em;
+    }
+    #aboutMe .author > img {
+        width: 60px;
+        height: 60px;
+        border-radius: 5px;
+    }
+
+    #education .stack ul {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    #education .content ul li {
+        padding: 1em;
+        text-align: justify;
+    }
+    #education .content ul li .icon {
+        width: 40px;
+        height: 40px;
+        top: -15px;
+        left: -15px;
+    }
+
+    .brief-text {
+        width: 100%;
+    }
+
+    #projects .content {
+        display: flex;
+        flex-direction: column;
+    }
+    .project-content:not(.unfolded) {
+        transform: translateX(100vw);
+    }
+
+    #contact form {
+        height: 100%;
+        margin-top: 2em;
+        margin-bottom: 2em;
+        margin: 0;
+        padding: 0;
+        border-radius: 0px;
+        width: 100vw;
+        padding: 1em;
+        box-sizing: border-box;
+    }
+
+    #contact::before {
+        display: none;
+    }
+    #contact form .button-container {
+        flex-direction: column;
+    }
+    #contact form > div {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    #contact form ul {
+        display: flex;
+        flex-direction: column;
+    }
+    #contact form div {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+    footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    footer > div {
+        padding: 1em !important;
+        text-align: center;
+    }
+
+    footer #credits ul {
+        padding-left: 2em;
+        text-align: left;
+    }
+
+    footer #images {
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    footer #images div {
+        height: 50px;
+        width: 50px;
+    }
+
+}

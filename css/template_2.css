@@ -139,7 +139,7 @@
     transition: transform 0.5s;
 }
 .project-content:not(.unfolded) {
-    transform: translateY(100vh);
+    transform: translateY(90vh);
 }
 .project-content.unfolded {
     transform: none;

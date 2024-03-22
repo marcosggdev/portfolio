@@ -41,7 +41,8 @@
     <link rel="stylesheet" href="css/footer.css">
 
     <!--RESPONSIVE-->
-    <link rel="stylesheet" href="css/desktop.css">
+    <link rel="stylesheet" href="css/responsive/mobile.css">
+    <link rel="stylesheet" href="css/responsive/desktop.css">
 
     <!--OTHER-->
     <link rel="stylesheet"
@@ -210,7 +211,7 @@
                         <div class="bg-icon project-icon" style="background-image: url('./img/bloomjs_4.png')"></div>
                         <h3>BloomJS</h3>
                     </div>
-                    <div class="project-content unfolded">
+                    <div class="project-content">
                         <p>BloomJS was thought as a simple framework to generate graphic components that the user could
                             copy and
                             paste on the
@@ -292,30 +293,32 @@
         <section id="contact" class="template-contact">
             <form action="https://marcosggdev.000webhostapp.com/portfolio-analytics/analytics.php" method="POST"
                 autocomplete="on">
+                <ul>
+                    <h3>Contact form</h3>
+                    <li><a class="social-link" href="mailto:marcosggdev@gmail.com"><img src="./img/gmail.png"
+                                alt="">marcosggdev@gmail.com</a></li>
+                    <li class="social-link"><img src="./img/phone.png" alt="">630 115 465</li>
+                    <li><a class="social-link" href="https://github.com/marcosggdev" target="_blank"><img
+                                src="./img/github.png" alt="">marcosggdev</a></li>
+                </ul>
                 <div>
-                    <ul>
-                        <h3>Contact form</h3>
-                        <li><a class="social-link" href="mailto:marcosggdev@gmail.com"><img src="./img/gmail.png"
-                                    alt="">marcosggdev@gmail.com</a></li>
-                        <li class="social-link"><img src="./img/phone.png" alt="">630 115 465</li>
-                        <li><a class="social-link" href="https://github.com/marcosggdev" target="_blank"><img
-                                    src="./img/github.png" alt="">marcosggdev</a></li>
-                    </ul>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="email"><span class="material-symbols-outlined">email</span>Your email</label>
-                        <input id="email" name="email" type="email" placeholder="Your email">
-                        <div class="button-container">
-                            <div class="h-captcha" data-sitekey="dc000899-6721-4cae-b1e3-9f22af17a914"></div>
-                            <button>Send</button>
-                        </div>
-                        <small class="smaller">If you have any questions, you have found some error or need something related to this page, you
-                            can contact me using this form.</small>
-                    </div>
-                    <div class="col">
+                    <div class="col col-2">
                         <label for="message"><span class="material-symbols-outlined">message</span>Message</label>
                         <textarea id="message" name="message" type="text" placeholder="Message"></textarea>
+                    </div>
+                    <div class="col col-1">
+                        <div>
+                            <label for="email"><span class="material-symbols-outlined">email</span>Your email</label>
+                            <input id="email" name="email" type="email" placeholder="Your email">
+                        </div>
+                        <div>
+                            <div class="button-container">
+                                <div class="h-captcha" data-sitekey="dc000899-6721-4cae-b1e3-9f22af17a914"></div>
+                                <button>Send</button>
+                            </div>
+                            <small class="smaller">If you have any questions, you have found some error or need something related to this page, you
+                                can contact me using this form.</small>
+                        </div>
                     </div>
                 </div>
             </form>
