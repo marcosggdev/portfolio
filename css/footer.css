@@ -10,7 +10,6 @@ footer::before {
     background-image: url('../img/footer.jpg');
     background-size: cover;
     background-position: 50%;
-    background-repeat: no-repeat;
     filter: brightness(0.3);
 }
 footer {
