@@ -1,0 +1,92 @@
+<script setup>
+import { ref } from "vue";
+
+import loading from "../assets/img/gifs/loading.gif";
+
+const props = defineProps({
+  callback: {
+    type: Function,
+    default: () => Promise.resolve(),
+  },
+  variant: {
+    type: String,
+    default: "primary",
+    validator: (value) => ["primary", "secondary"].includes(value),
+  },
+  effects: {
+    type: Array,
+    default: [],
+    validator: (value) => value.every((item) => typeof item === "string"),
+  },
+});
+
+const focused = ref(false);
+const isLoading = ref(false);
+
+const handleClick = async () => {
+  if (isLoading.value) return;
+
+  isLoading.value = true;
+
+  setTimeout(async () => {
+    try {
+      await props.callback();
+    } finally {
+      isLoading.value = false;
+    }
+  }, 500);
+};
+</script>
+
+<template>
+  <button
+    @click="handleClick"
+    @focusin="focused = true"
+    @focusout="focused = false"
+    class="isolate relative p-4 pt-2 pb-2 hover:scale-[1.05] active:scale-[1] focus:scale-[1] transition ease-out rounded-lg cursor-pointer"
+    :class="[variant]"
+  >
+    <div
+      class="background absolute inset-0 w-full h-full rounded-lg -z-1 transition-all duration-300 ease-out"
+      :class="[variant, effects.includes('crystal') ? 'crystal' : '']"
+    ></div>
+
+    <!-- content -->
+    <div :style="focused || isLoading ? 'filter: blur(1px)' : ''">
+      <slot />
+    </div>
+
+    <!-- loading overlay -->
+    <img
+      v-if="isLoading"
+      class="absolute inset-0 m-auto sm-icon"
+      :src="loading"
+      alt="loading"
+    />
+  </button>
+</template>
+
+<style scoped>
+.primary {
+  color: white;
+}
+
+.primary .background {
+  border: none;
+  background-color: black;
+}
+
+.secondary {
+  color: white;
+}
+
+.secondary .background {
+  border: 1px solid white;
+  background-color: transparent;
+}
+
+.crystal {
+  backdrop-filter: blur(5px);
+  filter: drop-shadow(0 0 3px black);
+}
+</style>

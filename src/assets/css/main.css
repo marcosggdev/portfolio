@@ -1,5 +1,55 @@
 @import "tailwindcss";
 
+:root {
+  --bg-color: #222222;
+  --primary-color: rgb(255, 255, 190);
+  --primary-color-hover: rgb(255, 255, 224);
+  --primary-color-focus: rgb(185, 185, 114);
+  --light-title: rgb(237, 237, 237);
+  --light-title-hover: white;
+  --light-text: rgb(200, 200, 200);
+  --light-text-hover: rgb(239, 239, 239);
+  --download-color: rgb(113, 163, 255);
+}
+
 html {
   scroll-behavior: smooth;
+}
+
+.sm-icon {
+  width: 20px;
+  height: auto;
+  object-fit: cover;
+}
+
+.md-icon {
+  width: 32px;
+  height: auto;
+  object-fit: cover;
+}
+
+.bg-icon {
+  width: 48px;
+  height: auto;
+  object-fit: contain;
+}
+
+h1 {
+  font-size: 38pt;
+}
+
+h2 {
+  font-size: 32pt;
+}
+
+h3 {
+  font-size: 22pt;
+}
+
+h4 {
+  font-size: 20pt;
+}
+
+p {
+  font-size: 12pt;
 }
