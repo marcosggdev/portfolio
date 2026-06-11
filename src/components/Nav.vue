@@ -1,11 +1,14 @@
 <script setup>
 import { computed } from "vue";
-import avatar from "../assets/img/icons/avatar.png";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
+import { Icon } from "@iconify/vue";
+
 import UnderlineLink from "./UnderlineLink.vue";
 import Button from "./Button.vue";
 import Socials from "./Socials.vue";
+
+import avatar from "../assets/img/icons/avatar.png";
 
 const currentRoute = useRoute();
 const router = useRouter();
