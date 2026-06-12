@@ -18,6 +18,14 @@ const props = defineProps({
     default: [],
     validator: (value) => value.every((item) => typeof item === "string"),
   },
+  backgroundColor: {
+    type: String,
+    default: "transparent",
+  },
+  color: {
+    type: String,
+    default: "white",
+  },
 });
 
 const focused = ref(false);
@@ -40,6 +48,10 @@ const handleClick = async () => {
 
 <template>
   <button
+    :style="{
+      '--background-color': backgroundColor,
+      '--color': color,
+    }"
     @click="handleClick"
     @focusin="focused = true"
     @focusout="focused = false"
@@ -52,7 +64,7 @@ const handleClick = async () => {
     ></div>
 
     <!-- content -->
-    <div :style="focused || isLoading ? 'filter: blur(1px)' : ''">
+    <div :style="isLoading ? 'filter: blur(1px)' : ''">
       <slot />
     </div>
 
@@ -68,20 +80,20 @@ const handleClick = async () => {
 
 <style scoped>
 .primary {
-  color: white;
+  color: var(--color);
 }
 
 .primary .background {
   border: none;
-  background-color: black;
+  background-color: var(--background-color);
 }
 
 .secondary {
-  color: white;
+  color: var(--color);
 }
 
 .secondary .background {
-  border: 1px solid white;
+  border: 1px solid var(--color);
   background-color: transparent;
 }
 
