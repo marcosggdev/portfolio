@@ -1,26 +1,37 @@
 <script setup>
 import { Icon } from "@iconify/vue";
+
+const props = defineProps({
+  color: { type: String, default: "text-white" },
+  expanded: { type: Boolean, default: false },
+});
 </script>
 
 <template>
-  <ul class="flex flex-row items-center gap-2">
+  <ul class="flex flex-row items-center" :class="expanded ? 'gap-4' : 'gap-2'">
     <a
-      class="hover:scale-[1.1] transition"
+      class="hover:scale-[1.1] transition flex flex-row items-center gap-1"
       href="https://github.com/marcosggdev"
       target="_blank"
-      ><Icon class="sm-icon text-white" icon="simple-icons:github"
-    /></a>
+    >
+      <Icon :class="color" class="sm-icon" icon="simple-icons:github" />
+      <span v-if="expanded">Github</span>
+    </a>
     <a
-      class="hover:scale-[1.1] transition"
+      class="hover:scale-[1.1] transition flex flex-row items-center gap-1"
       href="https://www.linkedin.com/in/marcos-garcia-garcia-dev/"
       target="_blank"
-      ><Icon class="sm-icon text-white" icon="simple-icons:linkedin"
-    /></a>
+      ><Icon :class="color" class="sm-icon" icon="simple-icons:linkedin" />
+      <span v-if="expanded">LinkedIn</span>
+    </a>
     <a
-      class="hover:scale-[1.1] transition"
+      class="hover:scale-[1.1] transition flex flex-row items-center gap-1"
       href="mailto:marcosggdev@gmail.com"
       target="_blank"
-      ><Icon class="sm-icon text-white" icon="simple-icons:gmail"
-    /></a>
+      ><Icon :class="color" class="sm-icon" icon="simple-icons:gmail" /><span
+        v-if="expanded"
+        >Gmail</span
+      ></a
+    >
   </ul>
 </template>

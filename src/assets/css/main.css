@@ -34,12 +34,18 @@ html {
   object-fit: contain;
 }
 
+.e-bg-icon {
+  width: 128px;
+  height: auto;
+  object-fit: contain;
+}
+
 h1 {
   font-size: 38pt;
 }
 
 h2 {
-  font-size: 32pt;
+  font-size: 28pt;
 }
 
 h3 {
