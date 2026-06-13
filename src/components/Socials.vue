@@ -15,14 +15,14 @@ const props = defineProps({
       target="_blank"
     >
       <Icon :class="color" class="sm-icon" icon="simple-icons:github" />
-      <span v-if="expanded">Github</span>
+      <span v-if="expanded" :class="color">Github</span>
     </a>
     <a
       class="hover:scale-[1.1] transition flex flex-row items-center gap-1"
       href="https://www.linkedin.com/in/marcos-garcia-garcia-dev/"
       target="_blank"
       ><Icon :class="color" class="sm-icon" icon="simple-icons:linkedin" />
-      <span v-if="expanded">LinkedIn</span>
+      <span v-if="expanded" :class="color">LinkedIn</span>
     </a>
     <a
       class="hover:scale-[1.1] transition flex flex-row items-center gap-1"
@@ -30,6 +30,7 @@ const props = defineProps({
       target="_blank"
       ><Icon :class="color" class="sm-icon" icon="simple-icons:gmail" /><span
         v-if="expanded"
+        :class="color"
         >Gmail</span
       ></a
     >

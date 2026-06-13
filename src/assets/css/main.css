@@ -34,6 +34,12 @@ html {
   object-fit: contain;
 }
 
+.bg-e-bg-icon {
+  width: 64px;
+  height: auto;
+  object-fit: contain;
+}
+
 .e-bg-icon {
   width: 128px;
   height: auto;

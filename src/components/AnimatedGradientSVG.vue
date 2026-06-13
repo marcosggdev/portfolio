@@ -4,6 +4,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 const props = defineProps({
   backgroundColor: { type: String, default: "#222222" },
   color: { type: String, default: "#fff29d" },
+  brightness: { type: Number, default: 1 },
 });
 
 const mouseX = ref(0);
@@ -55,6 +56,7 @@ onUnmounted(() => {
     :style="{
       '--background-color': backgroundColor,
       '--color': color,
+      filter: `brightness(${brightness})`,
     }"
     class="pt-32 pb-32"
     ref="svgContainer"
