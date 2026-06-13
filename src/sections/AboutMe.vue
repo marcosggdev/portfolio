@@ -29,7 +29,7 @@ onMounted(() => {
     end: "bottom bottom",
     pin: background.value,
     pinSpacing: false,
-    markers: true,
+    markers: false,
   });
 
   ScrollTrigger.refresh();

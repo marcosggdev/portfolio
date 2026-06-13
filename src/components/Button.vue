@@ -70,7 +70,7 @@ const handleClick = async () => {
     @click="handleClick"
     @focusin="focused = true"
     @focusout="focused = false"
-    class="isolate relative p-4 pt-2 pb-2 hover:scale-[1.05] active:scale-[1] focus:scale-[1] transition ease-out rounded-lg cursor-pointer"
+    class="isolate relative p-4 pt-2 pb-2 hover:scale-[1.05] active:scale-[1] focus:scale-[1] transition ease-out rounded-lg cursor-pointer w-fit"
     :class="[variant]"
   >
     <div

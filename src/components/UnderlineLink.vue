@@ -116,7 +116,7 @@ const linkColor = computed(() => {
   <div
     @mouseenter="hover = true"
     @mouseleave="hover = false"
-    class="relative flex flex-row"
+    class="relative flex flex-row w-fit"
   >
     <RouterLink
       :to="href"
