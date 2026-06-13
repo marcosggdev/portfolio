@@ -12,6 +12,7 @@ import hero from "../assets/img/hero.jpg";
     :has-padding="false"
     :background-image="hero"
     :background-brightness="0.4"
+    size="bg"
   >
     <div
       class="flex flex-row gap-2 items-center justify-center w-full h-full absolute inset-0 w-full h-full"

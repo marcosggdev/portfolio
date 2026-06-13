@@ -101,7 +101,7 @@ onMounted(() => {
     onUpdate: () => {
       const scrollY = window.scrollY;
       const goingDown = scrollY > lastScrollY;
-      const nearTop = scrollY < window.innerHeight * 0.5;
+      const nearTop = scrollY < window.innerHeight * 0.8;
 
       lastScrollY = scrollY;
 
