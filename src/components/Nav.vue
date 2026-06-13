@@ -161,6 +161,7 @@ onMounted(() => {
           :style="{ color: theme.text }"
           color="text-[var(--nav-text)]"
           current-color="text-[var(--nav-title)]"
+          :darkens="!isInThreshold"
         >
           {{ route.name }}
         </UnderlineLink>
