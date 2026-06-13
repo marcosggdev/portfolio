@@ -23,7 +23,11 @@ import hero from "../assets/img/hero.jpg";
           trabajos y experiencia
         </h2>
         <div class="flex flex-row items-center gap-4">
-          <Button variant="secondary" :effects="['crystal']"
+          <Button
+            type="link"
+            href="/proyectos"
+            variant="secondary"
+            :effects="['crystal']"
             >Ver Proyectos</Button
           >
           <Button variant="secondary" :effects="['crystal']"

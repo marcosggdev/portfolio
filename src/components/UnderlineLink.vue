@@ -20,13 +20,13 @@ const isActive = computed(() => route.path === props.href);
     @mouseleave="hover = false"
     class="relative flex flex-row"
   >
-    <a
-      :href="href"
+    <RouterLink
+      :to="href"
       class="flex flex-row w-full h-full items-center justify-center"
       :class="color"
     >
       <slot />
-    </a>
+    </RouterLink>
 
     <div
       class="absolute bottom-0 left-0 h-[1px] bg-current transition-all duration-300 ease-out"

@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 import loading from "../assets/img/gifs/loading.gif";
 
@@ -26,23 +27,37 @@ const props = defineProps({
     type: String,
     default: "white",
   },
+  type: {
+    type: String,
+    default: "button",
+    validator: (value) => ["button", "link"].includes(value),
+  },
+  href: {
+    type: String,
+    default: "#",
+  },
 });
 
+const router = useRouter();
 const focused = ref(false);
 const isLoading = ref(false);
 
 const handleClick = async () => {
-  if (isLoading.value) return;
+  if (props.type === "button") {
+    if (isLoading.value) return;
 
-  isLoading.value = true;
+    isLoading.value = true;
 
-  setTimeout(async () => {
-    try {
-      await props.callback();
-    } finally {
-      isLoading.value = false;
-    }
-  }, 500);
+    setTimeout(async () => {
+      try {
+        await props.callback();
+      } finally {
+        isLoading.value = false;
+      }
+    }, 500);
+  } else if (props.type === "link") {
+    router.push(props.href);
+  }
 };
 </script>
 
