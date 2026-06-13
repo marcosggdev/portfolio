@@ -167,12 +167,18 @@ onMounted(() => {
         </UnderlineLink>
       </ul>
 
-      <Button :callback="downloadCV" :variant="theme.buttonVariant">
+      <Button
+        :callback="downloadCV"
+        :variant="theme.buttonVariant"
+        :background-color="isInThreshold ? '' : 'black'"
+        :color="isInThreshold ? 'white' : 'white'"
+      >
         <div class="flex flex-row items-center gap-2">
-          <span :class="theme.buttonText">CV</span>
+          <span>CV</span>
           <Icon
             icon="material-symbols:download"
-            class="sm-icon text-[var(--nav-title)]"
+            class="sm-icon"
+            :class="isInThreshold ? 'text-white' : 'text-white'"
           />
         </div>
       </Button>
