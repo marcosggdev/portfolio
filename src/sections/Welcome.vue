@@ -10,7 +10,7 @@ import { Icon } from "@iconify/vue";
 </script>
 
 <template>
-  <Section size="sm" class="flex flex-col bg-[#e6e6e6]">
+  <Section size="sm" class="flex flex-col bg-[var(--light-bg)]">
     <div
       class="flex flex-col max-w-[1024px] ml-auto mr-auto w-full h-full isolate"
     >

@@ -14,10 +14,13 @@
   --dark-text: rgb(52, 52, 52);
   --dark-text-hover: rgb(107, 107, 107);
   --download-color: rgb(113, 163, 255);
+  --light-bg: #e6e6e6;
+  --dark-bg: #222222;
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 .sm-icon {
