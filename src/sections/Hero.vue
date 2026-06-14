@@ -1,10 +1,7 @@
 <script setup>
 import Section from "../components/Section.vue";
-import Nav from "../components/Nav.vue";
 import Button from "../components/Button.vue";
 import hero from "../assets/img/hero.jpg";
-
-import { navThemeVariations } from "../theme/NavTheme";
 </script>
 
 <template>
@@ -18,7 +15,6 @@ import { navThemeVariations } from "../theme/NavTheme";
     <div
       class="flex flex-row gap-2 items-center justify-center w-full h-full absolute inset-0 w-full h-full"
     >
-      <Nav v-bind="navThemeVariations[0]" class="fixed inset-0 w-full h-fit" />
       <div class="flex flex-col gap-8 max-w-[60%] items-center justify-center">
         <h2 class="text-center">
           Bienvenid@ a mi portfolio. Aquí podrás saber más sobre mí y sobre mis

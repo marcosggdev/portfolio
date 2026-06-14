@@ -1,7 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
+
+// assets
+import hero from "../assets/img/hero.jpg";
+
+// layouts
+import DefaultLayout from "../layouts/DefaultLayout.vue";
 import LegalLayout from "../layouts/LegalLayout.vue";
 
-// Views
+// pages
 import Index from "../pages/Index.vue";
 import Projects from "../pages/Projects.vue";
 import Contact from "../pages/Contact.vue";
@@ -13,29 +19,37 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: Index,
-    meta: {
-      label: "Inicio",
-      group: "main",
-    },
-  },
-  {
-    path: "/proyectos",
-    name: "projects",
-    component: Projects,
-    meta: {
-      label: "Proyectos",
-      group: "main",
-    },
-  },
-  {
-    path: "/contacto",
-    name: "contact",
-    component: Contact,
-    meta: {
-      label: "Contacto",
-      group: "main",
-    },
+    component: DefaultLayout,
+    children: [
+      {
+        path: "/",
+        name: "index",
+        component: Index,
+        meta: {
+          label: "Inicio",
+          group: "main",
+          src: hero,
+        },
+      },
+      {
+        path: "/proyectos",
+        name: "projects",
+        component: Projects,
+        meta: {
+          label: "Proyectos",
+          group: "main",
+        },
+      },
+      {
+        path: "/contacto",
+        name: "contact",
+        component: Contact,
+        meta: {
+          label: "Contacto",
+          group: "main",
+        },
+      },
+    ],
   },
   {
     path: "/legal",

@@ -11,5 +11,4 @@ import Footer from "../sections/Footer.vue";
   <Welcome />
   <AboutMe />
   <Projects />
-  <Footer />
 </template>

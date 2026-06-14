@@ -1,5 +1,7 @@
-<script setup></script>
+<script setup>
+import Hero from "../sections/Hero.vue";
+</script>
 
 <template>
-  <h1>Proyectos</h1>
+  <Hero />
 </template>
