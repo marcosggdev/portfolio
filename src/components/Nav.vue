@@ -24,6 +24,8 @@ const props = defineProps({
     required: true,
     validator: NavValidator,
   },
+  fixed: { type: Boolean, default: false },
+  threshold: { type: String, default: "0.8" },
 });
 
 const navRef = ref(null);
@@ -33,7 +35,11 @@ const isInThreshold = ref(true);
 
 // 🎯 THEME ACTIVE
 const theme = computed(() =>
-  isInThreshold.value ? props.thresholdTheme : props.nonThresholdTheme,
+  !props.fixed
+    ? isInThreshold.value
+      ? props.thresholdTheme
+      : props.nonThresholdTheme
+    : props.nonThresholdTheme,
 );
 
 const downloadCV = () => {
@@ -46,7 +52,7 @@ const downloadCV = () => {
 };
 
 onMounted(() => {
-  if (!navRef.value) return;
+  if (!navRef.value || props.fixed) return;
 
   const nav = navRef.value;
 
@@ -89,7 +95,7 @@ onMounted(() => {
     onUpdate: () => {
       const scrollY = window.scrollY;
       const goingDown = scrollY > lastScrollY;
-      const nearTop = scrollY < window.innerHeight * 0.8;
+      const nearTop = scrollY < window.innerHeight * props.threshold;
 
       lastScrollY = scrollY;
       isInThreshold.value = nearTop;
@@ -115,6 +121,7 @@ onMounted(() => {
   <nav
     ref="navRef"
     class="flex flex-row items-center p-2 justify-between pl-4 pr-4 w-full z-50 transition-colors"
+    :class="fixed ? 'bg-[var(--nav-bg)]' : ''"
     :style="{
       '--nav-bg': resolveCSSVar(theme.backgroundColor),
       '--nav-text': resolveCSSVar(theme.textColor),

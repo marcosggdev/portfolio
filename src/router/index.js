@@ -37,7 +37,7 @@ const routes = [
     },
   },
   {
-    path: "/privacidad",
+    path: "/legal/privacidad",
     name: "privacy",
     component: Privacy,
     meta: {
@@ -46,7 +46,7 @@ const routes = [
     },
   },
   {
-    path: "/terminos-y-condiciones",
+    path: "/legal/terminos-y-condiciones",
     name: "terms-and-conditions",
     component: TermsAndConditions,
     meta: {
@@ -55,7 +55,7 @@ const routes = [
     },
   },
   {
-    path: "/cookies",
+    path: "/legal/cookies",
     name: "cookies",
     component: Cookies,
     meta: {
