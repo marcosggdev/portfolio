@@ -149,7 +149,12 @@ onMounted(() => {
         :background-color="isInThreshold ? '' : 'var(--nav-text)'"
       >
         <div class="flex flex-row items-center gap-2">
-          <span text-[var(--nav-text)]>CV</span>
+          <span
+            :class="
+              isInThreshold ? 'text-[var(--nav-text)]' : 'text-[var(--nav-bg)]'
+            "
+            >CV</span
+          >
 
           <Icon
             icon="material-symbols:download"

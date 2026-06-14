@@ -24,11 +24,11 @@
   --nav-threshold-navbar-hover-color: rgb(255, 255, 255);
   --nav-threshold-navbar-current-color: var(--primary-color);
 
-  --nav-non-threshold-bg-color: white;
-  --nav-non-threshold-text-color: rgb(47, 47, 47);
-  --nav-non-threshold-navbar-color: rgb(44, 44, 44);
-  --nav-non-threshold-navbar-hover-color: rgb(0, 0, 0);
-  --nav-non-threshold-navbar-current-color: rgb(93, 54, 86);
+  --nav-non-threshold-bg-color: #222222;
+  --nav-non-threshold-text-color: rgb(225, 225, 225);
+  --nav-non-threshold-navbar-color: rgb(218, 218, 218);
+  --nav-non-threshold-navbar-hover-color: rgb(255, 255, 255);
+  --nav-non-threshold-navbar-current-color: var(--primary-color);
 
   --navbar-color-0: rgb(44, 44, 44);
   --navbar-hover-color-0: rgb(0, 0, 0);

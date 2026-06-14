@@ -58,7 +58,7 @@ import fallback from "../assets/img/fallback.png";
                 MDO Corp. SL
               </h5>
             </a>
-            <div class="w-full flex flex-col justify-end shadow-lg">
+            <div class="w-full flex flex-col justify-end shadow-lg opacity-30">
               <img
                 class="inset-0 w-full h-full object-cover -z-1 aspect-[1/2]"
                 :src="fallback"
@@ -68,7 +68,7 @@ import fallback from "../assets/img/fallback.png";
                 Próximamente
               </h5>
             </div>
-            <div class="w-full flex flex-col justify-end shadow-lg">
+            <div class="w-full flex flex-col justify-end shadow-lg opacity-30">
               <img
                 class="inset-0 w-full h-full object-cover -z-1 aspect-[1/2]"
                 :src="fallback"
