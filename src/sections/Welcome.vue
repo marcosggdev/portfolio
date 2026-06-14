@@ -20,7 +20,7 @@ import { Icon } from "@iconify/vue";
             <img class="e-bg-icon" :src="avatar" alt="" />
             <div class="flex flex-col">
               <h2>Marcos G.</h2>
-              <Socials color="text-black" :expanded="true" />
+              <Socials color-class="text-black" :expanded="true" />
             </div>
           </header>
           <main class="flex flex-col gap-8">

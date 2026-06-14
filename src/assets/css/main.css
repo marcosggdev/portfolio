@@ -16,6 +16,23 @@
   --download-color: rgb(113, 163, 255);
   --light-bg: #e6e6e6;
   --dark-bg: #222222;
+
+  /*nav*/
+  --nav-threshold-bg-color: transparent;
+  --nav-threshold-text-color: white;
+  --nav-threshold-navbar-color: rgb(204, 204, 204);
+  --nav-threshold-navbar-hover-color: rgb(255, 255, 255);
+  --nav-threshold-navbar-current-color: var(--primary-color);
+
+  --nav-non-threshold-bg-color: white;
+  --nav-non-threshold-text-color: rgb(47, 47, 47);
+  --nav-non-threshold-navbar-color: rgb(44, 44, 44);
+  --nav-non-threshold-navbar-hover-color: rgb(0, 0, 0);
+  --nav-non-threshold-navbar-current-color: rgb(93, 54, 86);
+
+  --navbar-color-0: rgb(44, 44, 44);
+  --navbar-hover-color-0: rgb(0, 0, 0);
+  --navbar-current-color-0: rgb(0, 0, 0);
 }
 
 html {

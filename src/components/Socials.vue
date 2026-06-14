@@ -2,7 +2,7 @@
 import { Icon } from "@iconify/vue";
 
 const props = defineProps({
-  color: { type: String, default: "text-white" },
+  colorClass: { type: String, default: "text-white" },
   expanded: { type: Boolean, default: false },
 });
 </script>
@@ -14,25 +14,25 @@ const props = defineProps({
       href="https://github.com/marcosggdev"
       target="_blank"
     >
-      <Icon :class="color" class="sm-icon" icon="simple-icons:github" />
-      <span v-if="expanded" :class="color">Github</span>
+      <Icon :class="colorClass" class="sm-icon" icon="simple-icons:github" />
+      <span v-if="expanded" :class="colorClass">Github</span>
     </a>
     <a
       class="hover:scale-[1.1] transition flex flex-row items-center gap-1"
       href="https://www.linkedin.com/in/marcos-garcia-garcia-dev/"
       target="_blank"
-      ><Icon :class="color" class="sm-icon" icon="simple-icons:linkedin" />
-      <span v-if="expanded" :class="color">LinkedIn</span>
+      ><Icon :class="colorClass" class="sm-icon" icon="simple-icons:linkedin" />
+      <span v-if="expanded" :class="colorClass">LinkedIn</span>
     </a>
     <a
       class="hover:scale-[1.1] transition flex flex-row items-center gap-1"
       href="mailto:marcosggdev@gmail.com"
       target="_blank"
-      ><Icon :class="color" class="sm-icon" icon="simple-icons:gmail" /><span
-        v-if="expanded"
-        :class="color"
-        >Gmail</span
-      ></a
+      ><Icon
+        :class="colorClass"
+        class="sm-icon"
+        icon="simple-icons:gmail"
+      /><span v-if="expanded" :class="colorClass">Gmail</span></a
     >
   </ul>
 </template>

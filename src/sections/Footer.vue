@@ -2,6 +2,9 @@
 import { Icon } from "@iconify/vue";
 import avatar from "../assets/img/icons/avatar.png";
 import Socials from "../components/Socials.vue";
+import Navbar from "../components/Navbar.vue";
+
+import { navbarThemeVariations } from "../theme/NavbarTheme";
 </script>
 
 <template>
@@ -25,7 +28,7 @@ import Socials from "../components/Socials.vue";
             con personalidad.
           </p>
 
-          <Socials color="text-black" />
+          <Socials color-class="text-black" />
         </div>
       </div>
 
@@ -33,46 +36,19 @@ import Socials from "../components/Socials.vue";
       <div class="flex flex-col gap-4 text-sm">
         <h4 class="text-[var(--dark-title)] font-semibold">Navegación</h4>
 
-        <a
-          href="/"
-          class="text-[var(--dark-text)] opacity-70 hover:opacity-100 transition"
-        >
-          Inicio
-        </a>
-        <a
-          href="/proyectos"
-          class="text-[var(--dark-text)] opacity-70 hover:opacity-100 transition"
-        >
-          Proyectos
-        </a>
-        <a
-          href="/contacto"
-          class="text-[var(--dark-text)] opacity-70 hover:opacity-100 transition"
-        >
-          Contacto
-        </a>
+        <Navbar
+          class="flex flex-col gap-2"
+          group="main"
+          v-bind="navbarThemeVariations[0]"
+        />
 
         <div class="mt-4 flex flex-col gap-2">
           <h4 class="text-[var(--dark-title)] font-semibold">Legal</h4>
-
-          <a
-            href="/privacidad"
-            class="text-[var(--dark-text)] opacity-70 hover:opacity-100 transition"
-          >
-            Privacidad
-          </a>
-          <a
-            href="/cookies"
-            class="text-[var(--dark-text)] opacity-70 hover:opacity-100 transition"
-          >
-            Cookies
-          </a>
-          <a
-            href="/terminos-y-condiciones"
-            class="text-[var(--dark-text)] opacity-70 hover:opacity-100 transition"
-          >
-            Términos
-          </a>
+          <Navbar
+            class="flex flex-col gap-2"
+            group="legal"
+            v-bind="navbarThemeVariations[0]"
+          />
         </div>
       </div>
 

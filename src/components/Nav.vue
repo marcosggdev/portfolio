@@ -1,51 +1,39 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-import { useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { Icon } from "@iconify/vue";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { resolveCSSVar } from "../utils/resolveCSSVar";
+import { NavValidator } from "../validation/ComponentValidators";
 
-import UnderlineLink from "./UnderlineLink.vue";
 import Button from "./Button.vue";
 import Socials from "./Socials.vue";
+import Navbar from "./Navbar.vue";
 
 import avatar from "../assets/img/icons/avatar.png";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const currentRoute = useRoute();
-const router = useRouter();
-const routes = router.getRoutes();
+const props = defineProps({
+  thresholdTheme: {
+    type: Object,
+    required: true,
+    validator: NavValidator,
+  },
+  nonThresholdTheme: {
+    type: Object,
+    required: true,
+    validator: NavValidator,
+  },
+});
 
 const navRef = ref(null);
 
-// 🔥 STATE THRESHOLD
+// 🔥 STATE
 const isInThreshold = ref(true);
 
-// 🎨 THEMES
-const themes = {
-  inside: {
-    background: "transparent",
-    title: "var(--light-title)",
-    text: "var(--light-text)",
-    textHover: "var(--light-text-hover)",
-    buttonVariant: "secondary",
-    buttonText: "text-white",
-  },
-  outside: {
-    background: "white",
-    title: "var(--dark-title)",
-    text: "var(--dark-text)",
-    textHover: "var(--dark-text-hover)",
-    buttonVariant: "primary",
-    buttonText: "text-black",
-  },
-};
-
-// 🎯 THEME ACTIVO
+// 🎯 THEME ACTIVE
 const theme = computed(() =>
-  isInThreshold.value ? themes.inside : themes.outside,
+  isInThreshold.value ? props.thresholdTheme : props.nonThresholdTheme,
 );
 
 const downloadCV = () => {
@@ -104,26 +92,16 @@ onMounted(() => {
       const nearTop = scrollY < window.innerHeight * 0.8;
 
       lastScrollY = scrollY;
-
-      // 🔥 THRESHOLD STATE
       isInThreshold.value = nearTop;
 
-      if (nearTop) {
-        gsap.to(nav, {
-          backgroundColor: theme.value.background,
-          duration: 0.25,
-        });
-
-        openNav();
-        return;
-      }
-
       gsap.to(nav, {
-        backgroundColor: theme.value.background,
+        backgroundColor: resolveCSSVar(theme.value.backgroundColor),
         duration: 0.25,
       });
 
-      if (goingDown) {
+      if (nearTop) {
+        openNav();
+      } else if (goingDown) {
         closeNav();
       } else {
         openNav();
@@ -138,78 +116,50 @@ onMounted(() => {
     ref="navRef"
     class="flex flex-row items-center p-2 justify-between pl-4 pr-4 w-full z-50 transition-colors"
     :style="{
-      '--nav-title': theme.title,
-      '--nav-text': theme.text,
-      '--nav-text-hover': theme.textHover,
+      '--nav-bg': resolveCSSVar(theme.backgroundColor),
+      '--nav-text': resolveCSSVar(theme.textColor),
+      '--nav-navbar-color': resolveCSSVar(theme.navbarTheme.color),
+      '--nav-navbar-hover': resolveCSSVar(theme.navbarTheme.hoverColor),
+      '--nav-navbar-current': resolveCSSVar(theme.navbarTheme.currentColor),
     }"
   >
+    <!-- LEFT -->
     <div class="flex flex-row gap-2">
       <img class="bg-icon" :src="avatar" alt="" />
+
       <div class="flex flex-col gap-2">
-        <p :style="{ color: theme.title }">marcosggdev</p>
-        <Socials color="text-[var(--nav-title)]" />
+        <p class="text-[var(--nav-text)] font-semibold">marcosggdev</p>
+
+        <Socials colorClass="text-[var(--nav-text)]" />
       </div>
     </div>
 
+    <!-- RIGHT -->
     <div class="flex flex-row items-center gap-4">
-      <ul class="flex flex-row gap-2 w-fit">
-        <UnderlineLink
-          v-for="route in routes"
-          :key="route.path"
-          :href="route.path"
-          class="flex flex-row items-center gap-1"
-          :style="{ color: theme.text }"
-          color="text-[var(--nav-text)]"
-          current-color="text-[var(--nav-title)]"
-          :darkens="!isInThreshold"
-        >
-          {{ route.name }}
-        </UnderlineLink>
-      </ul>
+      <Navbar
+        class="flex flex-row items-center gap-2 text-[var(--nav-navbar-color)]"
+        group="main"
+        :theme="theme.navbarTheme"
+      />
 
       <Button
         :callback="downloadCV"
-        :variant="theme.buttonVariant"
-        :background-color="isInThreshold ? '' : 'black'"
-        :color="isInThreshold ? 'white' : 'white'"
+        :variant="isInThreshold ? 'secondary' : 'primary'"
+        :color="isInThreshold ? 'var(--nav-text)' : ''"
+        :background-color="isInThreshold ? '' : 'var(--nav-text)'"
       >
         <div class="flex flex-row items-center gap-2">
-          <span>CV</span>
+          <span text-[var(--nav-text)]>CV</span>
+
           <Icon
             icon="material-symbols:download"
             class="sm-icon"
-            :class="isInThreshold ? 'text-white' : 'text-white'"
+            :class="
+              isInThreshold ? 'text-[var(--nav-text)]' : 'text-[var(--nav-bg)]'
+            "
           />
         </div>
       </Button>
     </div>
   </nav>
 </template>
-
-<style scoped>
-.nav {
-  background-color: var(--nav-bg);
-  transition: background-color 0.25s ease;
-}
-
-/* título */
-.nav-title {
-  color: var(--nav-title);
-  transition: color 0.25s ease;
-}
-
-/* links */
-.nav-link {
-  color: var(--nav-text);
-  transition: color 0.2s ease;
-}
-
-.nav-link:hover {
-  color: var(--nav-text-hover);
-}
-
-/* botón texto */
-.nav-button-text {
-  transition: color 0.2s ease;
-}
-</style>
