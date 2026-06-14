@@ -38,7 +38,7 @@ const routes = computed(() =>
       }"
       class="transition"
       :class="
-        currentRoute.path === route.path
+        currentRoute.name === route.name
           ? 'text-[var(--current-color)] font-bold'
           : 'text-[var(--color)] hover:text-[var(--hover-color)] opacity-70 hover:opacity-100'
       "
