@@ -1,60 +1,57 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import { onBeforeRouteLeave } from "vue-router";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { scrollManager } from "../utils/ScrollManager";
+
 import { Icon } from "@iconify/vue";
+import Section from "../components/Section.vue";
 import AnimatedGradientSVG from "../components/AnimatedGradientSVG.vue";
 
+import villar from "../assets/img/villar.jpg";
+import ibq from "../assets/img/ibq.jpg";
+import ordenador from "../assets/img/ordenador.jpg";
+import avatar from "../assets/img/icons/avatar.png";
+import Socials from "../components/Socials.vue";
+import academic from "../assets/img/svg/academic.svg";
+import programming from "../assets/img/programming.jpg";
 import experience from "../assets/img/experience.jpg";
-/*
+
+gsap.registerPlugin(ScrollTrigger);
+
 const section = ref(null);
 const background = ref(null);
 
 let trigger = null;
 
-// contexto GSAP (IMPORTANTE: debe existir antes de usarlo)
-const ctx = gsap.context(() => {
-  // animations aquí si tienes
-}, section);
-
+// -------------------- INIT --------------------
 onMounted(() => {
+  if (!section.value || !background.value) return;
+
   trigger = ScrollTrigger.create({
     trigger: section.value,
     start: "top top",
     end: "bottom bottom",
+
     pin: background.value,
-    pinSpacing: true,
+    pinSpacing: false,
+
     invalidateOnRefresh: true,
     anticipatePin: 1,
   });
 
-  scrollManager.register(trigger);
-
-  ScrollTrigger.refresh();
+  // IMPORTANTE: delay para evitar conflictos con layout/router
+  requestAnimationFrame(() => {
+    ScrollTrigger.refresh();
+  });
 });
 
-onBeforeRouteLeave(() => {
-  // 1. matar trigger explícitamente (pin incluido)
-  trigger?.kill(true);
-  trigger = null;
-
-  // 2. limpiar animaciones GSAP del scope
-  ctx.revert();
-
-  // 3. opcional pero seguro en SPA con pins
-  ScrollTrigger.getAll().forEach((t) => t.kill());
-
-  // ❌ NO uses clearScrollMemory aquí (rompe más de lo que arregla en pins)
-});
-
+// -------------------- CLEANUP --------------------
 onUnmounted(() => {
   trigger?.kill(true);
   trigger = null;
-  ctx.revert();
+
+  ScrollTrigger.getAll().forEach((t) => t.kill());
 });
-*/
 </script>
 
 <template>
