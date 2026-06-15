@@ -1,18 +1,19 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { Icon } from "@iconify/vue";
+import { computed, ref, onMounted, onUnmounted, watch } from "vue";
+import { useRoute } from "vue-router";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import { resolveCSSVar } from "../utils/resolveCSSVar";
 import { NavValidator } from "../validation/ComponentValidators";
 
+import { Icon } from "@iconify/vue";
 import Button from "./Button.vue";
 import Socials from "./Socials.vue";
 import Navbar from "./Navbar.vue";
 
 import avatar from "../assets/img/icons/avatar.png";
 
+// -------------------- PROPS --------------------
 const props = defineProps({
   thresholdTheme: {
     type: Object,
@@ -28,12 +29,19 @@ const props = defineProps({
   threshold: { type: String, default: "0.8" },
 });
 
+// -------------------- STATE --------------------
 const navRef = ref(null);
 
-// 🔥 STATE
 const isInThreshold = ref(true);
+const isHidden = ref(false);
 
-// 🎯 THEME ACTIVE
+let lastScrollY = 0;
+let navHeight = 0;
+
+// -------------------- ROUTE (solo por consistencia futura) --------------------
+useRoute();
+
+// -------------------- THEME --------------------
 const theme = computed(() =>
   !props.fixed
     ? isInThreshold.value
@@ -42,6 +50,76 @@ const theme = computed(() =>
     : props.nonThresholdTheme,
 );
 
+// -------------------- SCROLL LOGIC --------------------
+const onScroll = () => {
+  if (!navRef.value || props.fixed) return;
+
+  const scrollY = window.scrollY;
+  const goingDown = scrollY > lastScrollY;
+  const delta = Math.abs(scrollY - lastScrollY);
+
+  if (delta < 2) return; // evita micro-jitter
+
+  const nearTop = scrollY < window.innerHeight * Number(props.threshold);
+
+  isInThreshold.value = nearTop;
+
+  // -------------------------
+  // VISIBILIDAD NAVBAR
+  // -------------------------
+  if (nearTop) {
+    isHidden.value = false;
+  } else {
+    isHidden.value = goingDown;
+  }
+
+  // -------------------------
+  // BACKGROUND ANIMATION
+  // -------------------------
+  gsap.to(navRef.value, {
+    backgroundColor: resolveCSSVar(theme.value.backgroundColor),
+    duration: 0.25,
+    overwrite: "auto",
+  });
+
+  lastScrollY = scrollY;
+};
+
+// -------------------- WATCH VISIBILITY --------------------
+watch(isHidden, (hidden) => {
+  if (!navRef.value) return;
+
+  gsap.to(navRef.value, {
+    height: hidden ? 0 : navHeight,
+    overflow: hidden ? "hidden" : "none",
+    paddingTop: hidden ? 0 : "0.5rem",
+    paddingBottom: hidden ? 0 : "0.5rem",
+    duration: 0.3,
+    ease: "power2.out",
+    overwrite: "auto",
+  });
+});
+
+// -------------------- LIFECYCLE --------------------
+onMounted(() => {
+  lastScrollY = window.scrollY;
+
+  navHeight = navRef.value.getBoundingClientRect().height;
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  onScroll();
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", onScroll);
+
+  if (navRef.value) {
+    gsap.killTweensOf(navRef.value);
+  }
+});
+
+// -------------------- ACTIONS --------------------
 const downloadCV = () => {
   const link = document.createElement("a");
   link.href = "/files/cv.pdf";
@@ -50,71 +128,6 @@ const downloadCV = () => {
   link.click();
   document.body.removeChild(link);
 };
-
-onMounted(() => {
-  if (!navRef.value || props.fixed) return;
-
-  const nav = navRef.value;
-
-  let lastScrollY = window.scrollY;
-  let isOpen = true;
-
-  const fullHeight = nav.getBoundingClientRect().height;
-
-  const openNav = () => {
-    if (isOpen) return;
-    isOpen = true;
-
-    gsap.to(nav, {
-      height: fullHeight,
-      duration: 0.35,
-      ease: "power2.out",
-      paddingTop: "0.5rem",
-      paddingBottom: "0.5rem",
-      overflow: "hidden",
-    });
-  };
-
-  const closeNav = () => {
-    if (!isOpen) return;
-    isOpen = false;
-
-    gsap.to(nav, {
-      height: 0,
-      duration: 0.3,
-      ease: "power2.inOut",
-      paddingTop: 0,
-      paddingBottom: 0,
-      overflow: "hidden",
-    });
-  };
-
-  ScrollTrigger.create({
-    start: 0,
-    end: "max",
-    onUpdate: () => {
-      const scrollY = window.scrollY;
-      const goingDown = scrollY > lastScrollY;
-      const nearTop = scrollY < window.innerHeight * props.threshold;
-
-      lastScrollY = scrollY;
-      isInThreshold.value = nearTop;
-
-      gsap.to(nav, {
-        backgroundColor: resolveCSSVar(theme.value.backgroundColor),
-        duration: 0.25,
-      });
-
-      if (nearTop) {
-        openNav();
-      } else if (goingDown) {
-        closeNav();
-      } else {
-        openNav();
-      }
-    },
-  });
-});
 </script>
 
 <template>
@@ -136,7 +149,6 @@ onMounted(() => {
 
       <div class="flex flex-col gap-2">
         <p class="text-[var(--nav-text)] font-semibold">marcosggdev</p>
-
         <Socials colorClass="text-[var(--nav-text)]" />
       </div>
     </div>
@@ -160,8 +172,9 @@ onMounted(() => {
             :class="
               isInThreshold ? 'text-[var(--nav-text)]' : 'text-[var(--nav-bg)]'
             "
-            >CV</span
           >
+            CV
+          </span>
 
           <Icon
             icon="material-symbols:download"

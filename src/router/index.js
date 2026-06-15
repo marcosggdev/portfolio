@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-// assets
-import hero from "../assets/img/hero.jpg";
-
 // layouts
 import DefaultLayout from "../layouts/DefaultLayout.vue";
 import LegalLayout from "../layouts/LegalLayout.vue";
@@ -22,17 +19,16 @@ const routes = [
     component: DefaultLayout,
     children: [
       {
-        path: "/",
+        path: "",
         name: "index",
         component: Index,
         meta: {
           label: "Inicio",
           group: "main",
-          src: hero,
         },
       },
       {
-        path: "/proyectos",
+        path: "proyectos",
         name: "projects",
         component: Projects,
         meta: {
@@ -41,7 +37,7 @@ const routes = [
         },
       },
       {
-        path: "/contacto",
+        path: "contacto",
         name: "contact",
         component: Contact,
         meta: {
@@ -90,15 +86,13 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
-    }
-
-    return {
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    };
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        const el = document.scrollingElement || document.documentElement;
+        el.scrollTop = 0;
+        resolve();
+      });
+    });
   },
 });
 
