@@ -6,7 +6,7 @@
 
 :root {
   --bg-color: #222222;
-  --primary-color: rgb(255, 255, 190);
+  --primary-color: rgb(255, 255, 149);
   --primary-color-hover: rgb(255, 255, 224);
   --primary-color-focus: rgb(185, 185, 114);
   --light-title: rgb(237, 237, 237);
@@ -105,12 +105,12 @@ p {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(60, 60, 60, 0.462);
   backdrop-filter: blur(4px);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(216, 216, 216);
+  background: var(--primary-color);
   border-radius: 999px;
 }
 
