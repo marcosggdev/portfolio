@@ -26,10 +26,12 @@ const props = defineProps({
         class="flex flex-col gap-8 max-w-[1024px] items-center justify-center"
       >
         <slot>
-          <h2 class="text-center">
-            Bienvenid@ a mi portfolio. Aquí podrás saber más sobre mí y sobre
-            mis trabajos y experiencia
-          </h2>
+          <h1>Título</h1>
+          <h2>Subtítulo</h2>
+          <h4>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae
+            commodi consequuntur aspernatur vel excepturi
+          </h4>
           <div class="flex flex-row items-center gap-4">
             <Button
               type="link"

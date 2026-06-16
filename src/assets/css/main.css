@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-hero: "Days One", sans-serif;
+}
+
 :root {
   --bg-color: #222222;
   --primary-color: rgb(255, 255, 190);
@@ -17,18 +21,20 @@
   --light-bg: #e6e6e6;
   --dark-bg: #222222;
 
+  --font-hero: "Days One";
+
   /*nav*/
   --nav-threshold-bg-color: transparent;
   --nav-threshold-text-color: white;
   --nav-threshold-navbar-color: rgb(204, 204, 204);
   --nav-threshold-navbar-hover-color: rgb(255, 255, 255);
-  --nav-threshold-navbar-current-color: var(--primary-color);
+  --nav-threshold-navbar-current-color: white;
 
   --nav-non-threshold-bg-color: #222222;
   --nav-non-threshold-text-color: rgb(225, 225, 225);
   --nav-non-threshold-navbar-color: rgb(218, 218, 218);
   --nav-non-threshold-navbar-hover-color: rgb(255, 255, 255);
-  --nav-non-threshold-navbar-current-color: var(--primary-color);
+  --nav-non-threshold-navbar-current-color: white;
 
   --navbar-color-0: rgb(44, 44, 44);
   --navbar-hover-color-0: rgb(0, 0, 0);
@@ -42,32 +48,32 @@ html {
 
 .sm-icon {
   width: 20px;
-  height: auto;
+  height: 20px;
   object-fit: cover;
 }
 
 .md-icon {
   width: 32px;
-  height: auto;
+  height: 32px;
   object-fit: cover;
 }
 
 .bg-icon {
   width: 48px;
-  height: auto;
-  object-fit: contain;
+  height: 48px;
+  object-fit: cover;
 }
 
 .bg-e-bg-icon {
   width: 64px;
-  height: auto;
-  object-fit: contain;
+  height: 64px;
+  object-fit: cover;
 }
 
 .e-bg-icon {
   width: 128px;
-  height: auto;
-  object-fit: contain;
+  height: 128px;
+  object-fit: cover;
 }
 
 h1 {

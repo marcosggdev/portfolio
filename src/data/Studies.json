@@ -1,0 +1,20 @@
+[
+  {
+    "icon": "mdi:school",
+    "label": "2016",
+    "title": "Bachillerato de Ciencias",
+    "text": "Cursé el bachillerato de ciencias en el IES Bernaldo de Quirós, y me presenté a la PAU posteriormente. Mi objetivo era cursar el DG en Física y Matemáticas, y conseguí la nota necesaria."
+  },
+  {
+    "icon": "mdi:school",
+    "label": "2019",
+    "title": "Doble Grado en Física y Matemáticas",
+    "text": "Cursé el Doble Grado en Física y Matemáticas en la Universidad de Oviedo durante 3 años. No completé la carrera, pero descubrí mientras la cursaba mi pasión por el desarrollo de aplicaciones."
+  },
+  {
+    "icon": "mdi:school",
+    "label": "2022",
+    "title": "Técnico Superior en Desarrollo de Aplicaciones Web",
+    "text": "Cursé el CFGS DAW durante 2 años y obtuve mi título al finalizar el curso."
+  }
+]

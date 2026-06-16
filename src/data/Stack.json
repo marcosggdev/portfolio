@@ -1,0 +1,15 @@
+[
+  { "icon": "logos:html-5", "text": "HTML" },
+  { "icon": "logos:css-3", "text": "CSS" },
+  { "icon": "logos:javascript", "text": "JavaScript" },
+  { "icon": "logos:typescript-icon", "text": "TypeScript" },
+  { "icon": "logos:vue", "text": "Vue" },
+  { "icon": "logos:react", "text": "React" },
+  { "icon": "logos:laravel", "text": "Laravel" },
+  { "icon": "logos:wordpress-icon", "text": "WordPress" },
+  { "icon": "logos:mysql", "text": "MySQL" },
+  { "icon": "logos:postgresql", "text": "PostgreSQL" },
+  { "icon": "logos:tailwindcss-icon", "text": "TailwindCSS" },
+  { "icon": "simple-icons:opengl", "text": "OpenGL" },
+  {"icon": "mdi:plus", "text": "Y Más..."}
+]
