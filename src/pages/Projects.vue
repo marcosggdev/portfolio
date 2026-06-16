@@ -24,7 +24,8 @@ import ArchiveProjects from "../sections/ArchiveProjects.vue";
             </div>
             <div class="flex flex-col gap-2">
               <p class="text-[var(--light-text)]">
-                Desarrollé con Nuxt + Vue la página oficial de la empresa.
+                Aquí podrás acceder a todos mis proyectos publicados en mi
+                Portfolio. Podrás visitar directamente algunos.
               </p>
             </div>
           </div>
