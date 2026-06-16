@@ -3,7 +3,8 @@ import { createRouter, createWebHistory } from "vue-router";
 // layouts
 import DefaultLayout from "../layouts/DefaultLayout.vue";
 import LegalLayout from "../layouts/LegalLayout.vue";
-
+import ProjectsLayout from "../layouts/ProjectsLayout.vue";
+import SingleProjectLayout from "../layouts/SingleProjectLayout.vue";
 // pages
 import Index from "../pages/Index.vue";
 import Projects from "../pages/Projects.vue";
@@ -11,6 +12,7 @@ import Contact from "../pages/Contact.vue";
 import Privacy from "../pages/Privacy.vue";
 import TermsAndConditions from "../pages/TermsAndConditions.vue";
 import Cookies from "../pages/Cookies.vue";
+import ArchiveProjects from "../pages/ArchiveProjects.vue";
 
 const routes = [
   {
@@ -29,12 +31,22 @@ const routes = [
       },
       {
         path: "proyectos",
-        name: "projects",
-        component: Projects,
-        meta: {
-          label: "Proyectos",
-          group: "main",
-        },
+        component: ProjectsLayout,
+        children: [
+          {
+            path: "",
+            name: "projects",
+            component: ArchiveProjects,
+            meta: {
+              label: "Proyectos",
+              group: "main",
+            },
+          },
+          {
+            path: ":slug",
+            component: SingleProjectLayout,
+          },
+        ],
       },
       {
         path: "contacto",

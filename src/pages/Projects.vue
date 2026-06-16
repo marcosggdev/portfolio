@@ -4,7 +4,7 @@ import hero from "../assets/img/experience.jpg";
 import { Icon } from "@iconify/vue";
 
 import mdoIcon from "../assets/img/icons/mdo.png";
-import ArchiveProjects from "../sections/ArchiveProjects.vue";
+import ArchiveProjects from "../layouts/ProjectsLayout.vue";
 </script>
 
 <template>

@@ -23,6 +23,10 @@ const currentRoute = useRoute();
 const routes = computed(() =>
   router.getRoutes().filter((route) => route.meta?.group === props.group),
 );
+
+const isActiveRoute = (route) =>
+  currentRoute.path === route.path ||
+  currentRoute.path.startsWith(route.path + "/");
 </script>
 
 <template>
@@ -38,7 +42,7 @@ const routes = computed(() =>
       }"
       class="transition"
       :class="
-        currentRoute.name === route.name
+        isActiveRoute(route)
           ? 'text-[var(--current-color)] font-bold'
           : 'text-[var(--color)] hover:text-[var(--hover-color)] opacity-70 hover:opacity-100'
       "
