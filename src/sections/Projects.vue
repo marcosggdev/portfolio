@@ -7,6 +7,8 @@ import mdo from "../assets/img/mdo-showcase.png";
 import UnderlineLink from "../components/UnderlineLink.vue";
 import fallback from "../assets/img/fallback.png";
 import SkewHoverCarousel from "../components/SkewHoverCarousel.vue";
+
+import FeaturedProjects from "../data/FeaturedProjects";
 </script>
 
 <template>
@@ -41,7 +43,7 @@ import SkewHoverCarousel from "../components/SkewHoverCarousel.vue";
 
         <!--right col-->
         <div class="flex flex-col gap-8">
-          <SkewHoverCarousel />
+          <SkewHoverCarousel :items="FeaturedProjects" />
         </div>
       </div>
     </div>

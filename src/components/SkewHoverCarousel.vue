@@ -4,6 +4,9 @@ import { useRouter } from "vue-router";
 
 import fallbackImg from "../assets/img/fallback.png";
 import mdoImg from "../assets/img/mdo.png";
+import SkewHoverCarouselSchema from "../data/SkewHoverCarouselSchema";
+
+import { SkewHoverCarouselValidator } from "../validation/ComponentValidators";
 
 /**
  * 📦 Props del componente
@@ -38,6 +41,7 @@ const props = defineProps({
         brightness: 0.7,
       },
     ],
+    validator: SkewHoverCarouselValidator,
   },
 });
 
