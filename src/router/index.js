@@ -45,6 +45,9 @@ const routes = [
           {
             path: ":slug",
             component: SingleProjectLayout,
+            meta: {
+              label: "Proyecto",
+            },
           },
         ],
       },

@@ -1,6 +1,6 @@
 <script setup>
 import Projects from "../data/Projects";
-import { computed } from "vue";
+import { computed, provide } from "vue";
 import { useRoute } from "vue-router";
 
 import Hero from "../sections/Hero.vue";
@@ -15,6 +15,10 @@ import ProjectBrief from "../components/ProjectBrief.vue";
 const route = useRoute();
 const project = computed(() => Projects[route.params.slug]);
 const Component = computed(() => project.value?.component);
+
+if (project?.value?.title) {
+  provide("slugLabel", project?.value?.title);
+}
 </script>
 
 <template>

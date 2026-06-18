@@ -36,9 +36,15 @@
   --nav-non-threshold-navbar-hover-color: rgb(255, 255, 255);
   --nav-non-threshold-navbar-current-color: white;
 
+  /*navbar*/
   --navbar-color-0: rgb(44, 44, 44);
   --navbar-hover-color-0: rgb(0, 0, 0);
   --navbar-current-color-0: rgb(0, 0, 0);
+
+  /*breadcrumbs*/
+  --breadcrumbs-navbar-color: rgb(53, 53, 53);
+  --breadcrumbs-navbar-hover-color: rgb(30, 30, 30);
+  --breadcrumbs-navbar-current-color: rgb(0, 0, 0);
 }
 
 html {
