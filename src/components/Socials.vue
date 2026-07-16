@@ -24,15 +24,5 @@ const props = defineProps({
       ><Icon :class="colorClass" class="sm-icon" icon="simple-icons:linkedin" />
       <span v-if="expanded" :class="colorClass">LinkedIn</span>
     </a>
-    <a
-      class="hover:scale-[1.1] transition flex flex-row items-center gap-1"
-      href="mailto:marcosggdev@gmail.com"
-      target="_blank"
-      ><Icon
-        :class="colorClass"
-        class="sm-icon"
-        icon="simple-icons:gmail"
-      /><span v-if="expanded" :class="colorClass">Gmail</span></a
-    >
   </ul>
 </template>

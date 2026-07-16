@@ -19,7 +19,9 @@ const props = defineProps({
 <template>
   <a class="flex flex-col gap-8" :href="href">
     <img class="aspect-square object-cover" :src="src" alt="" />
-    <div class="grid grid-cols-[max-content_auto] gap-4 pb-16 md:pb-32">
+    <div
+      class="grid grid-cols-[max-content_auto] gap-4 pb-16 md:pb-24 lg:pb-32"
+    >
       <Icon
         :icon="icon"
         class="bg-icon md:e-bg-icon text-[var(--dark-text)]/60"

@@ -63,7 +63,7 @@ const isActiveRoute = (route) =>
         '--hover-color': resolveCSSVar(theme.hoverColor),
         '--current-color': resolveCSSVar(theme.currentColor),
       }"
-      class="transition flex flex-row items-center gap-2"
+      class="transition flex flex-row items-center gap-4"
       :class="
         isActiveRoute(route)
           ? 'text-[var(--current-color)] font-bold'

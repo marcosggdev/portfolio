@@ -8,7 +8,9 @@ import mdo from "../assets/img/mdo.png";
 
 <template>
   <Section :has-padding="true" size="bg">
-    <div class="flex flex-col md:grid md:grid-cols-3 gap-8 md:gap-16">
+    <div
+      class="flex flex-col md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 gap-8 md:gap-16"
+    >
       <ProjectPreview
         :src="portfolio"
         icon="mdi:package-variant-closed"

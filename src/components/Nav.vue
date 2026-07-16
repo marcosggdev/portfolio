@@ -144,7 +144,7 @@ const downloadCV = () => {
     }"
   >
     <!-- LEFT -->
-    <div class="flex flex-row gap-2 hidden md:block">
+    <div class="flex flex-row gap-2 hidden md:flex">
       <img class="bg-icon" :src="avatar" alt="" />
 
       <div class="flex flex-col gap-2">

@@ -10,7 +10,7 @@ import Footer from "../sections/Footer.vue";
   <Nav :fixed="true" v-bind="navThemeVariations[0]" />
 
   <div
-    class="flex flex-col gap-4 max-w-[1024px] ml-auto mr-auto p-16 pt-32 pb-32"
+    class="flex flex-col gap-4 md:max-w-[1024px] ml-auto mr-auto p-8 pt-16 pb-16 md:p-16 md:pt-32 md:pb-32"
   >
     <Navbar
       class="flex flex-row items-center gap-2 p-2"
