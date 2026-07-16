@@ -9,5 +9,5 @@ const Component = computed(() => project.value?.component);
 </script>
 
 <template>
-  <component :is="Component"></component>
+  <component :is="Component" :project="project"></component>
 </template>

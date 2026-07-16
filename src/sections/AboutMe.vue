@@ -58,12 +58,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section ref="section" class="relative h-[300vh]">
+  <section ref="section" class="relative h-[calc(300vh + 64)]">
     <div ref="background" class="absolute inset-0 h-screen w-full">
       <AnimatedGradientSVG class="h-full w-full" :brightness="0.5" />
     </div>
     <div
-      class="relative z-10 flex flex-col pt-[100vh] max-w-[1024px] ml-auto mr-auto"
+      class="relative z-10 flex flex-col pt-[100vh] max-w-[1024px] gap-64 ml-auto mr-auto"
     >
       <AboutMeStudies />
       <AboutMeExperience />

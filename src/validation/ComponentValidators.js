@@ -4,9 +4,13 @@ import NavbarThemeSchema from "../data/NavbarThemeSchema";
 import StackSchema from "../data/StackSchema";
 import SkewHoverCarouselSchema from "../data/SkewHoverCarouselSchema";
 import BreadcrumbsSchema from "../data/BreadcrumbsSchema";
+import ProjectSchema from "../data/ProjectSchema";
+import ProjectGallerySchema from "../data/ProjectGallerySchema";
 
 export const NavValidator = ajv.compile(NavThemeSchema);
 export const NavbarValidator = ajv.compile(NavbarThemeSchema);
 export const StackValidator = ajv.compile(StackSchema);
 export const SkewHoverCarouselValidator = ajv.compile(SkewHoverCarouselSchema);
 export const BreadcrumbsValidator = ajv.compile(BreadcrumbsSchema);
+export const ProjectValidator = ajv.compile(ProjectSchema);
+export const ProjectGalleryValidator = ajv.compile(ProjectGallerySchema);

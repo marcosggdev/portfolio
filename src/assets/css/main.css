@@ -14,8 +14,9 @@
   --light-text: rgb(200, 200, 200);
   --light-text-hover: rgb(239, 239, 239);
   --dark-title: rgb(21, 21, 21);
-  --dark-title-hover: rgb(62, 62, 62);
+  --dark-subtitle: rgb(38, 38, 38);
   --dark-text: rgb(52, 52, 52);
+  --dark-title-hover: rgb(62, 62, 62);
   --dark-text-hover: rgb(107, 107, 107);
   --download-color: rgb(113, 163, 255);
   --light-bg: #e6e6e6;

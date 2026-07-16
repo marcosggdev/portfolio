@@ -6,6 +6,7 @@ const props = defineProps({
   stack: { type: Array, required: true, validator: StackValidator },
   cols: { type: Number, default: -1 },
   rows: { type: Number, default: -1 },
+  colorClass: { type: String, default: "text-white" },
 });
 </script>
 
@@ -18,8 +19,12 @@ const props = defineProps({
       v-for="tech in stack"
       class="flex flex-col items-center gap-1 aspect-square"
     >
-      <Icon class="bg-icon aspect-square" :icon="tech.icon" />
-      <span>{{ tech.text }}</span>
+      <Icon
+        class="bg-icon aspect-square"
+        :class="colorClass"
+        :icon="tech.icon"
+      />
+      <span :class="colorClass">{{ tech.text }}</span>
     </li>
   </ul>
 </template>

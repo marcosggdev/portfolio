@@ -13,13 +13,15 @@ const props = defineProps({
 <template>
   <Section :has-padding="true">
     <div class="grid grid-cols-[70%_auto] gap-16">
-      <div class="flex flex-col gap-4 min-w-[640px]">
+      <div class="flex flex-col gap-16 min-w-[640px]">
         <Breadcrumbs
           class="border-b-2 border-black/20 p-4"
           :theme="breadcrumbsThemeVariations[0]"
         />
-        <h1>{{ title }}</h1>
-        <h2>{{ subtitle }}</h2>
+        <header class="flex flex-col gap-2">
+          <h1 class="text-[var(--dark-title)]">{{ title }}</h1>
+          <h2 class="text-[var(--dark-subtitle)]">{{ subtitle }}</h2>
+        </header>
         <slot name="content"></slot>
       </div>
       <aside class="flex flex-col gap-4">
