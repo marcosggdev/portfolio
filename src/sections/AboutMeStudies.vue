@@ -14,7 +14,7 @@ import ItemsScroll from "../components/ItemsScroll.vue";
       <Stack :stack="stack" :cols="4" />
     </div>
     <div class="flex flex-col gap-8">
-      <h3 class="text-[var(--light-title)]">Formación y Stack</h3>
+      <h3 class="text-[var(--primary-color)]">Formación y Stack</h3>
       <ItemsScroll />
     </div>
   </div>

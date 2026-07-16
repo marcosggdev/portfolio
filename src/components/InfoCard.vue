@@ -6,7 +6,7 @@ const props = defineProps({
   icon: { type: String, required: false, default: "" },
   iconColor: { type: String, required: false, default: "--primary-color" },
   image: { type: String, required: false, default: "" },
-  mediaSize: { type: String, required: false, default: "bg-icon" },
+  mediaSize: { type: String, required: false, default: "md-icon" },
   rounded: { type: String, required: false, default: "none" },
   alt: { type: String, default: "" },
   label: { type: String, required: false, default: "" },
@@ -22,7 +22,7 @@ const props = defineProps({
     }"
     class="grid grid-cols-[max-content_auto] items-start gap-4"
   >
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 justify-center items-center">
       <Icon
         v-if="icon"
         class="text-[var(--icon-color)] aspect-square"
