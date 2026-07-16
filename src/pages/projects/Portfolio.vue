@@ -89,7 +89,18 @@ defineProps({
         </p>
       </div>
       <Gallery :data="project.galleryData" />
-      <Stack :stack="project.stack" :cols="8" color-class="text-black" />
+      <Stack
+        class="hidden md:block"
+        :stack="project.stack"
+        :cols="8"
+        color-class="text-black"
+      />
+      <Stack
+        class="md:hidden"
+        :stack="project.stack"
+        :cols="3"
+        color-class="text-black"
+      />
     </template>
     <template #aside> aside </template>
   </ProjectEntry>

@@ -20,7 +20,7 @@ import avatar from "../assets/img/icons/avatar.png";
     size="bg"
   >
     <div
-      class="flex flex-col items-center p-8 gap-16 md:grid md:grid-cols-[max-content_max-content] md:max-w-[1024px]"
+      class="flex flex-col items-center md:p-8 gap-16 md:grid md:grid-cols-[max-content_max-content] md:max-w-[1024px]"
     >
       <header class="flex flex-col gap-4">
         <img class="e-bg-icon rounded-xl shadow-xl" :src="avatar" alt="" />

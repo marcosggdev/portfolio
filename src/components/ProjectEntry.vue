@@ -12,8 +12,8 @@ const props = defineProps({
 
 <template>
   <Section :has-padding="true">
-    <div class="grid grid-cols-[70%_auto] gap-16">
-      <div class="flex flex-col gap-16 min-w-[640px]">
+    <div class="flex flex-col md:grid md:grid-cols-[70%_auto] gap-16">
+      <div class="flex flex-col gap-16 md:min-w-[640px]">
         <Breadcrumbs class="p-4" :theme="breadcrumbsThemeVariations[0]" />
         <header class="flex flex-col gap-2">
           <h1 class="text-[var(--dark-title)]">{{ title }}</h1>
@@ -21,7 +21,7 @@ const props = defineProps({
         </header>
         <slot name="content"></slot>
       </div>
-      <aside class="flex flex-col gap-4">
+      <aside class="flex flex-col gap-4 hidden md:block">
         <slot name="aside"></slot>
       </aside>
     </div>

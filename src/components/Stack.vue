@@ -12,7 +12,7 @@ const props = defineProps({
 
 <template>
   <ul
-    class="w-fit h-fit grid gap-2 text-white"
+    class="w-fit h-fit grid gap-2 text-white m-auto"
     :style="`grid-template-columns: repeat(${cols}, 1fr); grid-template-rows: repeat(${rows}, 1fr)`"
   >
     <li

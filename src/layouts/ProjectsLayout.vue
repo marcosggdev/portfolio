@@ -31,8 +31,10 @@ if (project?.value?.title) {
   >
     <div class="flex flex-col md:grid md:grid-cols-2 gap-16">
       <!--left col-->
-      <div class="flex flex-col gap-4 p-4 rounded-lg h-fit">
-        <div class="grid grid-cols-[max-content_auto] gap-4 flex-1">
+      <div class="flex flex-col gap-4 md:p-4 rounded-lg h-fit">
+        <div
+          class="flex flex-col md:grid md:grid-cols-[max-content_auto] gap-4 flex-1"
+        >
           <Icon class="bg-icon md:e-bg-icon" icon="mdi:folder-outline" />
           <div class="flex flex-col gap-2">
             <div class="flex flex-col">
@@ -51,7 +53,7 @@ if (project?.value?.title) {
 
       <!--right col-->
       <div
-        class="flex flex-col gap-4 p-4 rounded-lg shadow-xl h-fit"
+        class="flex flex-col gap-4 md:p-4 rounded-lg shadow-xl h-fit"
         style="backdrop-filter: blur(10px)"
       >
         <ProjectBrief v-if="project" v-bind="project" />
