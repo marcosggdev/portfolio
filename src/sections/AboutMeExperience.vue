@@ -8,14 +8,14 @@ import experience from "../assets/img/experience.jpg";
     class="grid grid-cols-2 items-center gap-16 h-screen pt-32 pb-32 max-w-[1024px] ml-auto mr-auto"
   >
     <div class="flex flex-col gap-8">
-      <h3 class="text-[var(--light-title)]">Experiencia</h3>
+      <h3 class="text-[var(--primary-color)]">Experiencia</h3>
       <div class="flex flex-col gap-8 overflow-y-auto h-[50vh]">
         <div class="grid grid-cols-[max-content_auto] gap-4">
           <Icon class="text-white bg-icon" icon="fa6-brands:wordpress" />
           <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
               <div class="flex flex-row gap-4 items-center">
-                <h5 class="text-[var(--light-title)]">3 Meses</h5>
+                <h5 class="text-[var(--primary-color)]">3 Meses</h5>
                 <h5 class="text-[var(--light-text)]">Prácticas FP</h5>
                 <h5 class="text-[var(--light-text)]">2023</h5>
               </div>
@@ -32,7 +32,7 @@ import experience from "../assets/img/experience.jpg";
           <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
               <div class="flex flex-row gap-4 items-center">
-                <h5 class="text-[var(--light-title)]">3 Meses</h5>
+                <h5 class="text-[var(--primary-color)]">3 Meses</h5>
                 <h5 class="text-[var(--light-text)]">
                   Proyecto MDO Corp. S. L.
                 </h5>
@@ -55,7 +55,7 @@ import experience from "../assets/img/experience.jpg";
           <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
               <div class="flex flex-row gap-4 items-center">
-                <h5 class="text-[var(--light-title)]">12 Meses</h5>
+                <h5 class="text-[var(--primary-color)]">12 Meses</h5>
                 <h5 class="text-[var(--light-text)]">Otros proyectos</h5>
                 <h5 class="text-[var(--light-text)]">2020 - 2026</h5>
               </div>
