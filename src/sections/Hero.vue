@@ -20,7 +20,7 @@ const props = defineProps({
     :size="size"
   >
     <div
-      class="flex flex-row gap-2 items-center justify-center w-full h-full absolute inset-0 w-full h-full"
+      class="flex flex-row gap-2 items-center justify-center w-full h-full w-full h-full"
     >
       <div
         class="flex flex-col gap-8 max-w-[1024px] items-center justify-center"

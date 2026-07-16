@@ -29,11 +29,11 @@ if (project?.value?.title) {
     :background-brightness="0.3"
     size="md"
   >
-    <div class="grid grid-cols-2 gap-16">
+    <div class="flex flex-col md:grid md:grid-cols-2 gap-16">
       <!--left col-->
       <div class="flex flex-col gap-4 p-4 rounded-lg h-fit">
         <div class="grid grid-cols-[max-content_auto] gap-4 flex-1">
-          <Icon class="e-bg-icon" icon="mdi:folder-outline" />
+          <Icon class="bg-icon md:e-bg-icon" icon="mdi:folder-outline" />
           <div class="flex flex-col gap-2">
             <div class="flex flex-col">
               <h2 class="text-[var(--light-title)]">Proyectos</h2>
