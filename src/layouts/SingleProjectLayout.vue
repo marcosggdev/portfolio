@@ -1,5 +1,6 @@
 <script setup>
 import Projects from "../data/Projects";
+
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 

@@ -2,6 +2,7 @@
 import Section from "../components/Section.vue";
 import ProjectPreview from "../components/ProjectPreview.vue";
 
+import portfolio from "../assets/img/portfolio.png";
 import mdo from "../assets/img/mdo.png";
 </script>
 
@@ -9,13 +10,21 @@ import mdo from "../assets/img/mdo.png";
   <Section :has-padding="true" size="bg">
     <div class="grid grid-cols-3 gap-16">
       <ProjectPreview
-        :src="mdo"
+        :src="portfolio"
+        icon="mdi:package-variant-closed"
         title="Portfolio"
         description="Por supuesto, esta página se incluye como proyecto"
+        href="/proyectos/portfolio"
+      >
+      </ProjectPreview>
+      <ProjectPreview
+        :src="mdo"
+        icon="mdi:package-variant-closed"
+        title="Página de MDO Corp."
+        description="La página oficial de MDO Corp. S. L."
         href="/proyectos/mdo-corp-sl"
       >
       </ProjectPreview>
-      <ProjectPreview></ProjectPreview>
       <ProjectPreview></ProjectPreview>
       <ProjectPreview></ProjectPreview>
       <ProjectPreview></ProjectPreview>

@@ -7,7 +7,6 @@ import ProjectsLayout from "../layouts/ProjectsLayout.vue";
 import SingleProjectLayout from "../layouts/SingleProjectLayout.vue";
 // pages
 import Index from "../pages/Index.vue";
-import Projects from "../pages/Projects.vue";
 import Contact from "../pages/Contact.vue";
 import Privacy from "../pages/Privacy.vue";
 import TermsAndConditions from "../pages/TermsAndConditions.vue";

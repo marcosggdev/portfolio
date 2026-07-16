@@ -1,5 +1,6 @@
 <script setup>
 import Projects from "../data/Projects";
+
 import { computed, provide } from "vue";
 import { useRoute } from "vue-router";
 
@@ -40,7 +41,8 @@ if (project?.value?.title) {
             <div class="flex flex-col gap-2">
               <p class="text-[var(--light-text)]">
                 Aquí podrás acceder a todos mis proyectos publicados en mi
-                Portfolio. Podrás visitar directamente algunos.
+                Portfolio. Podrás visitar directamente algunos, mientras que
+                otros carecen de hosting activo.
               </p>
             </div>
           </div>

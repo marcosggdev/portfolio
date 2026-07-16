@@ -12,6 +12,7 @@ const props = defineProps({
       "Quédate pendiente y échale un vistazo a los nuevos proyectos que vendrán...",
   },
   href: { type: String, default: "#" },
+  icon: { type: String, default: "mdi:clock-outline" },
 });
 </script>
 
@@ -19,10 +20,9 @@ const props = defineProps({
   <a class="flex flex-col gap-8" :href="href">
     <img class="aspect-square object-cover" :src="src" alt="" />
     <div class="grid grid-cols-[max-content_auto] gap-4 pb-32">
-      <img class="e-bg-icon" :src="logo" alt="" />
-      <div class="flex flex-col">
-        <h2>{{ title }}</h2>
-
+      <Icon :icon="icon" class="e-bg-icon text-[var(--dark-text)]/60" />
+      <div class="flex flex-col gap-2">
+        <h3>{{ title }}</h3>
         <p>{{ description }}</p>
       </div>
     </div>
