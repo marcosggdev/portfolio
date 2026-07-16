@@ -148,7 +148,7 @@ const downloadCV = () => {
       <img class="bg-icon" :src="avatar" alt="" />
 
       <div class="flex flex-col gap-2">
-        <p class="text-[var(--nav-text)] font-semibold">marcosggdev</p>
+        <p class="text-[var(--nav-text)] font-semibold">Marcos G.</p>
         <Socials colorClass="text-[var(--nav-text)]" />
       </div>
     </div>
