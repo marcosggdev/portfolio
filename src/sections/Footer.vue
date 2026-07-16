@@ -9,10 +9,10 @@ import { navbarThemeVariations } from "../theme/NavbarTheme";
 
 <template>
   <footer
-    class="flex flex-col min-h-[60vh] bg-[var(--light-bg)] text-[var(--light-title)]"
+    class="flex flex-col min-h-[100vh] md:min-h-[60vh] bg-[var(--light-bg)] text-[var(--light-title)]"
   >
     <div
-      class="grid grid-cols-3 max-w-[1024px] ml-auto mr-auto w-full pl-16 pr-16 items-start flex-1 py-16 gap-10"
+      class="flex flex-col md:grid md:grid-cols-3 md:max-w-[1024px] ml-auto mr-auto w-full pl-8 pr-8 md:pl-16 md:pr-16 items-start flex-1 py-16 gap-10"
     >
       <!-- Columna 1 -->
       <div class="flex flex-col gap-4">

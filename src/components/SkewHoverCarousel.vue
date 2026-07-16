@@ -71,14 +71,14 @@ const navigate = (href) => {
 
 <template>
   <div
-    class="grid h-full transition-[grid-template-columns] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+    class="grid h-full flex-1 transition-[grid-template-columns] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
     :style="{ gridTemplateColumns: gridTemplate }"
   >
     <a
       v-for="(item, index) in items"
       :key="index"
       :href="item.href"
-      class="relative flex flex-col justify-end skew-x-6 shadow-xl overflow-hidden transition-all duration-500"
+      class="relative flex flex-col justify-end md:skew-x-6 shadow-xl overflow-hidden transition-all duration-500"
       :class="[
         index === activeIndex ? 'z-10' : 'opacity-40',
         item.href === '#' ? 'cursor-default' : 'cursor-pointer',
@@ -104,19 +104,20 @@ const navigate = (href) => {
         "
       >
         <!-- caja interna con ancho estable -->
-        <div class="min-w-[240px] max-w-[60%] overflow-hidden">
+        <div class="min-w-[200px] md:min-w-[240px] max-w-[60%] overflow-hidden">
           <slot name="content" :item="item" :active="index === activeIndex">
-            <h1 class="text-xl font-bold">
+            <h1 class="hidden md:block text-xl font-bold">
               {{ item.title }}
             </h1>
-
-            <h4 v-if="item.subtitle" class="text-sm opacity-80">
+            <h4 v-if="item.subtitle" class="hidden md:block text-sm opacity-80">
               {{ item.subtitle }}
             </h4>
-
-            <p v-if="item.text" class="text-xs mt-2 opacity-70">
+            <p v-if="item.text" class="hidden md:block text-xs mt-2 opacity-70">
               {{ item.text }}
             </p>
+            <h3 class="md:hidden text-sm font-bold">
+              {{ item.title }}
+            </h3>
           </slot>
         </div>
       </div>

@@ -14,7 +14,7 @@ import { Icon } from "@iconify/vue";
     <div
       class="flex flex-col max-w-[1024px] ml-auto mr-auto w-full h-full isolate"
     >
-      <div class="grid grid-cols-2 gap-16 p-16">
+      <div class="flex flex-col md:grid md:grid-cols-2 md:p-8 gap-16 md:p-16">
         <div class="flex flex-col gap-8 justify-center relative">
           <header class="flex flex-col gap-4">
             <img class="e-bg-icon" :src="avatar" alt="" />

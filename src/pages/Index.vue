@@ -19,7 +19,9 @@ import avatar from "../assets/img/icons/avatar.png";
     :background-brightness="0.2"
     size="bg"
   >
-    <div class="grid grid-cols-[max-content_max-content] gap-16 max-w-[1024px]">
+    <div
+      class="flex flex-col items-center p-8 gap-16 md:grid md:grid-cols-[max-content_max-content] md:max-w-[1024px]"
+    >
       <header class="flex flex-col gap-4">
         <img class="e-bg-icon rounded-xl shadow-xl" :src="avatar" alt="" />
       </header>

@@ -14,9 +14,9 @@ import FeaturedProjects from "../data/FeaturedProjects";
 <template>
   <Section class="flex flex-col" size="bg" :has-padding="false">
     <div class="flex flex-col gap-4 ml-auto mr-auto w-full h-full flex-1">
-      <div class="grid grid-cols-[40%_auto] h-full flex-1">
+      <div class="flex flex-col md:grid md:grid-cols-[40%_auto] h-full flex-1">
         <!--left col-->
-        <div class="flex flex-col gap-8 p-16">
+        <div class="flex flex-col gap-8 p-8 md:p-16">
           <div class="grid grid-cols-[max-content_auto] gap-2 items-start">
             <img class="e-bg-icon" :src="logo" alt="" />
           </div>
@@ -41,7 +41,7 @@ import FeaturedProjects from "../data/FeaturedProjects";
         </div>
 
         <!--right col-->
-        <div class="flex flex-col gap-8">
+        <div class="flex flex-col gap-8 min-h-[50vh] md:min-h-[auto]">
           <SkewHoverCarousel :items="FeaturedProjects" />
         </div>
       </div>

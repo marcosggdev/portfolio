@@ -133,7 +133,7 @@ const downloadCV = () => {
 <template>
   <nav
     ref="navRef"
-    class="flex flex-row items-center p-2 justify-between pl-4 pr-4 w-full z-50 transition-colors"
+    class="flex flex-row items-center p-2 justify-center md:justify-between pl-4 pr-4 w-full z-50 transition-colors"
     :class="fixed ? 'bg-[var(--nav-bg)]' : ''"
     :style="{
       '--nav-bg': resolveCSSVar(theme.backgroundColor),
@@ -144,7 +144,7 @@ const downloadCV = () => {
     }"
   >
     <!-- LEFT -->
-    <div class="flex flex-row gap-2">
+    <div class="flex flex-row gap-2 hidden md:block">
       <img class="bg-icon" :src="avatar" alt="" />
 
       <div class="flex flex-col gap-2">

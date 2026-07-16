@@ -22,7 +22,9 @@ const size = computed(() => {
       return "min-h-[100vh]";
   }
 });
-const padding = computed(() => (props.hasPadding ? "p-16 pt-32 pb-32" : ""));
+const padding = computed(() =>
+  props.hasPadding ? "p-8 pt-16 pb-16 md:p-16 md:pt-32 md:pb-32" : "",
+);
 </script>
 
 <template>

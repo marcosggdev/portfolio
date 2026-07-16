@@ -5,7 +5,7 @@ import experience from "../assets/img/experience.jpg";
 
 <template>
   <div
-    class="grid grid-cols-2 items-center gap-16 h-screen pt-32 pb-32 max-w-[1024px] ml-auto mr-auto"
+    class="flex flex-col md:grid md:grid-cols-2 items-center gap-16 h-screen p-8 pt-16 pb-16 md:pt-32 md:pb-32 max-w-[1024px] ml-auto mr-auto"
   >
     <div class="flex flex-col gap-8">
       <h3 class="text-[var(--primary-color)]">Experiencia</h3>
