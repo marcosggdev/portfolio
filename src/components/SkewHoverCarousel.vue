@@ -1,10 +1,9 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 
 import fallbackImg from "../assets/img/fallback.png";
 import mdoImg from "../assets/img/mdo.png";
-import SkewHoverCarouselSchema from "../data/SkewHoverCarouselSchema";
 
 import { SkewHoverCarouselValidator } from "../validation/ComponentValidators";
 
@@ -18,7 +17,7 @@ const props = defineProps({
       {
         image: mdoImg,
         href: "/proyectos/mdo-corp-sl",
-        title: "Página oficial de MDO Corp. S. L. ",
+        title: "Página oficial de MDO Corp. S. L.",
         subtitle:
           "SPA dinámica y muy visual, con efectos avanzados y ambientación aérea",
         text: "",
@@ -46,14 +45,52 @@ const props = defineProps({
 });
 
 const router = useRouter();
+
 const activeIndex = ref(0);
 
 const setActive = (i) => {
   activeIndex.value = i;
 };
 
+const navigate = (href) => {
+  router.push(href);
+};
+
 /**
- * 🔥 focus grid system (estable y animable)
+ * Detecta el tipo de input disponible.
+ * true  -> ratón (hover)
+ * false -> táctil
+ */
+const supportsHover = ref(true);
+
+let mediaQuery;
+
+onMounted(() => {
+  mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+  supportsHover.value = mediaQuery.matches;
+
+  const listener = (e) => {
+    supportsHover.value = e.matches;
+  };
+
+  if (mediaQuery.addEventListener) {
+    mediaQuery.addEventListener("change", listener);
+  } else {
+    mediaQuery.addListener(listener);
+  }
+
+  onUnmounted(() => {
+    if (mediaQuery.removeEventListener) {
+      mediaQuery.removeEventListener("change", listener);
+    } else {
+      mediaQuery.removeListener(listener);
+    }
+  });
+});
+
+/**
+ * 🔥 Focus grid system
  */
 const gridTemplate = computed(() => {
   const small = 0.2 / (props.items.length - 1);
@@ -64,15 +101,50 @@ const gridTemplate = computed(() => {
     .join(" ");
 });
 
-const navigate = (href) => {
-  router.push(href);
-};
+/* ==========================
+   Swipe (solo táctil)
+========================== */
+
+const touchStartX = ref(0);
+const touchCurrentX = ref(0);
+
+const SWIPE_THRESHOLD = 45;
+
+function onTouchStart(e) {
+  if (supportsHover.value) return;
+
+  touchStartX.value = e.touches[0].clientX;
+  touchCurrentX.value = touchStartX.value;
+}
+
+function onTouchMove(e) {
+  if (supportsHover.value) return;
+
+  touchCurrentX.value = e.touches[0].clientX;
+}
+
+function onTouchEnd() {
+  if (supportsHover.value) return;
+
+  const delta = touchCurrentX.value - touchStartX.value;
+
+  if (Math.abs(delta) < SWIPE_THRESHOLD) return;
+
+  if (delta < 0 && activeIndex.value < props.items.length - 1) {
+    activeIndex.value++;
+  } else if (delta > 0 && activeIndex.value > 0) {
+    activeIndex.value--;
+  }
+}
 </script>
 
 <template>
   <div
-    class="grid h-full flex-1 transition-[grid-template-columns] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+    class="grid h-full flex-1 transition-[grid-template-columns] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] touch-pan-y"
     :style="{ gridTemplateColumns: gridTemplate }"
+    @touchstart.passive="onTouchStart"
+    @touchmove.passive="onTouchMove"
+    @touchend.passive="onTouchEnd"
   >
     <a
       v-for="(item, index) in items"
@@ -83,7 +155,7 @@ const navigate = (href) => {
         index === activeIndex ? 'z-10' : 'opacity-40',
         item.href === '#' ? 'cursor-default' : 'cursor-pointer',
       ]"
-      @mouseenter="setActive(index)"
+      @mouseenter="supportsHover && setActive(index)"
       @click.prevent="item.href !== '#' && navigate(item.href)"
     >
       <!-- IMAGEN -->
@@ -94,7 +166,7 @@ const navigate = (href) => {
         alt=""
       />
 
-      <!-- CONTENIDO (FUERA DEL FLUJO) -->
+      <!-- CONTENIDO -->
       <div
         class="absolute bottom-0 left-0 w-full p-4 text-white transition-all duration-500"
         :class="
@@ -103,18 +175,20 @@ const navigate = (href) => {
             : 'opacity-0 translate-y-3 pointer-events-none'
         "
       >
-        <!-- caja interna con ancho estable -->
         <div class="min-w-[200px] md:min-w-[240px] max-w-[60%] overflow-hidden">
           <slot name="content" :item="item" :active="index === activeIndex">
             <h1 class="hidden md:block text-xl font-bold">
               {{ item.title }}
             </h1>
+
             <h4 v-if="item.subtitle" class="hidden md:block text-sm opacity-80">
               {{ item.subtitle }}
             </h4>
+
             <p v-if="item.text" class="hidden md:block text-xs mt-2 opacity-70">
               {{ item.text }}
             </p>
+
             <h3 class="md:hidden text-sm font-bold">
               {{ item.title }}
             </h3>
