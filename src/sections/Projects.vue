@@ -26,8 +26,7 @@ import FeaturedProjects from "../data/FeaturedProjects";
               <p>
                 Aquí tienes una colección de mis proyectos más destacados. Se
                 trata de proyectos web ya sea reales o ficticios que considero
-                están relativamente completos. Algunos son más frontend, otros
-                tocan acceso a datos con API Restful...
+                completos.
               </p>
             </div>
             <Button
