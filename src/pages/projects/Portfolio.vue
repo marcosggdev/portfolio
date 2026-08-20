@@ -19,7 +19,7 @@ defineProps({
     subtitle="Construí desde cero la página oficial de la empresa, con Nuxt + Vue."
   >
     <template #content>
-      <div class="flex flex-col gap-4">
+      <div id="descripcion" class="flex flex-col gap-4">
         <h3 class="text-[var(--dark-subtitle)]">Descripción</h3>
         <p class="text-[var(--dark-text)]">
           Se trata de uno de los proyectos más completos que he realizado, ya
@@ -43,7 +43,7 @@ defineProps({
           hash de versión, y mucho más.
         </p>
       </div>
-      <div class="flex flex-col gap-4">
+      <div id="dificultades" class="flex flex-col gap-4">
         <h3 class="text-[var(--dark-subtitle)]">Dificultades que tuve</h3>
         <ul class="flex flex-col gap-4 pl-4 list-disc text-[var(--dark-text)]">
           <li>
@@ -73,7 +73,7 @@ defineProps({
           </li>
         </ul>
       </div>
-      <div class="flex flex-col gap-4">
+      <div id="puntos-fuertes" class="flex flex-col gap-4">
         <h3 class="text-[var(--dark-subtitle)]">Puntos fuertes</h3>
         <p class="text-[var(--dark-text)]">
           El proyecto me permitió poner en práctica mis habilidades Frontend con
@@ -88,7 +88,10 @@ defineProps({
           interesantes.
         </p>
       </div>
-      <Gallery :data="project.galleryData" />
+      <div id="galeria">
+        <Gallery :data="project.galleryData" />
+      </div>
+
       <Stack
         class="hidden md:grid"
         :stack="project.stack"
@@ -102,6 +105,5 @@ defineProps({
         color-class="text-black"
       />
     </template>
-    <template #aside> aside </template>
   </ProjectEntry>
 </template>

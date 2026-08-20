@@ -22,7 +22,16 @@ const props = defineProps({
         <slot name="content"></slot>
       </div>
       <aside class="flex flex-col gap-4 hidden md:block">
-        <slot name="aside"></slot>
+        <slot name="aside">
+          <ul
+            class="flex flex-col gap-2 hidden md:sticky md:top-24 md:flex md:flex-col md:gap-4"
+          >
+            <a href="#descripcion">Descripción</a>
+            <a href="#dificultades">Dificultades</a>
+            <a href="#puntos-fuertes">Puntos Fuertes</a>
+            <a href="#galeria">Galería</a>
+          </ul>
+        </slot>
       </aside>
     </div>
   </Section>

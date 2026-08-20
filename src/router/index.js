@@ -99,11 +99,41 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+
   scrollBehavior(to, from, savedPosition) {
     return new Promise((resolve) => {
       requestAnimationFrame(() => {
+        // Atrás / adelante
+        if (savedPosition) {
+          resolve(savedPosition);
+          return;
+        }
+
+        // Ancla
+        if (to.hash) {
+          const target = document.querySelector(to.hash);
+
+          if (target) {
+            const offset = 128; // mt-32 = 8rem = 128px
+
+            const top =
+              target.getBoundingClientRect().top + window.scrollY - offset;
+
+            window.scrollTo({
+              top,
+              behavior: "smooth",
+            });
+          }
+
+          resolve();
+          return;
+        }
+
+        // Cambio de página normal
         const el = document.scrollingElement || document.documentElement;
+
         el.scrollTop = 0;
+
         resolve();
       });
     });
