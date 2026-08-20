@@ -3,6 +3,7 @@ import ProjectEntry from "../../components/ProjectEntry.vue";
 import Stack from "../../components/Stack.vue";
 import Gallery from "../../components/Gallery.vue";
 import { ProjectValidator } from "../../validation/ComponentValidators";
+import portfolio from "../../assets/img/portfolio.png";
 
 defineProps({
   project: {
@@ -17,6 +18,7 @@ defineProps({
   <ProjectEntry
     title="MDO Corp SL"
     subtitle="Construí desde cero la página oficial de la empresa, con Nuxt + Vue."
+    :image="portfolio"
   >
     <template #content>
       <div id="descripcion" class="flex flex-col gap-4">
