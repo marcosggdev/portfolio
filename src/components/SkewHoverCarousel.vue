@@ -161,14 +161,16 @@ function onTouchEnd() {
       <!-- IMAGEN -->
       <img
         class="absolute inset-0 w-full h-full object-cover aspect-[1/2]"
-        :style="`filter: brightness(${item.brightness})`"
+        :style="{
+          filter: `brightness(${item.brightness})`,
+        }"
         :src="item.image || fallbackImg"
         alt=""
       />
 
       <!-- CONTENIDO -->
       <div
-        class="absolute bottom-0 left-0 w-full p-4 text-white transition-all duration-500"
+        class="absolute bottom-0 left-0 w-full p-8 text-white transition-all duration-500 md:-skew-x-6"
         :class="
           index === activeIndex
             ? 'opacity-100 translate-y-0'

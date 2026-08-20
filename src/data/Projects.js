@@ -37,10 +37,6 @@ export default {
     },
     stack: [
       {
-        icon: "simple-icons:nuxtdotjs",
-        text: "Nuxt",
-      },
-      {
         icon: "simple-icons:vuedotjs",
         text: "Vue.js",
       },
@@ -51,18 +47,6 @@ export default {
       {
         icon: "simple-icons:git",
         text: "Git",
-      },
-      {
-        icon: "simple-icons:postgresql",
-        text: "PostgreSQL",
-      },
-      {
-        icon: "simple-icons:supabase",
-        text: "Supabase",
-      },
-      {
-        icon: "simple-icons:gsap",
-        text: "GSAP",
       },
     ],
   },
