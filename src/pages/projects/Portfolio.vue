@@ -4,6 +4,8 @@ import Stack from "../../components/Stack.vue";
 import Gallery from "../../components/Gallery.vue";
 import { ProjectValidator } from "../../validation/ComponentValidators";
 import portfolio from "../../assets/img/portfolio.png";
+import portfolioPreview from "../../assets/vid/portfolio-preview.mp4";
+import VideoWithTimestamps from "../../components/VideoWithTimestamps.vue";
 
 defineProps({
   project: {
@@ -36,6 +38,34 @@ defineProps({
           proyecto en el portfolio porque, al final, sigue siendo un proyecto
           web más que he completado.
         </p>
+      </div>
+      <div id="galeria">
+        <VideoWithTimestamps
+          :src="portfolioPreview"
+          :timestamps="[
+            {
+              id: 1,
+              start: 0,
+              end: 15,
+              title: 'Inicio',
+              text: 'Aquí aparece la primera información.',
+            },
+            {
+              id: 2,
+              start: 15,
+              end: 35,
+              title: 'Segundo punto',
+              text: 'Información correspondiente al segundo intervalo.',
+            },
+            {
+              id: 3,
+              start: 72,
+              end: 78,
+              title: 'Tercer punto',
+              text: 'Otra información.',
+            },
+          ]"
+        />
       </div>
       <div id="dificultades" class="flex flex-col gap-4">
         <h3 class="text-[var(--dark-subtitle)]">Dificultades que tuve</h3>
@@ -81,9 +111,6 @@ defineProps({
             mostrar las páginas casi en su totalidad igualmente.
           </li>
         </ul>
-      </div>
-      <div id="galeria">
-        <Gallery :data="project.galleryData" />
       </div>
 
       <Stack

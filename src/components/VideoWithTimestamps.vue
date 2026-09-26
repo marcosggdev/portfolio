@@ -1,0 +1,667 @@
+<script setup>
+import { computed, onBeforeUnmount, ref, watch } from "vue";
+
+const props = defineProps({
+  src: {
+    type: String,
+    default: "",
+  },
+
+  timestamps: {
+    type: Array,
+    default: () => [],
+  },
+});
+
+const video = ref(null);
+const timeline = ref(null);
+
+const duration = ref(0);
+const currentTime = ref(0);
+const isPlaying = ref(false);
+const activeTimestamp = ref(null);
+const isScrubbing = ref(false);
+
+// Mobile controls visibility.
+// Desktop visibility is controlled exclusively by group-hover.
+const controlsVisible = ref(false);
+
+// Timestamp navigation starts collapsed.
+const timestampsExpanded = ref(false);
+
+let scrubFrame = null;
+let pendingScrubTime = null;
+
+const warnedTimestampErrors = new Set();
+
+const formatTime = (seconds) => {
+  if (!Number.isFinite(seconds)) {
+    return "00:00";
+  }
+
+  const totalSeconds = Math.floor(seconds);
+  const minutes = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+
+  return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+};
+
+const progress = computed(() => {
+  if (!duration.value) {
+    return 0;
+  }
+
+  return (currentTime.value / duration.value) * 100;
+});
+
+const rawTimestamps = computed(() =>
+  props.timestamps.map((item, index) => ({
+    id: item?.id ?? index,
+    start: Number(item?.start ?? item?.time ?? 0),
+    end: Number(item?.end ?? item?.start ?? item?.time ?? 0),
+    title: item?.title ?? "",
+    text: item?.text ?? "",
+    data: item,
+    index,
+  })),
+);
+
+const getTimestampValidationError = (timestamp) => {
+  if (!Number.isFinite(timestamp.start)) {
+    return "el tiempo de inicio no es un número válido";
+  }
+
+  if (!Number.isFinite(timestamp.end)) {
+    return "el tiempo de fin no es un número válido";
+  }
+
+  if (timestamp.start < 0) {
+    return `el tiempo de inicio (${timestamp.start}s) es negativo`;
+  }
+
+  if (timestamp.end < 0) {
+    return `el tiempo de fin (${timestamp.end}s) es negativo`;
+  }
+
+  if (timestamp.end < timestamp.start) {
+    return `el tiempo de fin (${timestamp.end}s) es anterior al inicio (${timestamp.start}s)`;
+  }
+
+  if (duration.value > 0) {
+    if (timestamp.start > duration.value) {
+      return `el inicio (${timestamp.start}s) está fuera del vídeo, cuya duración es ${duration.value.toFixed(
+        3,
+      )}s`;
+    }
+
+    if (timestamp.end > duration.value) {
+      return `el fin (${timestamp.end}s) está fuera del vídeo, cuya duración es ${duration.value.toFixed(
+        3,
+      )}s`;
+    }
+  }
+
+  return null;
+};
+
+const validateTimestamps = () => {
+  rawTimestamps.value.forEach((timestamp) => {
+    const error = getTimestampValidationError(timestamp);
+
+    if (!error) {
+      return;
+    }
+
+    const isDurationError = error.includes("fuera del vídeo");
+
+    if (isDurationError && !duration.value) {
+      return;
+    }
+
+    const warningKey = [
+      props.src,
+      timestamp.index,
+      timestamp.start,
+      timestamp.end,
+      error,
+    ].join("|");
+
+    if (warnedTimestampErrors.has(warningKey)) {
+      return;
+    }
+
+    warnedTimestampErrors.add(warningKey);
+
+    console.warn(
+      `[VideoTimeline] Timestamp inválido en el índice ${timestamp.index}: ${error}`,
+      timestamp.data,
+    );
+  });
+};
+
+const normalizedTimestamps = computed(() => {
+  if (!duration.value) {
+    return [];
+  }
+
+  return rawTimestamps.value
+    .filter((timestamp) => !getTimestampValidationError(timestamp))
+    .sort((a, b) => a.start - b.start);
+});
+
+const getSegmentStyle = (timestamp) => {
+  if (!duration.value) {
+    return {};
+  }
+
+  const start = Math.max(0, timestamp.start);
+  const end = Math.min(duration.value, timestamp.end);
+
+  return {
+    left: `${(start / duration.value) * 100}%`,
+    width: `${Math.max(((end - start) / duration.value) * 100, 0.25)}%`,
+  };
+};
+
+const getMarkerStyle = (timestamp) => {
+  if (!duration.value) {
+    return {};
+  }
+
+  return {
+    left: `${(timestamp.start / duration.value) * 100}%`,
+  };
+};
+
+const updateActiveTimestamp = () => {
+  const current = currentTime.value;
+
+  const found = normalizedTimestamps.value.find(
+    (timestamp) =>
+      current >= timestamp.start &&
+      current <= Math.max(timestamp.end, timestamp.start),
+  );
+
+  activeTimestamp.value = found?.id ?? null;
+};
+
+const updateTime = () => {
+  if (!video.value) {
+    return;
+  }
+
+  if (!isScrubbing.value) {
+    currentTime.value = video.value.currentTime;
+  }
+
+  updateActiveTimestamp();
+};
+
+const handleLoadedMetadata = () => {
+  if (!video.value) {
+    return;
+  }
+
+  duration.value = video.value.duration;
+  currentTime.value = video.value.currentTime;
+
+  validateTimestamps();
+  updateActiveTimestamp();
+};
+
+const handlePlay = () => {
+  isPlaying.value = true;
+};
+
+const handlePause = () => {
+  isPlaying.value = false;
+};
+
+const handleEnded = () => {
+  isPlaying.value = false;
+};
+
+const togglePlay = async () => {
+  if (!video.value) {
+    return;
+  }
+
+  if (video.value.paused) {
+    try {
+      await video.value.play();
+    } catch (error) {
+      isPlaying.value = false;
+
+      console.warn("[VideoTimeline] No se pudo reproducir el vídeo.", error);
+    }
+
+    return;
+  }
+
+  video.value.pause();
+  isPlaying.value = false;
+};
+
+const handleVideoClick = async () => {
+  await togglePlay();
+
+  // This state is relevant for mobile.
+  // On desktop the visibility is controlled by group-hover.
+  controlsVisible.value = true;
+};
+
+const toggleTimestampNavigation = () => {
+  timestampsExpanded.value = !timestampsExpanded.value;
+
+  // On mobile, opening/closing the timestamps should also
+  // make sure the controls remain visible.
+  controlsVisible.value = true;
+};
+
+const getTimeFromClientX = (clientX) => {
+  if (!timeline.value || !duration.value) {
+    return null;
+  }
+
+  const rect = timeline.value.getBoundingClientRect();
+
+  const position = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+
+  return position * duration.value;
+};
+
+const seek = (event) => {
+  if (!video.value || !duration.value || isScrubbing.value) {
+    return;
+  }
+
+  const target = getTimeFromClientX(event.clientX);
+
+  if (target === null) {
+    return;
+  }
+
+  video.value.currentTime = target;
+  currentTime.value = target;
+
+  updateActiveTimestamp();
+};
+
+const startScrubbing = (event) => {
+  if (!video.value || !duration.value) {
+    return;
+  }
+
+  video.value.pause();
+  isPlaying.value = false;
+
+  isScrubbing.value = true;
+
+  event.currentTarget.setPointerCapture(event.pointerId);
+
+  seekFromPointer(event.clientX);
+};
+
+const handleScrubbing = (event) => {
+  if (!isScrubbing.value) {
+    return;
+  }
+
+  seekFromPointer(event.clientX);
+};
+
+const seekFromPointer = (clientX) => {
+  const target = getTimeFromClientX(clientX);
+
+  if (target === null) {
+    return;
+  }
+
+  pendingScrubTime = target;
+
+  if (scrubFrame !== null) {
+    return;
+  }
+
+  scrubFrame = requestAnimationFrame(() => {
+    scrubFrame = null;
+
+    if (!isScrubbing.value || !video.value || pendingScrubTime === null) {
+      return;
+    }
+
+    const targetTime = pendingScrubTime;
+
+    pendingScrubTime = null;
+
+    video.value.currentTime = targetTime;
+    currentTime.value = targetTime;
+
+    updateActiveTimestamp();
+  });
+};
+
+const finishScrubbing = (event) => {
+  if (!isScrubbing.value) {
+    return;
+  }
+
+  if (video.value && pendingScrubTime !== null) {
+    video.value.currentTime = pendingScrubTime;
+    currentTime.value = pendingScrubTime;
+
+    pendingScrubTime = null;
+
+    updateActiveTimestamp();
+  }
+
+  if (event?.currentTarget?.hasPointerCapture?.(event.pointerId)) {
+    event.currentTarget.releasePointerCapture(event.pointerId);
+  }
+
+  isScrubbing.value = false;
+
+  if (video.value) {
+    video.value.pause();
+  }
+
+  isPlaying.value = false;
+};
+
+const cancelScrubbing = (event) => {
+  finishScrubbing(event);
+};
+
+const navigateTo = (timestamp) => {
+  if (!video.value || !duration.value) {
+    return;
+  }
+
+  const validationError = getTimestampValidationError(timestamp);
+
+  if (validationError) {
+    console.warn(
+      `[VideoTimeline] No se puede navegar al timestamp ${timestamp.id}: ${validationError}`,
+    );
+
+    return;
+  }
+
+  const target = Math.min(Math.max(timestamp.start, 0), duration.value);
+
+  // Instant navigation.
+  video.value.currentTime = target;
+  currentTime.value = target;
+
+  updateActiveTimestamp();
+};
+
+const handleTimestampClick = (timestamp) => {
+  navigateTo(timestamp);
+
+  controlsVisible.value = true;
+};
+
+watch(
+  [() => props.timestamps, () => duration.value],
+  () => {
+    validateTimestamps();
+  },
+  {
+    deep: true,
+  },
+);
+
+watch(
+  () => props.src,
+  () => {
+    if (video.value) {
+      video.value.pause();
+      video.value.currentTime = 0;
+    }
+
+    currentTime.value = 0;
+    duration.value = 0;
+    activeTimestamp.value = null;
+    isPlaying.value = false;
+
+    controlsVisible.value = false;
+    timestampsExpanded.value = false;
+  },
+);
+
+onBeforeUnmount(() => {
+  if (scrubFrame !== null) {
+    cancelAnimationFrame(scrubFrame);
+    scrubFrame = null;
+  }
+
+  pendingScrubTime = null;
+});
+</script>
+
+<template>
+  <div class="group relative w-full min-h-[60vh] bg-black overflow-hidden">
+    <!-- VIDEO -->
+    <video
+      ref="video"
+      :src="src"
+      class="absolute inset-0 z-1 w-full h-full object-cover cursor-pointer"
+      @click="handleVideoClick"
+      @loadedmetadata="handleLoadedMetadata"
+      @timeupdate="updateTime"
+      @play="handlePlay"
+      @pause="handlePause"
+      @ended="handleEnded"
+    />
+
+    <!-- CONTROLS -->
+    <div
+      class="video-controls absolute inset-0 z-2 flex flex-col pointer-events-none opacity-0 transition-opacity duration-200 md:group-hover:opacity-100"
+      :class="{ 'is-visible': controlsVisible }"
+    >
+      <!-- ACTIVE TIMESTAMP -->
+      <div class="flex-1 flex items-start justify-end p-4 pointer-events-none">
+        <div
+          v-if="activeTimestamp !== null"
+          class="max-w-xl px-4 py-2 rounded-lg bg-black/60 backdrop-blur-sm text-white text-center"
+        >
+          <template
+            v-for="timestamp in normalizedTimestamps"
+            :key="timestamp.id"
+          >
+            <div v-if="timestamp.id === activeTimestamp">
+              <div v-if="timestamp.title" class="font-medium">
+                {{ timestamp.title }}
+              </div>
+
+              <div v-if="timestamp.text" class="text-sm text-white/80">
+                {{ timestamp.text }}
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- BOTTOM CONTROLS -->
+      <div
+        class="w-full px-4 pb-4 pt-8 bg-gradient-to-t from-black/80 to-transparent pointer-events-auto"
+        @click.stop
+      >
+        <!-- TIMELINE -->
+        <div
+          ref="timeline"
+          class="relative h-2 w-full rounded-full bg-white/20 cursor-pointer touch-none select-none"
+          @click.stop="seek"
+          @pointerdown.stop="startScrubbing"
+          @pointermove.stop="handleScrubbing"
+          @pointerup.stop="finishScrubbing"
+          @pointercancel.stop="cancelScrubbing"
+          @pointerleave.stop="cancelScrubbing"
+        >
+          <!-- PROGRESS -->
+          <div
+            class="absolute inset-y-0 left-0 rounded-full bg-white pointer-events-none"
+            :style="{ width: `${progress}%` }"
+          />
+
+          <!-- TIMESTAMP SEGMENTS -->
+          <div
+            v-for="timestamp in normalizedTimestamps"
+            :key="`segment-${timestamp.id}`"
+            class="absolute inset-y-0 rounded-full bg-white/30 pointer-events-none"
+            :style="getSegmentStyle(timestamp)"
+          />
+
+          <!-- TIMESTAMP MARKERS -->
+          <div
+            v-for="timestamp in normalizedTimestamps"
+            :key="`marker-${timestamp.id}`"
+            class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white border border-black/30 pointer-events-none"
+            :style="getMarkerStyle(timestamp)"
+          />
+
+          <!-- CURRENT POSITION -->
+          <div
+            class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white shadow pointer-events-none"
+            :style="{ left: `${progress}%` }"
+          />
+        </div>
+
+        <!-- PLAYBACK ROW -->
+        <div class="flex items-center gap-2 mt-2 text-white">
+          <!-- PLAY / PAUSE -->
+          <button
+            type="button"
+            class="flex items-center justify-center w-8 h-8 shrink-0 rounded text-white/90 hover:bg-white/10 transition-colors"
+            :aria-label="isPlaying ? 'Pausar vídeo' : 'Reproducir vídeo'"
+            @click.stop="togglePlay"
+          >
+            <!-- PAUSE -->
+            <svg
+              v-if="isPlaying"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-5 h-5"
+            >
+              <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+            </svg>
+
+            <!-- PLAY -->
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-5 h-5"
+            >
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </button>
+
+          <!-- CURRENT TIME -->
+          <span class="text-sm tabular-nums whitespace-nowrap text-white/90">
+            {{ formatTime(currentTime) }}
+            /
+            {{ formatTime(duration) }}
+          </span>
+
+          <!-- SPACER -->
+          <div class="flex-1" />
+
+          <!-- TIMESTAMP TOGGLE -->
+          <button
+            v-if="normalizedTimestamps.length"
+            type="button"
+            class="flex items-center justify-center w-8 h-8 shrink-0 rounded text-white/90 hover:bg-white/10 transition-colors"
+            :aria-label="
+              timestampsExpanded ? 'Ocultar timestamps' : 'Mostrar timestamps'
+            "
+            :aria-expanded="timestampsExpanded"
+            :title="
+              timestampsExpanded ? 'Ocultar timestamps' : 'Mostrar timestamps'
+            "
+            @click.stop="toggleTimestampNavigation"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              class="w-5 h-5 transition-transform duration-200"
+              :class="{
+                'rotate-180': timestampsExpanded,
+              }"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m19 9-7 7-7-7"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- TIMESTAMP NAVIGATION -->
+        <div
+          v-if="normalizedTimestamps.length"
+          class="overflow-hidden transition-[height] duration-200 ease-in-out"
+          :class="timestampsExpanded ? 'h-[68px]' : 'h-0'"
+        >
+          <div
+            class="flex gap-2 overflow-x-auto overscroll-contain pt-3 pb-1 scrollbar-thin"
+          >
+            <button
+              v-for="timestamp in normalizedTimestamps"
+              :key="timestamp.id"
+              type="button"
+              class="shrink-0 max-w-[220px] px-3 py-2 rounded bg-white/10 hover:bg-white/20 text-left transition-colors"
+              :class="{
+                'bg-blue-500/70': timestamp.id === activeTimestamp,
+              }"
+              @click.stop="handleTimestampClick(timestamp)"
+            >
+              <div class="text-xs text-white/60 whitespace-nowrap">
+                {{ formatTime(timestamp.start) }}
+
+                <template v-if="timestamp.end !== timestamp.start">
+                  —
+                  {{ formatTime(timestamp.end) }}
+                </template>
+              </div>
+
+              <div
+                v-if="timestamp.title"
+                class="text-sm font-medium text-white truncate"
+              >
+                {{ timestamp.title }}
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+/*
+ * Desktop:
+ *   Visibility is controlled by md:group-hover:opacity-100.
+ *
+ * Mobile:
+ *   There is no reliable hover, so controlsVisible controls
+ *   the opacity explicitly.
+ */
+@media (max-width: 767px) {
+  .video-controls {
+    opacity: 0;
+  }
+
+  .video-controls.is-visible {
+    opacity: 1;
+  }
+}
+</style>

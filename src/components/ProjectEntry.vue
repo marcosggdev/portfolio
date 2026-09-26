@@ -59,6 +59,14 @@ const scrollToTop = () => {
                   </a>
 
                   <a
+                    href="#galeria"
+                    class="flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors"
+                  >
+                    <Icon icon="lucide:images" class="sm-icon" />
+                    Galería
+                  </a>
+
+                  <a
                     href="#dificultades"
                     class="flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors"
                   >
@@ -72,14 +80,6 @@ const scrollToTop = () => {
                   >
                     <Icon icon="lucide:check-circle" class="sm-icon" />
                     Puntos Fuertes
-                  </a>
-
-                  <a
-                    href="#galeria"
-                    class="flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors"
-                  >
-                    <Icon icon="lucide:images" class="sm-icon" />
-                    Galería
                   </a>
                 </div>
               </div>
