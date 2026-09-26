@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
+import cv from "@/assets/files/cv.pdf";
 
 const props = defineProps({
   action: {
@@ -97,15 +98,85 @@ let messageTimeoutId = null;
  * ============================================================
  */
 
-const downloadCV = () => {
+const downloadCV = async () => {
+  const url = cv;
+
+  console.info("[Button:downloadCV] Iniciando descarga", {
+    url,
+  });
+
+  const response = await fetch(url, {
+    cache: "no-store",
+  });
+
+  console.info("[Button:downloadCV] Respuesta recibida", {
+    status: response.status,
+    statusText: response.statusText,
+    ok: response.ok,
+    contentType: response.headers.get("content-type"),
+    contentLength: response.headers.get("content-length"),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP_${response.status}`);
+  }
+
+  const blob = await response.blob();
+
+  console.info("[Button:downloadCV] Blob recibido", {
+    type: blob.type,
+    size: blob.size,
+  });
+
+  if (!blob.size) {
+    throw new Error("EMPTY_FILE");
+  }
+
+  /*
+   * Comprobamos que realmente estamos recibiendo un PDF.
+   *
+   * Un PDF válido comienza con:
+   * %PDF-
+   */
+  const header = await blob.slice(0, 5).text();
+
+  console.info("[Button:downloadCV] Cabecera del archivo", {
+    header,
+  });
+
+  if (header !== "%PDF-") {
+    throw new Error("INVALID_PDF");
+  }
+
+  const blobUrl = URL.createObjectURL(blob);
+
   const link = document.createElement("a");
 
-  link.href = "/files/cv.pdf";
+  link.href = blobUrl;
   link.download = "cv.pdf";
 
   document.body.appendChild(link);
+
+  console.info("[Button:downloadCV] Ejecutando descarga", {
+    blobUrl,
+    filename: link.download,
+  });
+
   link.click();
+
   link.remove();
+
+  /*
+   * No revocamos inmediatamente el Blob URL.
+   * Damos tiempo al navegador para iniciar la descarga.
+   */
+  setTimeout(() => {
+    URL.revokeObjectURL(blobUrl);
+  }, 1000);
+
+  console.info("[Button:downloadCV] Descarga iniciada correctamente");
+
+  return true;
 };
 
 /*
