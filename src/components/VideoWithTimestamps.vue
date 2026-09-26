@@ -441,12 +441,14 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="group relative w-full min-h-[60vh] bg-black overflow-hidden">
+  <div
+    class="group relative w-full aspect-[9/16] md:aspect-video overflow-hidden"
+  >
     <!-- VIDEO -->
     <video
       ref="video"
       :src="src"
-      class="absolute inset-0 z-1 w-full h-full object-cover cursor-pointer"
+      class="z-1 block w-full h-full object-cover cursor-pointer"
       @click="handleVideoClick"
       @loadedmetadata="handleLoadedMetadata"
       @timeupdate="updateTime"

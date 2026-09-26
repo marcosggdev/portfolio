@@ -23,7 +23,7 @@ const size = computed(() => {
   }
 });
 const padding = computed(() =>
-  props.hasPadding ? "p-8 pt-16 pb-16 md:p-16 md:pt-32 md:pb-32" : "",
+  props.hasPadding ? "p-4 pt-16 pb-16 md:p-16 md:pt-32 md:pb-32" : "",
 );
 </script>
 
