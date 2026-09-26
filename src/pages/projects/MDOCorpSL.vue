@@ -1,7 +1,7 @@
 <script setup>
 import ProjectEntry from "../../components/ProjectEntry.vue";
+import ProjectSection from "../../components/ProjectSection.vue";
 import Stack from "../../components/Stack.vue";
-import Gallery from "../../components/Gallery.vue";
 import { ProjectValidator } from "../../validation/ComponentValidators";
 import mdoCorp from "../../assets/img/mdo.png";
 
@@ -16,89 +16,107 @@ defineProps({
 
 <template>
   <ProjectEntry
-    title="MDO Corp SL"
+    title="MDO Corp. S. L."
     subtitle="Construí desde cero la página oficial de la empresa, con Nuxt + Vue."
     :image="mdoCorp"
+    :navigation="project.navigation"
   >
     <template #content>
-      <div id="descripcion" class="flex flex-col gap-4">
-        <h3 class="text-[var(--dark-subtitle)]">Descripción</h3>
+      <ProjectSection id="descripcion" title="Descripción">
         <p class="text-[var(--dark-text)]">
           Se trata de uno de los proyectos más completos que he realizado, ya
           que fue un proyecto real y tuve que pulir cada apartado con cuidado,
-          hacer testing de todo minuciosamente, y planificar correctamente las
-          timelines para no alargar el proyecto más de lo previsto.
+          hacer testing de todo minuciosamente y planificar correctamente las
+          distintas fases para no alargar el desarrollo más de lo previsto.
         </p>
+
         <p class="text-[var(--dark-text)]">
-          Como resultado, tenemos la página de MDO Corp SL, una página reactiva
-          muy visual, con ambientación aérea y dinamismo, pero sin sacrificar
-          rendimiento. La página necesitó una optimización severa, pero tras
-          muchas pequeñas optimizaciones, se logró mantener la mayor parte del
-          estilo visual funcionando incluso en dispositivos viejos o lentos.
+          Como resultado, tenemos la página de MDO Corp. S. L., una página
+          reactiva y muy visual, con ambientación aérea y dinamismo, pero sin
+          sacrificar el rendimiento. La página necesitó una optimización
+          considerable, pero tras muchas pequeñas mejoras se consiguió mantener
+          gran parte del estilo visual incluso en dispositivos antiguos o con
+          pocos recursos.
         </p>
+
         <p class="text-[var(--dark-text)]">
-          La página utiliza Vue para manejar el Frontend, GSAP para animaciones
-          avanzadas, un validador propio para formularios de suscripción, acceso
-          a base de datos con Supabase donde yo mismo ideé también las
-          estructuras de datos y los propios datos, un sistema de cacheado para
-          obtener los últimos precios y servicios de la base de datos basado en
-          hash de versión, y mucho más.
+          El frontend utiliza Nuxt y Vue, con GSAP para las animaciones
+          avanzadas. También desarrollé un sistema propio de validación para el
+          formulario de suscripción, integración con Supabase para la gestión de
+          datos y un sistema de caché basado en hashes de versión para obtener
+          los últimos precios y servicios disponibles.
         </p>
-      </div>
-      <div id="dificultades" class="flex flex-col gap-4">
-        <h3 class="text-[var(--dark-subtitle)]">Dificultades que tuve</h3>
+      </ProjectSection>
+
+      <ProjectSection id="galeria" title="Galería">
+        <p class="text-[var(--dark-text)]">
+          La galería de este proyecto está centrada principalmente en el diseño
+          visual y en algunos de los efectos utilizados en la página. Entre los
+          elementos que más destacan se encuentran la ambientación mediante
+          nubes animadas con GSAP y el hero principal, que utiliza un SVG como
+          máscara para crear una composición más dinámica.
+        </p>
+
+        <p class="text-[var(--dark-text)]">
+          Actualmente esta sección no cuenta con una presentación de vídeo como
+          la disponible en otros proyectos, aunque la estructura de datos está
+          preparada para poder añadirla posteriormente.
+        </p>
+      </ProjectSection>
+
+      <ProjectSection id="observaciones" title="Observaciones">
+        <h4 class="text-[var(--dark-subtitle)]">Dificultades que tuve</h4>
+
         <ul class="flex flex-col gap-4 pl-4 list-disc text-[var(--dark-text)]">
           <li>
-            Mi punto flaco es el diseño, tengo que dedicar muchas horas para
-            lograr resultados atractivos. Dado que no teníamos diseñador para la
-            página, aprendí a usar Figma y sobre Diseño Web, lo que me permitió
-            lograr un resultado aceptable para la página, pero tuve que
-            rediseñar varias partes de la misma varias veces porque no me
-            convencían.
+            Mi punto flaco es el diseño, por lo que tuve que dedicar bastante
+            tiempo a conseguir un resultado visual que me convenciera. Como no
+            contábamos con un diseñador para la página, aprendí a utilizar Figma
+            y profundicé en conceptos de diseño web. Esto hizo que tuviera que
+            rediseñar varias partes de la interfaz durante el desarrollo.
           </li>
+
           <li>
-            Por otra parte, me empeñe en añadir un formulario de suscripción a
-            newsletter para registrar usuarios y quizá enviar información o
-            publicidad a personas interesadas en el futuro, sin embargo, hice
-            manualmente la sanitización y estado reactivo de los campos del
-            formulario, y al mismo tiempo intenté hacerlo genérico, basado en
-            componentes reutilizables. Eso alcanzó una complejidad muy grande
-            antes de que me diese cuenta. La integración con campos especiales
-            de un formulario, como un captcha, hizo muy difícil este apartado,
-            pero finalmente se logró.
+            También dediqué bastante esfuerzo al formulario de suscripción a la
+            newsletter. Quería que fuera reutilizable y tuviera una gestión
+            manual de la sanitización y del estado reactivo de sus campos.
+            Cuando añadí campos especiales, como el captcha, la complejidad
+            aumentó considerablemente, pero finalmente conseguí completar la
+            integración.
           </li>
+
           <li>
-            Por último, quisiera mencionar el problema con el hero de la página,
-            ya que no parece funcionar en navegadores Safari. Es un problema que
-            nunca llegué a resolver realmente, a pesar de intentarlo de varias
-            maneras.
+            Otro problema importante fue el hero de la página, que presenta
+            problemas de compatibilidad en algunos navegadores Safari. A pesar
+            de probar diferentes soluciones, es uno de los puntos que no llegué
+            a resolver completamente.
           </li>
         </ul>
-      </div>
-      <div id="puntos-fuertes" class="flex flex-col gap-4">
-        <h3 class="text-[var(--dark-subtitle)]">Puntos fuertes</h3>
+
+        <h4 class="text-[var(--dark-subtitle)]">Puntos fuertes</h4>
+
         <p class="text-[var(--dark-text)]">
-          El proyecto me permitió poner en práctica mis habilidades Frontend con
-          Nuxt + Vue, y diría que gracias a él me considero especializado en
-          Vue. Por el momento, es mi librería frontend favorita para reactividad
-          y uso de componentes.
+          El proyecto me permitió poner en práctica mis conocimientos de
+          frontend con Nuxt y Vue y trabajar con una aplicación real, con
+          necesidades de rendimiento, validación, persistencia de datos y
+          animaciones avanzadas.
         </p>
+
         <p class="text-[var(--dark-text)]">
-          En la galería podrás ver imágenes y vídeos ligeros sobre las partes
-          del diseño que más me gustan, pero particularmente el efecto de nubes
-          con gsap y el hero que utiliza un svg como mascara me parecen muy
-          interesantes.
+          Especialmente interesantes fueron la integración de GSAP para crear
+          una ambientación dinámica, el uso de SVG como máscara en el hero y el
+          sistema de caché utilizado para reducir las consultas innecesarias a
+          la base de datos.
         </p>
-      </div>
-      <div id="galeria">
-        <Gallery :data="project.galleryData" />
-      </div>
+      </ProjectSection>
+
       <Stack
         class="hidden md:grid"
         :stack="project.stack"
         :cols="8"
         color-class="text-black"
       />
+
       <Stack
         class="md:hidden"
         :stack="project.stack"

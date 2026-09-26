@@ -5,10 +5,26 @@ import Section from "./Section.vue";
 import { breadcrumbsThemeVariations } from "../theme/Breadcrumbs";
 import { Icon } from "@iconify/vue";
 
-const props = defineProps({
-  title: { type: String, required: true },
-  subtitle: { type: String, required: true },
-  image: { type: String, required: true },
+defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+
+  subtitle: {
+    type: String,
+    required: true,
+  },
+
+  image: {
+    type: String,
+    required: true,
+  },
+
+  navigation: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const scrollToTop = () => {
@@ -24,12 +40,20 @@ const scrollToTop = () => {
     <div class="flex flex-col md:grid md:grid-cols-[70%_auto] gap-16">
       <div class="flex flex-col gap-16 md:min-w-[640px]">
         <Breadcrumbs class="p-4" :theme="breadcrumbsThemeVariations[0]" />
+
         <header class="flex flex-col gap-2">
-          <h1 class="text-[var(--dark-title)]">{{ title }}</h1>
-          <h2 class="text-[var(--dark-subtitle)]">{{ subtitle }}</h2>
+          <h1 class="text-[var(--dark-title)]">
+            {{ title }}
+          </h1>
+
+          <h2 class="text-[var(--dark-subtitle)]">
+            {{ subtitle }}
+          </h2>
         </header>
-        <slot name="content"></slot>
+
+        <slot name="content" />
       </div>
+
       <aside class="hidden md:block">
         <slot name="aside">
           <div class="flex flex-col gap-8 p-4 md:sticky md:top-22">
@@ -38,8 +62,10 @@ const scrollToTop = () => {
               :src="image"
               alt=""
             />
+
             <!-- Navegación -->
             <nav
+              v-if="navigation.length"
               class="flex flex-col gap-4"
               aria-label="Navegación del contenido"
             >
@@ -49,44 +75,24 @@ const scrollToTop = () => {
                 >
                   Sobre el Proyecto
                 </span>
+
                 <div class="flex flex-col gap-3">
                   <a
-                    href="#descripcion"
+                    v-for="item in navigation"
+                    :key="item.id"
+                    :href="`#${item.id}`"
                     class="flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors"
                   >
-                    <Icon icon="lucide:file-text" class="sm-icon" />
-                    Descripción
-                  </a>
+                    <Icon :icon="item.icon" class="sm-icon" />
 
-                  <a
-                    href="#galeria"
-                    class="flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors"
-                  >
-                    <Icon icon="lucide:images" class="sm-icon" />
-                    Galería
-                  </a>
-
-                  <a
-                    href="#dificultades"
-                    class="flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors"
-                  >
-                    <Icon icon="lucide:gauge" class="sm-icon" />
-                    Dificultades
-                  </a>
-
-                  <a
-                    href="#puntos-fuertes"
-                    class="flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors"
-                  >
-                    <Icon icon="lucide:check-circle" class="sm-icon" />
-                    Puntos Fuertes
+                    {{ item.title }}
                   </a>
                 </div>
               </div>
             </nav>
 
             <!-- Separador -->
-            <div class="w-full h-px bg-black/10"></div>
+            <div class="w-full h-px bg-black/10" />
 
             <!-- Información -->
             <div class="flex flex-col gap-4">
@@ -102,6 +108,7 @@ const scrollToTop = () => {
                   class="flex items-center gap-2 text-black/60 hover:text-black transition-colors"
                 >
                   <Icon icon="lucide:house" class="sm-icon" />
+
                   Inicio
                 </a>
 
@@ -110,6 +117,7 @@ const scrollToTop = () => {
                   class="flex items-center gap-2 text-black/60 hover:text-black transition-colors"
                 >
                   <Icon icon="lucide:folder" class="sm-icon" />
+
                   Proyectos
                 </a>
               </div>
@@ -118,10 +126,11 @@ const scrollToTop = () => {
             <!-- Volver -->
             <button
               type="button"
-              @click="scrollToTop"
               class="flex items-center gap-2 text-sm text-black/60 hover:text-black transition-colors cursor-pointer"
+              @click="scrollToTop"
             >
               <Icon icon="lucide:arrow-up" class="sm-icon" />
+
               Volver arriba
             </button>
           </div>
