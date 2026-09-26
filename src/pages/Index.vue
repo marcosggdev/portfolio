@@ -29,7 +29,7 @@ import avatar from "../assets/img/icons/avatar.png";
       <div class="flex flex-col gap-10">
         <div class="flex flex-col">
           <h1 class="font-hero text-[var(--primary-color)]">Marcos G.</h1>
-          <h3>Fullstrack Developer</h3>
+          <h3>Fullstack Developer</h3>
           <Socials class="pt-2" />
         </div>
         <div class="flex flex-col gap-4">
