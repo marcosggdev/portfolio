@@ -32,6 +32,7 @@ import avatar from "../assets/img/icons/avatar.png";
           <h3>Fullstack Developer</h3>
           <Socials class="pt-2" />
         </div>
+
         <div class="flex flex-col gap-4">
           <p class="max-w-[420px] text-[var(--light-text)]">
             Bienvenid@ a mi portfolio. Aquí podrás ver mi perfil profesional y
@@ -45,16 +46,23 @@ import avatar from "../assets/img/icons/avatar.png";
               variant="primary"
               background-color="var(--primary-color)"
               color="black"
-              >Ver Proyectos</Button
             >
-            <Button variant="secondary" :effects="['crystal']"
-              >Descargar CV</Button
+              Ver Proyectos
+            </Button>
+
+            <Button
+              action="downloadCV"
+              variant="secondary"
+              :effects="['crystal']"
             >
+              Descargar CV
+            </Button>
           </div>
         </div>
       </div>
     </div>
   </Hero>
+
   <Welcome />
   <AboutMe />
   <Projects />

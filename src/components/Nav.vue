@@ -58,7 +58,7 @@ const onScroll = () => {
   const goingDown = scrollY > lastScrollY;
   const delta = Math.abs(scrollY - lastScrollY);
 
-  if (delta < 2) return; // evita micro-jitter
+  if (delta < 2) return;
 
   const nearTop = scrollY < window.innerHeight * Number(props.threshold);
 
@@ -118,16 +118,6 @@ onUnmounted(() => {
     gsap.killTweensOf(navRef.value);
   }
 });
-
-// -------------------- ACTIONS --------------------
-const downloadCV = () => {
-  const link = document.createElement("a");
-  link.href = "/files/cv.pdf";
-  link.download = "cv.pdf";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
 </script>
 
 <template>
@@ -149,6 +139,7 @@ const downloadCV = () => {
 
       <div class="flex flex-col gap-2">
         <p class="text-[var(--nav-text)] font-semibold">Marcos G.</p>
+
         <Socials colorClass="text-[var(--nav-text)]" />
       </div>
     </div>
@@ -162,7 +153,7 @@ const downloadCV = () => {
       />
 
       <Button
-        :callback="downloadCV"
+        action="downloadCV"
         :variant="isInThreshold ? 'secondary' : 'primary'"
         :color="isInThreshold ? 'var(--nav-text)' : ''"
         :background-color="isInThreshold ? '' : 'var(--nav-text)'"
