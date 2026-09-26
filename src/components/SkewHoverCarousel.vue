@@ -53,11 +53,16 @@ const setActive = (i) => {
 };
 
 const navigate = (href) => {
+  if (!href || href === "#") {
+    return;
+  }
+
   router.push(href);
 };
 
 /**
  * Detecta el tipo de input disponible.
+ *
  * true  -> ratón (hover)
  * false -> táctil
  */
@@ -93,13 +98,60 @@ onMounted(() => {
  * 🔥 Focus grid system
  */
 const gridTemplate = computed(() => {
-  const small = 0.2 / (props.items.length - 1);
+  const small = props.items.length > 1 ? 0.2 / (props.items.length - 1) : 1;
 
   return props.items
     .map((_, i) => (i === activeIndex.value ? 0.8 : small))
     .map((v) => `${v}fr`)
     .join(" ");
 });
+
+/**
+ * Click / tap sobre una tarjeta.
+ *
+ * DESKTOP:
+ * - Mantiene el comportamiento original.
+ * - El click navega directamente.
+ *
+ * MOBILE:
+ * - Si se toca una tarjeta inactiva:
+ *   → se convierte en activa.
+ *   → NO navega.
+ *
+ * - Si se toca una tarjeta que ya está activa:
+ *   → navega.
+ */
+const handleItemClick = (event, index, href) => {
+  if (supportsHover.value) {
+    // Desktop: comportamiento original.
+    if (href === "#") {
+      event.preventDefault();
+      return;
+    }
+
+    event.preventDefault();
+    navigate(href);
+
+    return;
+  }
+
+  // Mobile: primer toque sobre una tarjeta inactiva.
+  if (index !== activeIndex.value) {
+    event.preventDefault();
+    activeIndex.value = index;
+
+    return;
+  }
+
+  // Mobile: tarjeta ya activa.
+  if (href === "#") {
+    event.preventDefault();
+    return;
+  }
+
+  event.preventDefault();
+  navigate(href);
+};
 
 /* ==========================
    Swipe (solo táctil)
@@ -111,24 +163,32 @@ const touchCurrentX = ref(0);
 const SWIPE_THRESHOLD = 45;
 
 function onTouchStart(e) {
-  if (supportsHover.value) return;
+  if (supportsHover.value) {
+    return;
+  }
 
   touchStartX.value = e.touches[0].clientX;
   touchCurrentX.value = touchStartX.value;
 }
 
 function onTouchMove(e) {
-  if (supportsHover.value) return;
+  if (supportsHover.value) {
+    return;
+  }
 
   touchCurrentX.value = e.touches[0].clientX;
 }
 
 function onTouchEnd() {
-  if (supportsHover.value) return;
+  if (supportsHover.value) {
+    return;
+  }
 
   const delta = touchCurrentX.value - touchStartX.value;
 
-  if (Math.abs(delta) < SWIPE_THRESHOLD) return;
+  if (Math.abs(delta) < SWIPE_THRESHOLD) {
+    return;
+  }
 
   if (delta < 0 && activeIndex.value < props.items.length - 1) {
     activeIndex.value++;
@@ -153,10 +213,11 @@ function onTouchEnd() {
       class="relative flex flex-col justify-end md:skew-x-6 shadow-xl overflow-hidden transition-all duration-500"
       :class="[
         index === activeIndex ? 'z-10' : 'opacity-40',
+
         item.href === '#' ? 'cursor-default' : 'cursor-pointer',
       ]"
       @mouseenter="supportsHover && setActive(index)"
-      @click.prevent="item.href !== '#' && navigate(item.href)"
+      @click="handleItemClick($event, index, item.href)"
     >
       <!-- IMAGEN -->
       <img

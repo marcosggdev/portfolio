@@ -4,16 +4,13 @@ import { StackValidator } from "../validation/ComponentValidators";
 
 const props = defineProps({
   stack: { type: Array, required: true, validator: StackValidator },
-  cols: { type: Number, default: -1 },
-  rows: { type: Number, default: -1 },
   colorClass: { type: String, default: "text-white" },
 });
 </script>
 
 <template>
   <ul
-    class="w-fit h-fit gap-2 text-white m-auto grid"
-    :style="`grid-template-columns: repeat(${cols}, 1fr); grid-template-rows: repeat(${rows}, 1fr)`"
+    class="w-fit h-fit gap-2 text-white m-auto grid grid grid-cols-3 md:grid md:grid-cols-4"
   >
     <li
       v-for="tech in stack"

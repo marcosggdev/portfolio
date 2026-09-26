@@ -4,7 +4,8 @@ import Stack from "../../components/Stack.vue";
 import Gallery from "../../components/Gallery.vue";
 import { ProjectValidator } from "../../validation/ComponentValidators";
 import portfolio from "../../assets/img/portfolio.png";
-import portfolioPreview from "../../assets/vid/portfolio-preview.mp4";
+import portfolioPreviewDesktop from "../../assets/vid/portfolio-preview-desktop.mp4";
+import portfolioPreviewMobile from "../../assets/vid/portfolio-preview-mobile.mp4";
 import VideoWithTimestamps from "../../components/VideoWithTimestamps.vue";
 
 defineProps({
@@ -41,7 +42,8 @@ defineProps({
       </div>
       <div id="galeria">
         <VideoWithTimestamps
-          :src="portfolioPreview"
+          :src-desktop="portfolioPreviewDesktop"
+          :src-mobile="portfolioPreviewMobile"
           :timestamps="[
             {
               id: 1,

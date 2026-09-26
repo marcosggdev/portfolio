@@ -1,8 +1,13 @@
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 const props = defineProps({
-  src: {
+  srcDesktop: {
+    type: String,
+    default: "",
+  },
+
+  srcMobile: {
     type: String,
     default: "",
   },
@@ -29,10 +34,35 @@ const controlsVisible = ref(false);
 // Timestamp navigation starts collapsed.
 const timestampsExpanded = ref(false);
 
+// Detect mobile/desktop.
+const isMobile = ref(false);
+
+let mediaQuery = null;
+let mediaQueryListener = null;
+
 let scrubFrame = null;
 let pendingScrubTime = null;
 
 const warnedTimestampErrors = new Set();
+
+/**
+ * Vídeo que debe utilizarse según el dispositivo.
+ *
+ * Mobile:
+ *   srcMobile
+ *
+ * Desktop:
+ *   srcDesktop
+ *
+ * Si uno de los dos no existe, utiliza el otro como fallback.
+ */
+const videoSrc = computed(() => {
+  if (isMobile.value) {
+    return props.srcMobile || props.srcDesktop;
+  }
+
+  return props.srcDesktop || props.srcMobile;
+});
 
 const formatTime = (seconds) => {
   if (!Number.isFinite(seconds)) {
@@ -119,7 +149,8 @@ const validateTimestamps = () => {
     }
 
     const warningKey = [
-      props.src,
+      props.srcDesktop,
+      props.srcMobile,
       timestamp.index,
       timestamp.start,
       timestamp.end,
@@ -245,16 +276,14 @@ const togglePlay = async () => {
 const handleVideoClick = async () => {
   await togglePlay();
 
-  // This state is relevant for mobile.
-  // On desktop the visibility is controlled by group-hover.
+  // Relevant on mobile.
+  // On desktop visibility is controlled by group-hover.
   controlsVisible.value = true;
 };
 
 const toggleTimestampNavigation = () => {
   timestampsExpanded.value = !timestampsExpanded.value;
 
-  // On mobile, opening/closing the timestamps should also
-  // make sure the controls remain visible.
   controlsVisible.value = true;
 };
 
@@ -294,7 +323,6 @@ const startScrubbing = (event) => {
 
   video.value.pause();
   isPlaying.value = false;
-
   isScrubbing.value = true;
 
   event.currentTarget.setPointerCapture(event.pointerId);
@@ -389,7 +417,6 @@ const navigateTo = (timestamp) => {
 
   const target = Math.min(Math.max(timestamp.start, 0), duration.value);
 
-  // Instant navigation.
   video.value.currentTime = target;
   currentTime.value = target;
 
@@ -398,10 +425,64 @@ const navigateTo = (timestamp) => {
 
 const handleTimestampClick = (timestamp) => {
   navigateTo(timestamp);
-
   controlsVisible.value = true;
 };
 
+/**
+ * Resetea el estado cuando cambia el vídeo.
+ *
+ * Esto se utiliza tanto cuando cambia srcDesktop/srcMobile
+ * como cuando cambia el breakpoint y, por tanto, cambia
+ * videoSrc.
+ */
+const resetVideoState = () => {
+  if (video.value) {
+    video.value.pause();
+
+    video.value.currentTime = 0;
+  }
+
+  currentTime.value = 0;
+  duration.value = 0;
+  activeTimestamp.value = null;
+  isPlaying.value = false;
+
+  controlsVisible.value = false;
+  timestampsExpanded.value = false;
+
+  isScrubbing.value = false;
+  pendingScrubTime = null;
+
+  if (scrubFrame !== null) {
+    cancelAnimationFrame(scrubFrame);
+    scrubFrame = null;
+  }
+};
+
+/**
+ * Detecta mobile / desktop y actualiza el vídeo cuando
+ * cambia el breakpoint.
+ */
+onMounted(() => {
+  mediaQuery = window.matchMedia("(max-width: 767px)");
+
+  isMobile.value = mediaQuery.matches;
+
+  mediaQueryListener = (event) => {
+    isMobile.value = event.matches;
+  };
+
+  if (mediaQuery.addEventListener) {
+    mediaQuery.addEventListener("change", mediaQueryListener);
+  } else {
+    mediaQuery.addListener(mediaQueryListener);
+  }
+});
+
+/**
+ * Valida timestamps cuando cambian o cuando cambia
+ * la duración del vídeo.
+ */
 watch(
   [() => props.timestamps, () => duration.value],
   () => {
@@ -412,23 +493,22 @@ watch(
   },
 );
 
-watch(
-  () => props.src,
-  () => {
-    if (video.value) {
-      video.value.pause();
-      video.value.currentTime = 0;
-    }
+/**
+ * Un único watcher para el vídeo efectivo.
+ *
+ * Se ejecuta cuando:
+ * - cambia srcDesktop
+ * - cambia srcMobile
+ * - cambia de desktop a mobile
+ * - cambia de mobile a desktop
+ */
+watch(videoSrc, (newSrc, oldSrc) => {
+  if (newSrc === oldSrc) {
+    return;
+  }
 
-    currentTime.value = 0;
-    duration.value = 0;
-    activeTimestamp.value = null;
-    isPlaying.value = false;
-
-    controlsVisible.value = false;
-    timestampsExpanded.value = false;
-  },
-);
+  resetVideoState();
+});
 
 onBeforeUnmount(() => {
   if (scrubFrame !== null) {
@@ -437,6 +517,14 @@ onBeforeUnmount(() => {
   }
 
   pendingScrubTime = null;
+
+  if (mediaQuery) {
+    if (mediaQuery.removeEventListener) {
+      mediaQuery.removeEventListener("change", mediaQueryListener);
+    } else {
+      mediaQuery.removeListener(mediaQueryListener);
+    }
+  }
 });
 </script>
 
@@ -447,7 +535,7 @@ onBeforeUnmount(() => {
     <!-- VIDEO -->
     <video
       ref="video"
-      :src="src"
+      :src="videoSrc"
       class="z-1 block w-full h-full object-cover cursor-pointer"
       @click="handleVideoClick"
       @loadedmetadata="handleLoadedMetadata"
@@ -504,7 +592,9 @@ onBeforeUnmount(() => {
           <!-- PROGRESS -->
           <div
             class="absolute inset-y-0 left-0 rounded-full bg-white pointer-events-none"
-            :style="{ width: `${progress}%` }"
+            :style="{
+              width: `${progress}%`,
+            }"
           />
 
           <!-- TIMESTAMP SEGMENTS -->
@@ -526,7 +616,9 @@ onBeforeUnmount(() => {
           <!-- CURRENT POSITION -->
           <div
             class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white shadow pointer-events-none"
-            :style="{ left: `${progress}%` }"
+            :style="{
+              left: `${progress}%`,
+            }"
           />
         </div>
 
