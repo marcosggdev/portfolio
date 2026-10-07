@@ -20,6 +20,10 @@ export default {
       type: "string",
     },
 
+    projectHref: {
+      type: "string",
+    },
+
     text: {
       type: "string",
     },
@@ -77,6 +81,47 @@ export default {
                 type: "string",
               },
             },
+          },
+        },
+      },
+    },
+
+    icon: {
+      type: "string",
+      description: "Icono del proyecto (ej: mdi:package-variant-closed)",
+    },
+
+    description: {
+      type: "string",
+      description: "Descripción breve del proyecto",
+    },
+
+    component: {
+      type: ["string", "object"],
+      description: "Componente Vue asociado al proyecto",
+    },
+
+    navigation: {
+      type: "array",
+
+      items: {
+        type: "object",
+
+        required: ["id", "title", "icon"],
+
+        additionalProperties: false,
+
+        properties: {
+          id: {
+            type: "string",
+          },
+
+          title: {
+            type: "string",
+          },
+
+          icon: {
+            type: "string",
           },
         },
       },

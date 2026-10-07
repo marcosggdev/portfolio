@@ -12,12 +12,13 @@ const props = defineProps({
       "Quédate pendiente y échale un vistazo a los nuevos proyectos que vendrán...",
   },
   href: { type: String, default: "#" },
+  projectHref: { type: String, default: "#" },
   icon: { type: String, default: "mdi:clock-outline" },
 });
 </script>
 
 <template>
-  <a class="flex flex-col gap-8" :href="href">
+  <a class="flex flex-col gap-8" :href="projectHref">
     <img class="aspect-square object-cover" :src="src" alt="" />
     <div
       class="grid grid-cols-[max-content_auto] gap-4 pb-16 md:pb-24 lg:pb-32"

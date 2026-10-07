@@ -54,16 +54,16 @@ defineProps({
         <ul class="flex flex-col gap-4 pl-4 list-disc text-[var(--dark-text)]">
           <li>
             La página proyectos utiliza una estructura de rutas similar a la que
-            se ve en CMS's como Wordpress, tras desarrollar un pequeño pero
-            complejo sistema de enrutamiento, utilizando layouts de Vue y código
-            adicional para determinar información adicional sobre la ruta
+            se ve en CMSs como Wordpress, tras desarrollar un pequeño pero
+            complejo sistema de gestión de rutas, utilizando layouts de Vue y
+            código adicional para determinar información adicional sobre la ruta
             cargada y personalizar así la plantilla de cada página de proyecto.
           </li>
 
           <li>
             La estructura de navegación de la página es bastante compleja y me
             atasqué con un bug en los enlaces de navegación, que causaba que el
-            scroll no se reiniciase a 0 (subir arriba del todo) al cambiar entre
+            scroll no se reiniciase a 0 (**volver al inicio**) al cambiar entre
             páginas. Además, añadir enlaces de ancla complicó ligeramente más el
             problema, pero fue resuelto con éxito realizando unos ajustes en el
             router de Vue.
