@@ -26,7 +26,7 @@ const props = defineProps({
     validator: NavValidator,
   },
   fixed: { type: Boolean, default: false },
-  threshold: { type: String, default: "0.8" },
+  threshold: { type: String, default: "0.1" },
 });
 
 // -------------------- STATE --------------------
