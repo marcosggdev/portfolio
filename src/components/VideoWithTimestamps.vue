@@ -24,7 +24,10 @@ const timeline = ref(null);
 const duration = ref(0);
 const currentTime = ref(0);
 const isPlaying = ref(false);
+
 const activeTimestamp = ref(null);
+const dismissedTimestamp = ref(null);
+
 const isScrubbing = ref(false);
 
 // Mobile controls visibility.
@@ -204,7 +207,29 @@ const getMarkerStyle = (timestamp) => {
   };
 };
 
-const updateActiveTimestamp = () => {
+/**
+ * Cierra manualmente el timestamp activo.
+ *
+ * El timestamp queda descartado hasta que:
+ * - el reproductor vuelva a cruzar su punto inicial, o
+ * - el usuario haga seek/scrub manualmente.
+ */
+const closeActiveTimestamp = () => {
+  dismissedTimestamp.value = activeTimestamp.value;
+  activeTimestamp.value = null;
+};
+
+/**
+ * Actualiza el timestamp activo durante la reproducción.
+ *
+ * Importante:
+ * Un timestamp cerrado manualmente NO se vuelve a abrir mientras
+ * el reproductor permanezca dentro de su intervalo.
+ *
+ * Solo se vuelve a abrir cuando el reproductor cruza de nuevo
+ * su punto inicial.
+ */
+const updateActiveTimestamp = (previousTime = currentTime.value) => {
   const current = currentTime.value;
 
   const found = normalizedTimestamps.value.find(
@@ -213,6 +238,41 @@ const updateActiveTimestamp = () => {
       current <= Math.max(timestamp.end, timestamp.start),
   );
 
+  if (!found) {
+    activeTimestamp.value = null;
+    return;
+  }
+
+  const crossedStart = previousTime < found.start && current >= found.start;
+
+  if (dismissedTimestamp.value === found.id && !crossedStart) {
+    activeTimestamp.value = null;
+    return;
+  }
+
+  if (crossedStart) {
+    dismissedTimestamp.value = null;
+  }
+
+  activeTimestamp.value = found.id;
+};
+
+/**
+ * Activa el timestamp correspondiente a una navegación manual.
+ *
+ * Un seek/scrub se considera una intención explícita del usuario,
+ * por lo que elimina cualquier estado de cierre manual.
+ */
+const activateTimestampAtCurrentTime = () => {
+  const current = currentTime.value;
+
+  const found = normalizedTimestamps.value.find(
+    (timestamp) =>
+      current >= timestamp.start &&
+      current <= Math.max(timestamp.end, timestamp.start),
+  );
+
+  dismissedTimestamp.value = null;
   activeTimestamp.value = found?.id ?? null;
 };
 
@@ -221,11 +281,13 @@ const updateTime = () => {
     return;
   }
 
+  const previousTime = currentTime.value;
+
   if (!isScrubbing.value) {
     currentTime.value = video.value.currentTime;
   }
 
-  updateActiveTimestamp();
+  updateActiveTimestamp(previousTime);
 };
 
 const handleLoadedMetadata = () => {
@@ -237,6 +299,7 @@ const handleLoadedMetadata = () => {
   currentTime.value = video.value.currentTime;
 
   validateTimestamps();
+
   updateActiveTimestamp();
 };
 
@@ -283,7 +346,6 @@ const handleVideoClick = async () => {
 
 const toggleTimestampNavigation = () => {
   timestampsExpanded.value = !timestampsExpanded.value;
-
   controlsVisible.value = true;
 };
 
@@ -313,7 +375,7 @@ const seek = (event) => {
   video.value.currentTime = target;
   currentTime.value = target;
 
-  updateActiveTimestamp();
+  activateTimestampAtCurrentTime();
 };
 
 const startScrubbing = (event) => {
@@ -365,7 +427,7 @@ const seekFromPointer = (clientX) => {
     video.value.currentTime = targetTime;
     currentTime.value = targetTime;
 
-    updateActiveTimestamp();
+    activateTimestampAtCurrentTime();
   });
 };
 
@@ -380,7 +442,7 @@ const finishScrubbing = (event) => {
 
     pendingScrubTime = null;
 
-    updateActiveTimestamp();
+    activateTimestampAtCurrentTime();
   }
 
   if (event?.currentTarget?.hasPointerCapture?.(event.pointerId)) {
@@ -420,7 +482,7 @@ const navigateTo = (timestamp) => {
   video.value.currentTime = target;
   currentTime.value = target;
 
-  updateActiveTimestamp();
+  activateTimestampAtCurrentTime();
 };
 
 const handleTimestampClick = (timestamp) => {
@@ -438,15 +500,16 @@ const handleTimestampClick = (timestamp) => {
 const resetVideoState = () => {
   if (video.value) {
     video.value.pause();
-
     video.value.currentTime = 0;
   }
 
   currentTime.value = 0;
   duration.value = 0;
-  activeTimestamp.value = null;
-  isPlaying.value = false;
 
+  activeTimestamp.value = null;
+  dismissedTimestamp.value = null;
+
+  isPlaying.value = false;
   controlsVisible.value = false;
   timestampsExpanded.value = false;
 
@@ -554,8 +617,29 @@ onBeforeUnmount(() => {
       <div class="flex-1 flex items-start justify-end p-4 pointer-events-none">
         <div
           v-if="activeTimestamp !== null"
-          class="max-w-xl px-4 py-2 rounded-lg bg-black/60 backdrop-blur-sm text-white text-center"
+          class="relative max-w-xl md:w-[40%] px-4 py-2 pr-9 rounded-lg bg-black/60 backdrop-blur-sm text-white text-center pointer-events-auto"
         >
+          <!-- CLOSE -->
+          <button
+            type="button"
+            class="absolute top-1.5 right-1.5 flex items-center justify-center w-5 h-5 rounded text-white/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            aria-label="Cerrar"
+            title="Cerrar"
+            @click.stop="closeActiveTimestamp"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              class="w-3 h-3"
+            >
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+
           <template
             v-for="timestamp in normalizedTimestamps"
             :key="timestamp.id"
@@ -627,7 +711,7 @@ onBeforeUnmount(() => {
           <!-- PLAY / PAUSE -->
           <button
             type="button"
-            class="flex items-center justify-center w-8 h-8 shrink-0 rounded text-white/90 hover:bg-white/10 transition-colors"
+            class="flex items-center justify-center w-8 h-8 shrink-0 rounded text-white/90 hover:bg-white/10 transition-colors cursor-pointer"
             :aria-label="isPlaying ? 'Pausar vídeo' : 'Reproducir vídeo'"
             @click.stop="togglePlay"
           >
@@ -668,7 +752,7 @@ onBeforeUnmount(() => {
           <button
             v-if="normalizedTimestamps.length"
             type="button"
-            class="flex items-center justify-center w-8 h-8 shrink-0 rounded text-white/90 hover:bg-white/10 transition-colors"
+            class="flex items-center justify-center w-8 h-8 shrink-0 rounded text-white/90 hover:bg-white/10 transition-colors cursor-pointer"
             :aria-label="
               timestampsExpanded ? 'Ocultar timestamps' : 'Mostrar timestamps'
             "
@@ -711,7 +795,7 @@ onBeforeUnmount(() => {
               v-for="timestamp in normalizedTimestamps"
               :key="timestamp.id"
               type="button"
-              class="shrink-0 max-w-[220px] px-3 py-2 rounded bg-white/10 hover:bg-white/20 text-left transition-colors"
+              class="shrink-0 max-w-[220px] px-3 py-2 rounded bg-white/10 hover:bg-white/20 text-left transition-colors cursor-pointer"
               :class="{
                 'bg-blue-500/70': timestamp.id === activeTimestamp,
               }"
