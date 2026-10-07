@@ -13,15 +13,6 @@ export default [
     brightness: 0.6,
   },
   {
-    image: mdoImg,
-    href: "/proyectos/mdo-corp-sl",
-    title: "Página oficial de MDO Corp. S. L.",
-    subtitle:
-      "SPA dinámica y muy visual, con efectos avanzados y ambientación aérea",
-    text: "",
-    brightness: 0.5,
-  },
-  {
     image: fallbackImg,
     href: "#",
     title: "Próximamente...",

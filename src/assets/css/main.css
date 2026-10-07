@@ -84,15 +84,15 @@ html {
 }
 
 h1 {
-  font-size: 38pt;
+  @apply text-[26pt] md:text-[38pt];
 }
 
 h2 {
-  font-size: 28pt;
+  @apply text-[22pt] md:text-[28pt];
 }
 
 h3 {
-  font-size: 22pt;
+  @apply text-[18pt] md:text-[22pt];
 }
 
 h4 {

@@ -41,15 +41,6 @@ import { navbarThemeVariations } from "../theme/NavbarTheme";
           group="main"
           v-bind="navbarThemeVariations[0]"
         />
-
-        <div class="mt-4 flex flex-col gap-2">
-          <h4 class="text-[var(--dark-title)] font-semibold">Legal</h4>
-          <Navbar
-            class="flex flex-col gap-2"
-            group="legal"
-            v-bind="navbarThemeVariations[0]"
-          />
-        </div>
       </div>
 
       <!-- Columna 3 -->
