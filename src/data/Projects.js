@@ -1,6 +1,8 @@
 import mdo from "../assets/img/mdo.png";
 import portfolio from "../assets/img/portfolio.png";
 import Portfolio from "../pages/projects/Portfolio.vue";
+import portfolioDesktopPreviewVideo from "@/assets/vid/portfolio-preview-desktop.mp4";
+import portfolioMobilePreviewVideo from "@/assets/vid/portfolio-preview-mobile.mp4";
 
 export default {
   portfolio: {
@@ -33,8 +35,8 @@ export default {
     ],
 
     video: {
-      srcDesktop: "/src/assets/vid/portfolio-preview-desktop.mp4",
-      srcMobile: "/src/assets/vid/portfolio-preview-mobile.mp4",
+      srcDesktop: portfolioDesktopPreviewVideo,
+      srcMobile: portfolioMobilePreviewVideo,
 
       timestamps: [
         {
