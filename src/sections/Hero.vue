@@ -1,4 +1,6 @@
 <script setup>
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+
 import Section from "../components/Section.vue";
 import Button from "../components/Button.vue";
 
@@ -18,10 +20,77 @@ const props = defineProps({
     default: 0.4,
   },
 
+  /**
+   * Puede ser:
+   *
+   * size="md"
+   *
+   * o responsive:
+   *
+   * :size="{
+   *   base: 'bg',
+   *   md: 'md',
+   * }"
+   */
   size: {
-    type: String,
+    type: [String, Object],
     default: "md",
   },
+});
+
+const isMd = ref(false);
+
+let mediaQuery = null;
+let mediaQueryListener = null;
+
+const updateBreakpoint = () => {
+  if (!mediaQuery) {
+    return;
+  }
+
+  isMd.value = mediaQuery.matches;
+};
+
+const resolvedSize = computed(() => {
+  if (typeof props.size === "string") {
+    return props.size;
+  }
+
+  const baseSize = props.size?.base ?? "md";
+
+  if (isMd.value) {
+    return props.size?.md ?? baseSize;
+  }
+
+  return baseSize;
+});
+
+onMounted(() => {
+  mediaQuery = window.matchMedia("(min-width: 768px)");
+
+  updateBreakpoint();
+
+  mediaQueryListener = () => {
+    updateBreakpoint();
+  };
+
+  if (mediaQuery.addEventListener) {
+    mediaQuery.addEventListener("change", mediaQueryListener);
+  } else {
+    mediaQuery.addListener(mediaQueryListener);
+  }
+});
+
+onBeforeUnmount(() => {
+  if (!mediaQuery || !mediaQueryListener) {
+    return;
+  }
+
+  if (mediaQuery.removeEventListener) {
+    mediaQuery.removeEventListener("change", mediaQueryListener);
+  } else {
+    mediaQuery.removeListener(mediaQueryListener);
+  }
 });
 </script>
 
@@ -31,7 +100,7 @@ const props = defineProps({
     :has-padding="hasPadding"
     :background-image="backgroundImage"
     :background-brightness="backgroundBrightness"
-    :size="size"
+    :size="resolvedSize"
   >
     <div class="flex h-full w-full flex-row items-center justify-center">
       <div
