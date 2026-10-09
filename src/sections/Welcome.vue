@@ -70,10 +70,50 @@ import { Icon } from "@iconify/vue";
                 adaptarme.
               </p>
               <ul class="flex flex-row gap-2">
-                <Icon class="md-icon" icon="logos:react" />
-                <Icon class="md-icon" icon="logos:angular-icon" />
-                <Icon class="md-icon" icon="logos:spring-icon" />
-                <Icon class="md-icon" icon="logos:dotnet" />
+                <li class="group relative">
+                  <Icon class="md-icon" icon="logos:react" />
+                  <span
+                    class="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    React
+                  </span>
+                </li>
+
+                <li class="group relative">
+                  <Icon class="md-icon" icon="logos:angular-icon" />
+                  <span
+                    class="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    Angular
+                  </span>
+                </li>
+
+                <li class="group relative">
+                  <Icon class="md-icon" icon="logos:laravel" />
+                  <span
+                    class="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    Laravel
+                  </span>
+                </li>
+
+                <li class="group relative">
+                  <Icon class="md-icon" icon="logos:java" />
+                  <span
+                    class="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    Java
+                  </span>
+                </li>
+
+                <li class="group relative">
+                  <Icon class="md-icon" icon="logos:spring-icon" />
+                  <span
+                    class="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    Spring Boot
+                  </span>
+                </li>
               </ul>
             </div>
           </div>

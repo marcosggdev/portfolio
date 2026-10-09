@@ -4,7 +4,6 @@
 
 ## ✨ Mejoras
 
-- [ ] **[MEJ-002]** Sustituir otros en <Welcome /> por tecnologías que he empezado a aprender realmente: React, Laravel, Spring Boot
 - [ ] **[MEJ-004]** Optimizar recursos de la web y comprobar fluidez de la página en mobile en dispositivo real.
 - [ ] **[MEJ-005]** Renombrar Galería en páginas individuales de proyectos a Previsualización, y ajustar Aside en consecuencia.
 - [ ] **[MEJ-006]** Ajustar alineación de la imagen de perfil en el Hero de / en versión Desktop para alinearse arriba, pero dejar centrado en mobile.
@@ -19,3 +18,4 @@
 ## ✅ Resueltos
 
 - [x] **[MEJ-001]** Añadir foto de perfil a la pagina
+- [x] **[MEJ-002]** Sustituir otros en <Welcome /> por tecnologías que he empezado a aprender realmente: React, Laravel, Spring Boot
