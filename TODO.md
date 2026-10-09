@@ -2,13 +2,13 @@
 
 ## 🐛 Bugs
 
+- [ ] **[BUG-001]** Durante los segundos de carga inicial, la página funciona lento en dispositivos móviles menos rápidos, durante unos segundos, hasta que el issue se resuelve. Puede ser procesamiento de recursos descargados, como decodificación de imágenes o fuentes.
+
 ## ✨ Mejoras
 
 ## 🚀 Funcionalidades
 
 ## 🔧 Deuda técnica
-
-- [ ] **[TECH-001]** / y /projects/:slug necesitan mas optimización para funcionar bien en móviles antiguos
 
 ## ✅ Resueltos
 
