@@ -22,8 +22,8 @@ export default {
         icon: "lucide:file-text",
       },
       {
-        id: "galeria",
-        title: "Galería",
+        id: "previsualizacion",
+        title: "Previsualización",
         icon: "lucide:images",
       },
       {
