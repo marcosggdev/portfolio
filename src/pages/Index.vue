@@ -3,13 +3,11 @@ import AboutMe from "../sections/AboutMe.vue";
 import Hero from "../sections/Hero.vue";
 import Welcome from "../sections/Welcome.vue";
 import Projects from "../sections/Projects.vue";
-import Footer from "../sections/Footer.vue";
 import Button from "../components/Button.vue";
 
 import hero from "../assets/img/ordenador.jpg";
-import InfoCard from "../components/InfoCard.vue";
 import Socials from "../components/Socials.vue";
-import avatar from "../assets/img/icons/avatar.png";
+import avatar from "../assets/img/avatar.jpg";
 </script>
 
 <template>
@@ -23,7 +21,7 @@ import avatar from "../assets/img/icons/avatar.png";
       class="flex flex-col items-center md:p-8 gap-16 md:grid md:grid-cols-[max-content_max-content] md:max-w-[1024px]"
     >
       <header class="flex flex-col gap-4">
-        <img class="e-bg-icon rounded-xl shadow-xl" :src="avatar" alt="" />
+        <img class="e-bg-icon rounded-full shadow-xl" :src="avatar" alt="" />
       </header>
 
       <div class="flex flex-col gap-10">

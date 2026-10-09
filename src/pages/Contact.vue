@@ -1,11 +1,10 @@
 <script setup>
 import Hero from "../sections/Hero.vue";
 import Socials from "../components/Socials.vue";
-import Button from "../components/Button.vue";
 import MailCopy from "../components/MailCopy.vue";
 
 import contact from "../assets/img/contact.jpg";
-import avatar from "../assets/img/icons/avatar.png";
+import avatar from "../assets/img/avatar.jpg";
 </script>
 
 <template>
@@ -22,7 +21,7 @@ import avatar from "../assets/img/icons/avatar.png";
       class="flex flex-col items-center md:p-8 gap-16 md:grid md:grid-cols-[max-content_max-content] md:max-w-[1024px]"
     >
       <header class="flex flex-col gap-4">
-        <img class="e-bg-icon rounded-xl shadow-xl" :src="avatar" alt="" />
+        <img class="e-bg-icon rounded-full shadow-xl" :src="avatar" alt="" />
       </header>
 
       <div class="flex flex-col gap-10">

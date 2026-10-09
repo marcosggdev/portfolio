@@ -1,6 +1,6 @@
 <script setup>
 import { Icon } from "@iconify/vue";
-import avatar from "../assets/img/icons/avatar.png";
+import avatar from "../assets/img/avatar.jpg";
 import Socials from "../components/Socials.vue";
 import Navbar from "../components/Navbar.vue";
 
@@ -16,7 +16,11 @@ import { navbarThemeVariations } from "../theme/NavbarTheme";
     >
       <!-- Columna 1 -->
       <div class="flex flex-col gap-4">
-        <img class="e-bg-icon w-16 h-16" :src="avatar" alt="Avatar" />
+        <img
+          class="e-bg-icon w-16 h-16 rounded-full"
+          :src="avatar"
+          alt="Avatar"
+        />
 
         <div class="flex flex-col gap-2">
           <h3 class="text-[var(--dark-title)] text-lg font-semibold">

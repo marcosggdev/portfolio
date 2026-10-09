@@ -2,9 +2,7 @@
 import Section from "../components/Section.vue";
 import Socials from "../components/Socials.vue";
 
-import logo from "../assets/img/icons/logo.png";
-import avatar from "../assets/img/icons/avatar.png";
-import academic from "../assets/img/svg/academic.svg";
+import avatar from "../assets/img/avatar.jpg";
 import Button from "../components/Button.vue";
 import { Icon } from "@iconify/vue";
 </script>
@@ -17,7 +15,7 @@ import { Icon } from "@iconify/vue";
       <div class="flex flex-col md:grid md:grid-cols-2 md:p-8 gap-16 md:p-16">
         <div class="flex flex-col gap-8 justify-center relative">
           <header class="flex flex-col gap-4">
-            <img class="e-bg-icon" :src="avatar" alt="" />
+            <img class="e-bg-icon rounded-full" :src="avatar" alt="" />
             <div class="flex flex-col">
               <h2>Marcos G.</h2>
               <Socials color-class="text-black" :expanded="true" />
