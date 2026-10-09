@@ -37,7 +37,13 @@ export default {
     video: {
       type: "object",
 
-      required: ["srcDesktop", "srcMobile", "timestamps"],
+      required: [
+        "srcDesktop",
+        "srcMobile",
+        "posterDesktop",
+        "posterMobile",
+        "timestamps",
+      ],
 
       additionalProperties: false,
 
@@ -47,6 +53,14 @@ export default {
         },
 
         srcMobile: {
+          type: "string",
+        },
+
+        posterDesktop: {
+          type: "string",
+        },
+
+        posterMobile: {
           type: "string",
         },
 

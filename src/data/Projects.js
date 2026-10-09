@@ -2,6 +2,8 @@ import portfolio from "../assets/img/portfolio.webp";
 import Portfolio from "../pages/projects/Portfolio.vue";
 import portfolioDesktopPreviewVideo from "@/assets/vid/portfolio-preview-desktop.mp4";
 import portfolioMobilePreviewVideo from "@/assets/vid/portfolio-preview-mobile.mp4";
+import portfolioPosterDesktop from "@/assets/vid/portfolio-preview-desktop.jpg";
+import portfolioPosterMobile from "@/assets/vid/portfolio-preview-mobile.jpg";
 
 export default {
   portfolio: {
@@ -36,7 +38,8 @@ export default {
     video: {
       srcDesktop: portfolioDesktopPreviewVideo,
       srcMobile: portfolioMobilePreviewVideo,
-
+      posterDesktop: portfolioPosterDesktop,
+      posterMobile: portfolioPosterMobile,
       timestamps: [
         {
           id: 1,

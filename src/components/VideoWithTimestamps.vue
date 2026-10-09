@@ -1,17 +1,30 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 
 const props = defineProps({
   srcDesktop: {
     type: String,
     default: "",
   },
-
   srcMobile: {
     type: String,
     default: "",
   },
-
+  posterDesktop: {
+    type: String,
+    default: "",
+  },
+  posterMobile: {
+    type: String,
+    default: "",
+  },
   timestamps: {
     type: Array,
     default: () => [],
@@ -19,45 +32,50 @@ const props = defineProps({
 });
 
 const video = ref(null);
+const videoContainer = ref(null);
 const timeline = ref(null);
 
 const duration = ref(0);
 const currentTime = ref(0);
 const isPlaying = ref(false);
-
 const activeTimestamp = ref(null);
 const dismissedTimestamp = ref(null);
-
 const isScrubbing = ref(false);
 
-// Mobile controls visibility.
-// Desktop visibility is controlled exclusively by group-hover.
-const controlsVisible = ref(false);
+// Estados de carga.
+const isLoading = ref(true);
+const isBuffering = ref(false);
+const isReady = ref(false);
+const hasError = ref(false);
 
-// Timestamp navigation starts collapsed.
+// Indicador Play para móvil.
+const mobilePlayHintVisible = ref(false);
+const mobilePlayHintDismissed = ref(false);
+
+// Lazy loading.
+const shouldLoadVideo = ref(false);
+let videoObserver = null;
+let hasEnteredViewport = false;
+let loadRequested = false;
+
+// Controles.
+const controlsVisible = ref(false);
 const timestampsExpanded = ref(false);
 
-// Detect mobile/desktop.
+// Detección de dispositivo.
 const isMobile = ref(false);
-
 let mediaQuery = null;
 let mediaQueryListener = null;
 
+// Scrubbing.
 let scrubFrame = null;
 let pendingScrubTime = null;
 
+// Evita repetir avisos de timestamps inválidos.
 const warnedTimestampErrors = new Set();
 
 /**
- * Vídeo que debe utilizarse según el dispositivo.
- *
- * Mobile:
- *   srcMobile
- *
- * Desktop:
- *   srcDesktop
- *
- * Si uno de los dos no existe, utiliza el otro como fallback.
+ * Fuente de vídeo según el dispositivo.
  */
 const videoSrc = computed(() => {
   if (isMobile.value) {
@@ -66,6 +84,40 @@ const videoSrc = computed(() => {
 
   return props.srcDesktop || props.srcMobile;
 });
+
+/**
+ * Poster según el dispositivo.
+ */
+const posterSrc = computed(() => {
+  if (isMobile.value) {
+    return props.posterMobile || props.posterDesktop;
+  }
+
+  return props.posterDesktop || props.posterMobile;
+});
+
+/**
+ * La fuente solo se asigna después de activar el lazy loading.
+ */
+const lazyVideoSrc = computed(() =>
+  shouldLoadVideo.value ? videoSrc.value || undefined : undefined,
+);
+
+/**
+ * El indicador solo aparece en móvil cuando el vídeo está listo,
+ * no se está reproduciendo y el usuario todavía no lo ha descartado.
+ */
+const showMobilePlayHint = computed(
+  () =>
+    isMobile.value &&
+    isReady.value &&
+    !isPlaying.value &&
+    !isLoading.value &&
+    !isBuffering.value &&
+    !hasError.value &&
+    !mobilePlayHintDismissed.value &&
+    mobilePlayHintVisible.value,
+);
 
 const formatTime = (seconds) => {
   if (!Number.isFinite(seconds)) {
@@ -117,20 +169,16 @@ const getTimestampValidationError = (timestamp) => {
   }
 
   if (timestamp.end < timestamp.start) {
-    return `el tiempo de fin (${timestamp.end}s) es anterior al inicio (${timestamp.start}s)`;
+    return `el tiempo de fin (${timestamp.end}s) es anterior al inicio`;
   }
 
   if (duration.value > 0) {
     if (timestamp.start > duration.value) {
-      return `el inicio (${timestamp.start}s) está fuera del vídeo, cuya duración es ${duration.value.toFixed(
-        3,
-      )}s`;
+      return `el inicio (${timestamp.start}s) está fuera del vídeo, cuya duración es ${duration.value.toFixed(3)}s`;
     }
 
     if (timestamp.end > duration.value) {
-      return `el fin (${timestamp.end}s) está fuera del vídeo, cuya duración es ${duration.value.toFixed(
-        3,
-      )}s`;
+      return `el fin (${timestamp.end}s) está fuera del vídeo, cuya duración es ${duration.value.toFixed(3)}s`;
     }
   }
 
@@ -208,11 +256,38 @@ const getMarkerStyle = (timestamp) => {
 };
 
 /**
+ * Solicita la carga del vídeo.
+ */
+const loadVideo = async () => {
+  if (loadRequested || !videoSrc.value) {
+    return;
+  }
+
+  loadRequested = true;
+  shouldLoadVideo.value = true;
+
+  isLoading.value = true;
+  hasError.value = false;
+
+  await nextTick();
+
+  const element = video.value;
+
+  if (!element || !element.getAttribute("src")) {
+    loadRequested = false;
+    return;
+  }
+
+  if (element.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+    handleCanPlay();
+    return;
+  }
+
+  element.load();
+};
+
+/**
  * Cierra manualmente el timestamp activo.
- *
- * El timestamp queda descartado hasta que:
- * - el reproductor vuelva a cruzar su punto inicial, o
- * - el usuario haga seek/scrub manualmente.
  */
 const closeActiveTimestamp = () => {
   dismissedTimestamp.value = activeTimestamp.value;
@@ -221,13 +296,6 @@ const closeActiveTimestamp = () => {
 
 /**
  * Actualiza el timestamp activo durante la reproducción.
- *
- * Importante:
- * Un timestamp cerrado manualmente NO se vuelve a abrir mientras
- * el reproductor permanezca dentro de su intervalo.
- *
- * Solo se vuelve a abrir cuando el reproductor cruza de nuevo
- * su punto inicial.
  */
 const updateActiveTimestamp = (previousTime = currentTime.value) => {
   const current = currentTime.value;
@@ -259,9 +327,6 @@ const updateActiveTimestamp = (previousTime = currentTime.value) => {
 
 /**
  * Activa el timestamp correspondiente a una navegación manual.
- *
- * Un seek/scrub se considera una intención explícita del usuario,
- * por lo que elimina cualquier estado de cierre manual.
  */
 const activateTimestampAtCurrentTime = () => {
   const current = currentTime.value;
@@ -290,37 +355,157 @@ const updateTime = () => {
   updateActiveTimestamp(previousTime);
 };
 
+/**
+ * Los metadatos están disponibles.
+ */
 const handleLoadedMetadata = () => {
   if (!video.value) {
     return;
   }
 
-  duration.value = video.value.duration;
+  duration.value = Number.isFinite(video.value.duration)
+    ? video.value.duration
+    : 0;
+
   currentTime.value = video.value.currentTime;
 
   validateTimestamps();
-
   updateActiveTimestamp();
+};
+
+/**
+ * Comienza una nueva carga.
+ */
+const handleLoadStart = () => {
+  hasError.value = false;
+  isBuffering.value = false;
+
+  if (!isReady.value) {
+    isLoading.value = true;
+  }
+};
+
+/**
+ * El vídeo dispone de datos suficientes para reproducirse.
+ */
+const handleCanPlay = () => {
+  isLoading.value = false;
+  isBuffering.value = false;
+  isReady.value = true;
+  hasError.value = false;
+
+  // Muestra el indicador Play una vez que el vídeo está listo.
+  if (isMobile.value && !mobilePlayHintDismissed.value) {
+    mobilePlayHintVisible.value = true;
+  }
+};
+
+/**
+ * El primer fotograma está disponible.
+ */
+const handleLoadedData = () => {
+  if (video.value?.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+    isLoading.value = false;
+    isReady.value = true;
+    hasError.value = false;
+
+    if (isMobile.value && !mobilePlayHintDismissed.value) {
+      mobilePlayHintVisible.value = true;
+    }
+  }
+};
+
+/**
+ * El vídeo está esperando datos durante la reproducción.
+ */
+const handleWaiting = () => {
+  if (hasError.value || !video.value) {
+    return;
+  }
+
+  if (!isReady.value) {
+    isLoading.value = true;
+    return;
+  }
+
+  if (!video.value.paused && !video.value.ended) {
+    isBuffering.value = true;
+  }
+};
+
+/**
+ * La reproducción ha comenzado o se ha reanudado.
+ */
+const handlePlaying = () => {
+  isLoading.value = false;
+  isBuffering.value = false;
+  isReady.value = true;
+  hasError.value = false;
+
+  // No volvemos a mostrar el indicador durante esta sesión.
+  mobilePlayHintVisible.value = false;
+  mobilePlayHintDismissed.value = true;
+};
+
+/**
+ * Error de carga o reproducción.
+ */
+const handleVideoError = () => {
+  if (!video.value?.currentSrc && !lazyVideoSrc.value) {
+    return;
+  }
+
+  isLoading.value = false;
+  isBuffering.value = false;
+  isReady.value = false;
+  hasError.value = true;
+  isPlaying.value = false;
+  mobilePlayHintVisible.value = false;
+
+  console.warn(
+    "[VideoTimeline] No se pudo cargar el vídeo.",
+    video.value?.error,
+  );
 };
 
 const handlePlay = () => {
   isPlaying.value = true;
+  mobilePlayHintVisible.value = false;
+  mobilePlayHintDismissed.value = true;
 };
 
 const handlePause = () => {
   isPlaying.value = false;
+  isBuffering.value = false;
 };
 
 const handleEnded = () => {
   isPlaying.value = false;
+  isBuffering.value = false;
+
+  // No mostramos de nuevo el indicador al terminar el vídeo.
+  mobilePlayHintVisible.value = false;
+  mobilePlayHintDismissed.value = true;
 };
 
+/**
+ * Reproduce o pausa el vídeo.
+ */
 const togglePlay = async () => {
-  if (!video.value) {
+  if (!video.value || hasError.value) {
     return;
   }
 
   if (video.value.paused) {
+    // El indicador se oculta inmediatamente al interactuar.
+    mobilePlayHintVisible.value = false;
+    mobilePlayHintDismissed.value = true;
+
+    if (!shouldLoadVideo.value) {
+      await loadVideo();
+      await nextTick();
+    }
+
     try {
       await video.value.play();
     } catch (error) {
@@ -338,10 +523,21 @@ const togglePlay = async () => {
 
 const handleVideoClick = async () => {
   await togglePlay();
-
-  // Relevant on mobile.
-  // On desktop visibility is controlled by group-hover.
   controlsVisible.value = true;
+};
+
+/**
+ * El indicador Play móvil inicia la reproducción.
+ */
+const handleMobilePlayClick = async (event) => {
+  event.stopPropagation();
+
+  mobilePlayHintVisible.value = false;
+  mobilePlayHintDismissed.value = true;
+
+  controlsVisible.value = true;
+
+  await togglePlay();
 };
 
 const toggleTimestampNavigation = () => {
@@ -362,7 +558,7 @@ const getTimeFromClientX = (clientX) => {
 };
 
 const seek = (event) => {
-  if (!video.value || !duration.value || isScrubbing.value) {
+  if (!video.value || !duration.value || isScrubbing.value || hasError.value) {
     return;
   }
 
@@ -379,7 +575,7 @@ const seek = (event) => {
 };
 
 const startScrubbing = (event) => {
-  if (!video.value || !duration.value) {
+  if (!video.value || !duration.value || hasError.value) {
     return;
   }
 
@@ -421,7 +617,6 @@ const seekFromPointer = (clientX) => {
     }
 
     const targetTime = pendingScrubTime;
-
     pendingScrubTime = null;
 
     video.value.currentTime = targetTime;
@@ -441,9 +636,14 @@ const finishScrubbing = (event) => {
     currentTime.value = pendingScrubTime;
 
     pendingScrubTime = null;
-
-    activateTimestampAtCurrentTime();
   }
+
+  if (scrubFrame !== null) {
+    cancelAnimationFrame(scrubFrame);
+    scrubFrame = null;
+  }
+
+  activateTimestampAtCurrentTime();
 
   if (event?.currentTarget?.hasPointerCapture?.(event.pointerId)) {
     event.currentTarget.releasePointerCapture(event.pointerId);
@@ -463,7 +663,7 @@ const cancelScrubbing = (event) => {
 };
 
 const navigateTo = (timestamp) => {
-  if (!video.value || !duration.value) {
+  if (!video.value || !duration.value || hasError.value) {
     return;
   }
 
@@ -473,7 +673,6 @@ const navigateTo = (timestamp) => {
     console.warn(
       `[VideoTimeline] No se puede navegar al timestamp ${timestamp.id}: ${validationError}`,
     );
-
     return;
   }
 
@@ -491,16 +690,17 @@ const handleTimestampClick = (timestamp) => {
 };
 
 /**
- * Resetea el estado cuando cambia el vídeo.
- *
- * Esto se utiliza tanto cuando cambia srcDesktop/srcMobile
- * como cuando cambia el breakpoint y, por tanto, cambia
- * videoSrc.
+ * Reinicia el estado cuando cambia la fuente efectiva.
  */
 const resetVideoState = () => {
   if (video.value) {
     video.value.pause();
-    video.value.currentTime = 0;
+
+    try {
+      video.value.currentTime = 0;
+    } catch {
+      // Puede que todavía no haya metadatos.
+    }
   }
 
   currentTime.value = 0;
@@ -510,25 +710,69 @@ const resetVideoState = () => {
   dismissedTimestamp.value = null;
 
   isPlaying.value = false;
+  isLoading.value = true;
+  isBuffering.value = false;
+  isReady.value = false;
+  hasError.value = false;
+
+  mobilePlayHintVisible.value = false;
+  mobilePlayHintDismissed.value = false;
+
   controlsVisible.value = false;
   timestampsExpanded.value = false;
-
   isScrubbing.value = false;
+
   pendingScrubTime = null;
 
   if (scrubFrame !== null) {
     cancelAnimationFrame(scrubFrame);
     scrubFrame = null;
   }
+
+  loadRequested = false;
 };
 
 /**
- * Detecta mobile / desktop y actualiza el vídeo cuando
- * cambia el breakpoint.
+ * Si cambia la fuente, solicita la carga cuando corresponda.
+ */
+watch(videoSrc, async (newSrc, oldSrc) => {
+  if (newSrc === oldSrc) {
+    return;
+  }
+
+  resetVideoState();
+
+  if (hasEnteredViewport && newSrc) {
+    shouldLoadVideo.value = true;
+
+    await nextTick();
+
+    if (video.value) {
+      loadRequested = true;
+      video.value.load();
+    }
+  }
+});
+
+/**
+ * Si cambia el dispositivo, actualiza la visibilidad del indicador.
+ */
+watch(isMobile, (mobile) => {
+  if (!mobile) {
+    mobilePlayHintVisible.value = false;
+    return;
+  }
+
+  if (isReady.value && !mobilePlayHintDismissed.value) {
+    mobilePlayHintVisible.value = true;
+  }
+});
+
+/**
+ * Detección de breakpoint y lazy loading.
  */
 onMounted(() => {
   mediaQuery = window.matchMedia("(max-width: 767px)");
-
   isMobile.value = mediaQuery.matches;
 
   mediaQueryListener = (event) => {
@@ -540,11 +784,36 @@ onMounted(() => {
   } else {
     mediaQuery.addListener(mediaQueryListener);
   }
+
+  if ("IntersectionObserver" in window && videoContainer.value) {
+    videoObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (entry?.isIntersecting && !hasEnteredViewport) {
+          hasEnteredViewport = true;
+
+          loadVideo();
+
+          videoObserver?.disconnect();
+          videoObserver = null;
+        }
+      },
+      {
+        rootMargin: "400px 0px",
+        threshold: 0,
+      },
+    );
+
+    videoObserver.observe(videoContainer.value);
+  } else {
+    hasEnteredViewport = true;
+    loadVideo();
+  }
 });
 
 /**
- * Valida timestamps cuando cambian o cuando cambia
- * la duración del vídeo.
+ * Validación de timestamps.
  */
 watch(
   [() => props.timestamps, () => duration.value],
@@ -556,24 +825,10 @@ watch(
   },
 );
 
-/**
- * Un único watcher para el vídeo efectivo.
- *
- * Se ejecuta cuando:
- * - cambia srcDesktop
- * - cambia srcMobile
- * - cambia de desktop a mobile
- * - cambia de mobile a desktop
- */
-watch(videoSrc, (newSrc, oldSrc) => {
-  if (newSrc === oldSrc) {
-    return;
-  }
-
-  resetVideoState();
-});
-
 onBeforeUnmount(() => {
+  videoObserver?.disconnect();
+  videoObserver = null;
+
   if (scrubFrame !== null) {
     cancelAnimationFrame(scrubFrame);
     scrubFrame = null;
@@ -593,36 +848,174 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="group relative w-full aspect-[9/16] md:aspect-video overflow-hidden"
+    ref="videoContainer"
+    class="group relative aspect-[9/16] w-full overflow-hidden bg-black md:aspect-video"
   >
+    <!-- POSTER RESPONSIVE -->
+    <img
+      v-if="posterSrc && (!isReady || hasError)"
+      :src="posterSrc"
+      alt=""
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover"
+    />
+
     <!-- VIDEO -->
     <video
       ref="video"
-      :src="videoSrc"
-      class="z-1 block w-full h-full object-cover cursor-pointer"
+      :src="lazyVideoSrc"
+      :poster="posterSrc || undefined"
+      preload="none"
+      playsinline
+      class="relative z-[1] block h-full w-full cursor-pointer bg-transparent object-cover"
       @click="handleVideoClick"
+      @loadstart="handleLoadStart"
       @loadedmetadata="handleLoadedMetadata"
+      @loadeddata="handleLoadedData"
+      @canplay="handleCanPlay"
+      @waiting="handleWaiting"
+      @playing="handlePlaying"
+      @error="handleVideoError"
       @timeupdate="updateTime"
       @play="handlePlay"
       @pause="handlePause"
       @ended="handleEnded"
     />
 
-    <!-- CONTROLS -->
+    <!-- INDICADOR PLAY PARA MÓVIL -->
+    <Transition name="mobile-play">
+      <button
+        v-if="showMobilePlayHint"
+        type="button"
+        class="mobile-play-hint absolute left-1/2 top-1/2 z-10 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/45 text-white shadow-lg backdrop-blur-sm"
+        aria-label="Reproducir vídeo"
+        title="Reproducir vídeo"
+        @click="handleMobilePlayClick"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="ml-1 h-7 w-7"
+          aria-hidden="true"
+        >
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </button>
+    </Transition>
+
+    <!-- ESTADO DE CARGA INICIAL -->
     <div
-      class="video-controls absolute inset-0 z-2 flex flex-col pointer-events-none opacity-0 transition-opacity duration-200 md:group-hover:opacity-100"
+      v-if="shouldLoadVideo && isLoading && !hasError"
+      class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-black/20"
+      role="status"
+      aria-live="polite"
+    >
+      <div
+        class="flex flex-col items-center gap-3 rounded-xl bg-black/60 px-5 py-4 text-white backdrop-blur-sm"
+      >
+        <svg
+          class="h-7 w-7 animate-spin"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          />
+          <path
+            class="opacity-90"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          />
+        </svg>
+
+        <span class="text-sm">Cargando vídeo…</span>
+      </div>
+    </div>
+
+    <!-- ESTADO DE BUFFERING -->
+    <div
+      v-if="isBuffering && !hasError"
+      class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
+      role="status"
+      aria-live="polite"
+    >
+      <div class="rounded-full bg-black/60 p-3 text-white backdrop-blur-sm">
+        <svg
+          class="h-7 w-7 animate-spin"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          />
+          <path
+            class="opacity-90"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <!-- ESTADO DE ERROR -->
+    <div
+      v-if="hasError"
+      class="absolute inset-0 z-10 flex items-center justify-center bg-black/40 p-4"
+      role="alert"
+    >
+      <div
+        class="flex max-w-xs flex-col items-center gap-3 text-center text-white"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          class="h-8 w-8"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v4m0 4h.01M10.3 3.86 1.82 18.5A2 2 0 003.55 21h16.9a2 2 0 001.73-2.5L13.7 3.86a2 2 0 00-3.4 0z"
+          />
+        </svg>
+
+        <p class="text-sm">No se ha podido cargar el vídeo.</p>
+      </div>
+    </div>
+
+    <!-- CONTROLES -->
+    <div
+      class="video-controls pointer-events-none absolute inset-0 z-20 flex flex-col opacity-0 transition-opacity duration-200 md:group-hover:opacity-100"
       :class="{ 'is-visible': controlsVisible }"
     >
-      <!-- ACTIVE TIMESTAMP -->
-      <div class="flex-1 flex items-start justify-end p-4 pointer-events-none">
+      <!-- TIMESTAMP ACTIVO -->
+      <div class="pointer-events-none flex flex-1 items-start justify-end p-4">
         <div
           v-if="activeTimestamp !== null"
-          class="relative max-w-xl md:w-[40%] px-4 py-2 pr-9 rounded-lg bg-black/60 backdrop-blur-sm text-white text-center pointer-events-auto"
+          class="pointer-events-auto relative max-w-xl rounded-lg bg-black/60 px-4 py-2 pr-9 text-center text-white backdrop-blur-sm md:w-[40%]"
         >
-          <!-- CLOSE -->
+          <!-- CERRAR -->
           <button
             type="button"
-            class="absolute top-1.5 right-1.5 flex items-center justify-center w-5 h-5 rounded text-white/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            class="absolute right-1.5 top-1.5 flex h-5 w-5 cursor-pointer items-center justify-center rounded text-white/70 transition-colors hover:bg-white/10 hover:text-white"
             aria-label="Cerrar"
             title="Cerrar"
             @click.stop="closeActiveTimestamp"
@@ -634,7 +1027,7 @@ onBeforeUnmount(() => {
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
-              class="w-3 h-3"
+              class="h-3 w-3"
             >
               <path d="M6 6l12 12M18 6L6 18" />
             </svg>
@@ -657,15 +1050,15 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
-      <!-- BOTTOM CONTROLS -->
+      <!-- CONTROLES INFERIORES -->
       <div
-        class="w-full px-4 pb-4 pt-8 bg-gradient-to-t from-black/80 to-transparent pointer-events-auto"
+        class="pointer-events-auto w-full bg-gradient-to-t from-black/80 to-transparent px-4 pb-4 pt-8"
         @click.stop
       >
         <!-- TIMELINE -->
         <div
           ref="timeline"
-          class="relative h-2 w-full rounded-full bg-white/20 cursor-pointer touch-none select-none"
+          class="relative h-2 w-full cursor-pointer touch-none select-none rounded-full bg-white/20"
           @click.stop="seek"
           @pointerdown.stop="startScrubbing"
           @pointermove.stop="handleScrubbing"
@@ -673,86 +1066,81 @@ onBeforeUnmount(() => {
           @pointercancel.stop="cancelScrubbing"
           @pointerleave.stop="cancelScrubbing"
         >
-          <!-- PROGRESS -->
+          <!-- PROGRESO -->
           <div
-            class="absolute inset-y-0 left-0 rounded-full bg-white pointer-events-none"
-            :style="{
-              width: `${progress}%`,
-            }"
+            class="pointer-events-none absolute inset-y-0 left-0 rounded-full bg-white"
+            :style="{ width: `${progress}%` }"
           />
 
-          <!-- TIMESTAMP SEGMENTS -->
+          <!-- SEGMENTOS DE TIMESTAMPS -->
           <div
             v-for="timestamp in normalizedTimestamps"
             :key="`segment-${timestamp.id}`"
-            class="absolute inset-y-0 rounded-full bg-white/30 pointer-events-none"
+            class="pointer-events-none absolute inset-y-0 rounded-full bg-white/30"
             :style="getSegmentStyle(timestamp)"
           />
 
-          <!-- TIMESTAMP MARKERS -->
+          <!-- MARCADORES DE TIMESTAMPS -->
           <div
             v-for="timestamp in normalizedTimestamps"
             :key="`marker-${timestamp.id}`"
-            class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white border border-black/30 pointer-events-none"
+            class="pointer-events-none absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/30 bg-white"
             :style="getMarkerStyle(timestamp)"
           />
 
-          <!-- CURRENT POSITION -->
+          <!-- POSICIÓN ACTUAL -->
           <div
-            class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white shadow pointer-events-none"
-            :style="{
-              left: `${progress}%`,
-            }"
+            class="pointer-events-none absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow"
+            :style="{ left: `${progress}%` }"
           />
         </div>
 
-        <!-- PLAYBACK ROW -->
-        <div class="flex items-center gap-2 mt-2 text-white">
+        <!-- FILA DE REPRODUCCIÓN -->
+        <div class="mt-2 flex items-center gap-2 text-white">
           <!-- PLAY / PAUSE -->
           <button
             type="button"
-            class="flex items-center justify-center w-8 h-8 shrink-0 rounded text-white/90 hover:bg-white/10 transition-colors cursor-pointer"
+            class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded text-white/90 transition-colors hover:bg-white/10"
             :aria-label="isPlaying ? 'Pausar vídeo' : 'Reproducir vídeo'"
+            :disabled="hasError"
             @click.stop="togglePlay"
           >
-            <!-- PAUSE -->
             <svg
               v-if="isPlaying"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              class="w-5 h-5"
+              class="h-5 w-5"
             >
               <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
             </svg>
 
-            <!-- PLAY -->
             <svg
               v-else
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              class="w-5 h-5"
+              class="h-5 w-5"
             >
               <path d="M8 5v14l11-7z" />
             </svg>
           </button>
 
-          <!-- CURRENT TIME -->
-          <span class="text-sm tabular-nums whitespace-nowrap text-white/90">
+          <!-- TIEMPO ACTUAL -->
+          <span class="whitespace-nowrap text-sm tabular-nums text-white/90">
             {{ formatTime(currentTime) }}
             /
             {{ formatTime(duration) }}
           </span>
 
-          <!-- SPACER -->
+          <!-- ESPACIADOR -->
           <div class="flex-1" />
 
-          <!-- TIMESTAMP TOGGLE -->
+          <!-- MOSTRAR / OCULTAR TIMESTAMPS -->
           <button
             v-if="normalizedTimestamps.length"
             type="button"
-            class="flex items-center justify-center w-8 h-8 shrink-0 rounded text-white/90 hover:bg-white/10 transition-colors cursor-pointer"
+            class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded text-white/90 transition-colors hover:bg-white/10"
             :aria-label="
               timestampsExpanded ? 'Ocultar timestamps' : 'Mostrar timestamps'
             "
@@ -768,10 +1156,8 @@ onBeforeUnmount(() => {
               fill="none"
               stroke="currentColor"
               stroke-width="2"
-              class="w-5 h-5 transition-transform duration-200"
-              :class="{
-                'rotate-180': timestampsExpanded,
-              }"
+              class="h-5 w-5 transition-transform duration-200"
+              :class="{ 'rotate-180': timestampsExpanded }"
             >
               <path
                 stroke-linecap="round"
@@ -782,26 +1168,26 @@ onBeforeUnmount(() => {
           </button>
         </div>
 
-        <!-- TIMESTAMP NAVIGATION -->
+        <!-- NAVEGACIÓN DE TIMESTAMPS -->
         <div
           v-if="normalizedTimestamps.length"
           class="overflow-hidden transition-[height] duration-200 ease-in-out"
           :class="timestampsExpanded ? 'h-[68px]' : 'h-0'"
         >
           <div
-            class="flex gap-2 overflow-x-auto overscroll-contain pt-3 pb-1 scrollbar-thin"
+            class="scrollbar-thin flex gap-2 overflow-x-auto overscroll-contain pb-1 pt-3"
           >
             <button
               v-for="timestamp in normalizedTimestamps"
               :key="timestamp.id"
               type="button"
-              class="shrink-0 max-w-[220px] px-3 py-2 rounded bg-white/10 hover:bg-white/20 text-left transition-colors cursor-pointer"
+              class="max-w-[220px] shrink-0 cursor-pointer rounded bg-white/10 px-3 py-2 text-left transition-colors hover:bg-white/20"
               :class="{
                 'bg-blue-500/70': timestamp.id === activeTimestamp,
               }"
               @click.stop="handleTimestampClick(timestamp)"
             >
-              <div class="text-xs text-white/60 whitespace-nowrap">
+              <div class="whitespace-nowrap text-xs text-white/60">
                 {{ formatTime(timestamp.start) }}
 
                 <template v-if="timestamp.end !== timestamp.start">
@@ -812,7 +1198,7 @@ onBeforeUnmount(() => {
 
               <div
                 v-if="timestamp.title"
-                class="text-sm font-medium text-white truncate"
+                class="truncate text-sm font-medium text-white"
               >
                 {{ timestamp.title }}
               </div>
@@ -826,12 +1212,44 @@ onBeforeUnmount(() => {
 
 <style scoped>
 /*
- * Desktop:
- *   Visibility is controlled by md:group-hover:opacity-100.
+ * Indicador Play para móvil.
+ */
+.mobile-play-hint {
+  animation: mobile-play-pulse 1.6s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.mobile-play-enter-active,
+.mobile-play-leave-active {
+  transition:
+    opacity 220ms ease,
+    scale 220ms ease;
+}
+
+.mobile-play-enter-from,
+.mobile-play-leave-to {
+  opacity: 0;
+  scale: 0.7;
+}
+
+@keyframes mobile-play-pulse {
+  0%,
+  100% {
+    scale: 1;
+  }
+
+  50% {
+    scale: 1.1;
+  }
+}
+
+/*
+ * Escritorio:
+ * Los controles aparecen con group-hover.
  *
- * Mobile:
- *   There is no reliable hover, so controlsVisible controls
- *   the opacity explicitly.
+ * Móvil:
+ * La visibilidad se controla mediante controlsVisible.
  */
 @media (max-width: 767px) {
   .video-controls {
@@ -840,6 +1258,19 @@ onBeforeUnmount(() => {
 
   .video-controls.is-visible {
     opacity: 1;
+  }
+}
+
+/*
+ * Respeta las preferencias de movimiento reducido.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .video-controls,
+  .mobile-play-hint,
+  .mobile-play-enter-active,
+  .mobile-play-leave-active {
+    animation: none;
+    transition: none;
   }
 }
 </style>
