@@ -44,6 +44,8 @@ defineProps({
         <VideoWithTimestamps
           :src-desktop="project.video.srcDesktop"
           :src-mobile="project.video.srcMobile"
+          :poster-desktop="project.video.posterDesktop"
+          :poster-mobile="project.video.posterMobile"
           :timestamps="project.video.timestamps"
         />
       </ProjectSection>
