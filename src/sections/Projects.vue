@@ -1,13 +1,8 @@
 <script setup>
 import Section from "../components/Section.vue";
 import logo from "../assets/img/icons/logo.png";
-import { Icon } from "@iconify/vue";
 import Button from "../components/Button.vue";
-import mdo from "../assets/img/mdo-showcase.png";
-import UnderlineLink from "../components/UnderlineLink.vue";
-import fallback from "../assets/img/fallback.png";
 import SkewHoverCarousel from "../components/SkewHoverCarousel.vue";
-
 import FeaturedProjects from "../data/FeaturedProjects";
 </script>
 

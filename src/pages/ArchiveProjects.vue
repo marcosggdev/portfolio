@@ -1,9 +1,6 @@
 <script setup>
 import Section from "../components/Section.vue";
 import ProjectPreview from "../components/ProjectPreview.vue";
-
-import portfolio from "../assets/img/portfolio.png";
-import mdo from "../assets/img/mdo.png";
 import projects from "../data/Projects.js";
 </script>
 

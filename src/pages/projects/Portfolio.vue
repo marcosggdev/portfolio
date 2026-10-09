@@ -3,9 +3,7 @@ import ProjectEntry from "../../components/ProjectEntry.vue";
 import ProjectSection from "../../components/ProjectSection.vue";
 import Stack from "../../components/Stack.vue";
 import { ProjectValidator } from "../../validation/ComponentValidators";
-
-import portfolio from "../../assets/img/portfolio.png";
-
+import portfolio from "../../assets/img/portfolio.webp";
 import VideoWithTimestamps from "../../components/VideoWithTimestamps.vue";
 
 defineProps({
@@ -42,7 +40,7 @@ defineProps({
         </p>
       </ProjectSection>
 
-      <ProjectSection id="galeria" title="Galería">
+      <ProjectSection id="previsualizacion" title="Previsualización">
         <VideoWithTimestamps
           :src-desktop="project.video.srcDesktop"
           :src-mobile="project.video.srcMobile"

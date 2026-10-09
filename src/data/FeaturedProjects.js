@@ -1,5 +1,4 @@
-import portfolio from "../assets/img/portfolio.png";
-import mdoImg from "../assets/img/mdo.png";
+import portfolio from "../assets/img/portfolio.webp";
 import fallbackImg from "../assets/img/fallback.png";
 
 export default [

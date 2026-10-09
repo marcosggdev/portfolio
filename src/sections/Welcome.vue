@@ -2,9 +2,7 @@
 import Section from "../components/Section.vue";
 import Socials from "../components/Socials.vue";
 
-import logo from "../assets/img/icons/logo.png";
-import avatar from "../assets/img/icons/avatar.png";
-import academic from "../assets/img/svg/academic.svg";
+import avatar from "../assets/img/avatar.jpg";
 import Button from "../components/Button.vue";
 import { Icon } from "@iconify/vue";
 </script>
@@ -17,7 +15,7 @@ import { Icon } from "@iconify/vue";
       <div class="flex flex-col md:grid md:grid-cols-2 md:p-8 gap-16 md:p-16">
         <div class="flex flex-col gap-8 justify-center relative">
           <header class="flex flex-col gap-4">
-            <img class="e-bg-icon" :src="avatar" alt="" />
+            <img class="e-bg-icon rounded-full" :src="avatar" alt="" />
             <div class="flex flex-col">
               <h2>Marcos G.</h2>
               <Socials color-class="text-black" :expanded="true" />
@@ -72,10 +70,50 @@ import { Icon } from "@iconify/vue";
                 adaptarme.
               </p>
               <ul class="flex flex-row gap-2">
-                <Icon class="md-icon" icon="logos:react" />
-                <Icon class="md-icon" icon="logos:angular-icon" />
-                <Icon class="md-icon" icon="logos:spring-icon" />
-                <Icon class="md-icon" icon="logos:dotnet" />
+                <li class="group relative">
+                  <Icon class="md-icon" icon="logos:react" />
+                  <span
+                    class="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    React
+                  </span>
+                </li>
+
+                <li class="group relative">
+                  <Icon class="md-icon" icon="logos:angular-icon" />
+                  <span
+                    class="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    Angular
+                  </span>
+                </li>
+
+                <li class="group relative">
+                  <Icon class="md-icon" icon="logos:laravel" />
+                  <span
+                    class="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    Laravel
+                  </span>
+                </li>
+
+                <li class="group relative">
+                  <Icon class="md-icon" icon="logos:java" />
+                  <span
+                    class="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    Java
+                  </span>
+                </li>
+
+                <li class="group relative">
+                  <Icon class="md-icon" icon="logos:spring-icon" />
+                  <span
+                    class="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    Spring Boot
+                  </span>
+                </li>
               </ul>
             </div>
           </div>

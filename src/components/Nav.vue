@@ -11,7 +11,7 @@ import Button from "./Button.vue";
 import Socials from "./Socials.vue";
 import Navbar from "./Navbar.vue";
 
-import avatar from "../assets/img/icons/avatar.png";
+import logo from "../assets/img/icons/logo.png";
 
 // -------------------- PROPS --------------------
 const props = defineProps({
@@ -135,7 +135,7 @@ onUnmounted(() => {
   >
     <!-- LEFT -->
     <div class="flex flex-row gap-2 hidden md:flex">
-      <img class="bg-icon" :src="avatar" alt="" />
+      <img class="bg-icon" :src="logo" alt="" />
 
       <div class="flex flex-col gap-2">
         <p class="text-[var(--nav-text)] font-semibold">Marcos G.</p>

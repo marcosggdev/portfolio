@@ -1,5 +1,4 @@
-import mdo from "../assets/img/mdo.png";
-import portfolio from "../assets/img/portfolio.png";
+import portfolio from "../assets/img/portfolio.webp";
 import Portfolio from "../pages/projects/Portfolio.vue";
 import portfolioDesktopPreviewVideo from "@/assets/vid/portfolio-preview-desktop.mp4";
 import portfolioMobilePreviewVideo from "@/assets/vid/portfolio-preview-mobile.mp4";
@@ -23,8 +22,8 @@ export default {
         icon: "lucide:file-text",
       },
       {
-        id: "galeria",
-        title: "Galería",
+        id: "previsualizacion",
+        title: "Previsualización",
         icon: "lucide:images",
       },
       {
