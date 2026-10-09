@@ -26,8 +26,11 @@ const props = defineProps({
     default: "",
   },
   timestamps: {
-    type: Array,
-    default: () => [],
+    type: Object,
+    default: () => ({
+      desktop: [],
+      mobile: [],
+    }),
   },
 });
 
@@ -38,8 +41,10 @@ const timeline = ref(null);
 const duration = ref(0);
 const currentTime = ref(0);
 const isPlaying = ref(false);
+
 const activeTimestamp = ref(null);
 const dismissedTimestamp = ref(null);
+
 const isScrubbing = ref(false);
 
 // Estados de carga.
@@ -54,6 +59,7 @@ const mobilePlayHintDismissed = ref(false);
 
 // Lazy loading.
 const shouldLoadVideo = ref(false);
+
 let videoObserver = null;
 let hasEnteredViewport = false;
 let loadRequested = false;
@@ -64,6 +70,7 @@ const timestampsExpanded = ref(false);
 
 // Detección de dispositivo.
 const isMobile = ref(false);
+
 let mediaQuery = null;
 let mediaQueryListener = null;
 
@@ -97,6 +104,20 @@ const posterSrc = computed(() => {
 });
 
 /**
+ * Timestamps según el dispositivo.
+ *
+ * Si no existe una lista para el dispositivo actual,
+ * utiliza la del otro dispositivo como fallback.
+ */
+const deviceTimestamps = computed(() => {
+  if (isMobile.value) {
+    return props.timestamps?.mobile ?? props.timestamps?.desktop ?? [];
+  }
+
+  return props.timestamps?.desktop ?? props.timestamps?.mobile ?? [];
+});
+
+/**
  * La fuente solo se asigna después de activar el lazy loading.
  */
 const lazyVideoSrc = computed(() =>
@@ -104,7 +125,7 @@ const lazyVideoSrc = computed(() =>
 );
 
 /**
- * El indicador solo aparece en móvil cuando el vídeo está listo,
+ * El indicador Play solo aparece en móvil cuando el vídeo está listo,
  * no se está reproduciendo y el usuario todavía no lo ha descartado.
  */
 const showMobilePlayHint = computed(
@@ -139,8 +160,11 @@ const progress = computed(() => {
   return (currentTime.value / duration.value) * 100;
 });
 
+/**
+ * Normaliza los timestamps seleccionados para el dispositivo actual.
+ */
 const rawTimestamps = computed(() =>
-  props.timestamps.map((item, index) => ({
+  deviceTimestamps.value.map((item, index) => ({
     id: item?.id ?? index,
     start: Number(item?.start ?? item?.time ?? 0),
     end: Number(item?.end ?? item?.start ?? item?.time ?? 0),
@@ -202,6 +226,7 @@ const validateTimestamps = () => {
     const warningKey = [
       props.srcDesktop,
       props.srcMobile,
+      isMobile.value ? "mobile" : "desktop",
       timestamp.index,
       timestamp.start,
       timestamp.end,
@@ -221,6 +246,9 @@ const validateTimestamps = () => {
   });
 };
 
+/**
+ * Solo devuelve timestamps válidos para la duración del vídeo actual.
+ */
 const normalizedTimestamps = computed(() => {
   if (!duration.value) {
     return [];
@@ -394,7 +422,6 @@ const handleCanPlay = () => {
   isReady.value = true;
   hasError.value = false;
 
-  // Muestra el indicador Play una vez que el vídeo está listo.
   if (isMobile.value && !mobilePlayHintDismissed.value) {
     mobilePlayHintVisible.value = true;
   }
@@ -442,7 +469,6 @@ const handlePlaying = () => {
   isReady.value = true;
   hasError.value = false;
 
-  // No volvemos a mostrar el indicador durante esta sesión.
   mobilePlayHintVisible.value = false;
   mobilePlayHintDismissed.value = true;
 };
@@ -483,7 +509,7 @@ const handleEnded = () => {
   isPlaying.value = false;
   isBuffering.value = false;
 
-  // No mostramos de nuevo el indicador al terminar el vídeo.
+  // No volvemos a mostrar el indicador al terminar el vídeo.
   mobilePlayHintVisible.value = false;
   mobilePlayHintDismissed.value = true;
 };
@@ -497,7 +523,6 @@ const togglePlay = async () => {
   }
 
   if (video.value.paused) {
-    // El indicador se oculta inmediatamente al interactuar.
     mobilePlayHintVisible.value = false;
     mobilePlayHintDismissed.value = true;
 
@@ -534,7 +559,6 @@ const handleMobilePlayClick = async (event) => {
 
   mobilePlayHintVisible.value = false;
   mobilePlayHintDismissed.value = true;
-
   controlsVisible.value = true;
 
   await togglePlay();
@@ -634,7 +658,6 @@ const finishScrubbing = (event) => {
   if (video.value && pendingScrubTime !== null) {
     video.value.currentTime = pendingScrubTime;
     currentTime.value = pendingScrubTime;
-
     pendingScrubTime = null;
   }
 
@@ -673,6 +696,7 @@ const navigateTo = (timestamp) => {
     console.warn(
       `[VideoTimeline] No se puede navegar al timestamp ${timestamp.id}: ${validationError}`,
     );
+
     return;
   }
 
@@ -720,8 +744,8 @@ const resetVideoState = () => {
 
   controlsVisible.value = false;
   timestampsExpanded.value = false;
-  isScrubbing.value = false;
 
+  isScrubbing.value = false;
   pendingScrubTime = null;
 
   if (scrubFrame !== null) {
@@ -755,9 +779,16 @@ watch(videoSrc, async (newSrc, oldSrc) => {
 });
 
 /**
- * Si cambia el dispositivo, actualiza la visibilidad del indicador.
+ * Al cambiar de dispositivo:
+ * - Se selecciona la lista de timestamps correspondiente.
+ * - Se reinicia el timestamp activo.
+ * - Se reinicia el timestamp descartado.
+ * - Se actualiza el indicador Play móvil.
  */
 watch(isMobile, (mobile) => {
+  activeTimestamp.value = null;
+  dismissedTimestamp.value = null;
+
   if (!mobile) {
     mobilePlayHintVisible.value = false;
     return;
@@ -766,6 +797,8 @@ watch(isMobile, (mobile) => {
   if (isReady.value && !mobilePlayHintDismissed.value) {
     mobilePlayHintVisible.value = true;
   }
+
+  validateTimestamps();
 });
 
 /**
@@ -814,9 +847,11 @@ onMounted(() => {
 
 /**
  * Validación de timestamps.
+ *
+ * Se ejecuta al cambiar la lista seleccionada o la duración.
  */
 watch(
-  [() => props.timestamps, () => duration.value],
+  [deviceTimestamps, () => duration.value],
   () => {
     validateTimestamps();
   },

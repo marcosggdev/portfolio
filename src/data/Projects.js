@@ -40,36 +40,68 @@ export default {
       srcMobile: portfolioMobilePreviewVideo,
       posterDesktop: portfolioPosterDesktop,
       posterMobile: portfolioPosterMobile,
-      timestamps: [
-        {
-          id: 1,
-          start: 0,
-          end: 7,
-          title: "Interfaz",
-          text: "La página utiliza una interfaz elegante y pulida para mostrar la información importante de forma concisa, sin demasiados elementos que capten la atención.",
-        },
-        {
-          id: 2,
-          start: 7,
-          end: 17,
-          title: "Componentes avanzados",
-          text: "He desarrollado algunos componentes de interfaz avanzados para demostrar mis capacidades técnicas, como el componente AnimatedGradientSVG, que muestra un texto y resalta los bordes del mismo de forma dinámica en función de la posición del ratón.",
-        },
-        {
-          id: 3,
-          start: 26,
-          end: 30,
-          title: "Uso de Vue Layouts",
-          text: "La página Proyectos utiliza una vista de archivo de los proyectos que he añadido, y el router utiliza una vista específica para cada proyecto, basado en el :name de las rutas de la forma: '/proyectos/:name'.",
-        },
-        {
-          id: 4,
-          start: 32,
-          end: 40,
-          title: "Uso de Vue Layouts",
-          text: "Cada proyecto utiliza un componente común para organizar la información y así reutilizar código para la interfaz, como se haría en un CMS. Se utiliza la información de un archivo JSON sobre cada proyecto para saber qué assets necesita, como la imagen de preview o el vídeo de preview de la navegación por la página, mientras que el contenido utiliza un componente para dejar explícito el contenido y los enlaces del aside.",
-        },
-      ],
+      timestamps: {
+        desktop: [
+          {
+            id: 1,
+            start: 0,
+            end: 7,
+            title: "Interfaz",
+            text: "La página utiliza una interfaz elegante y pulida para mostrar la información importante de forma concisa, sin demasiados elementos que capten la atención.",
+          },
+          {
+            id: 2,
+            start: 7,
+            end: 17,
+            title: "Componentes avanzados",
+            text: "He desarrollado algunos componentes de interfaz avanzados para demostrar mis capacidades técnicas, como el componente AnimatedGradientSVG, que muestra un texto y resalta los bordes del mismo de forma dinámica en función de la posición del ratón.",
+          },
+          {
+            id: 3,
+            start: 26,
+            end: 30,
+            title: "Vistas de proyectos y rutas dinámicas",
+            text: "La página Proyectos utiliza una vista de archivo de los proyectos que he añadido, y el router utiliza una vista específica para cada proyecto, basado en el :name de las rutas de la forma: '/proyectos/:name'.",
+          },
+          {
+            id: 4,
+            start: 32,
+            end: 40,
+            title: "Uso de Vue Layouts",
+            text: "Cada proyecto utiliza un componente común para organizar la información y así reutilizar código para la interfaz, como se haría en un CMS. Se utiliza la información de un archivo JSON sobre cada proyecto para saber qué assets necesita, como la imagen de preview o el vídeo de preview de la navegación por la página, mientras que el contenido utiliza un componente para dejar explícito el contenido y los enlaces del aside.",
+          },
+        ],
+        mobile: [
+          {
+            id: 1,
+            start: 0,
+            end: 5,
+            title: "Interfaz",
+            text: "La página utiliza una interfaz elegante y pulida para mostrar la información importante de forma concisa, sin demasiados elementos que capten la atención.",
+          },
+          {
+            id: 2,
+            start: 5,
+            end: 17,
+            title: "Componentes avanzados",
+            text: "He desarrollado algunos componentes de interfaz avanzados para demostrar mis capacidades técnicas, como el componente AnimatedGradientSVG, que muestra un texto y resalta los bordes del mismo de forma dinámica en función de la posición del ratón.",
+          },
+          {
+            id: 3,
+            start: 24,
+            end: 30,
+            title: "Vistas de proyectos y rutas dinámicas",
+            text: "La página Proyectos utiliza una vista de archivo de los proyectos que he añadido, y el router utiliza una vista específica para cada proyecto, basado en el :name de las rutas de la forma: '/proyectos/:name'.",
+          },
+          {
+            id: 4,
+            start: 32,
+            end: 40,
+            title: "Uso de Vue Layouts",
+            text: "Cada proyecto utiliza un componente común para organizar la información y así reutilizar código para la interfaz, como se haría en un CMS. Se utiliza la información de un archivo JSON sobre cada proyecto para saber qué assets necesita, como la imagen de preview o el vídeo de preview de la navegación por la página, mientras que el contenido utiliza un componente para dejar explícito el contenido y los enlaces del aside.",
+          },
+        ],
+      },
     },
 
     stack: [
