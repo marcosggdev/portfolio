@@ -5,7 +5,7 @@ import Welcome from "../sections/Welcome.vue";
 import Projects from "../sections/Projects.vue";
 import Button from "../components/Button.vue";
 
-import hero from "../assets/img/ordenador.jpg";
+import hero from "../assets/img/ordenador.webp";
 import Socials from "../components/Socials.vue";
 import avatar from "../assets/img/avatar.jpg";
 </script>

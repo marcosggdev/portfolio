@@ -3,7 +3,7 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 
 import fallbackImg from "../assets/img/fallback.png";
-import mdoImg from "../assets/img/mdo.png";
+import mdoImg from "../assets/img/icons/mdo.webp";
 
 import { SkewHoverCarouselValidator } from "../validation/ComponentValidators";
 

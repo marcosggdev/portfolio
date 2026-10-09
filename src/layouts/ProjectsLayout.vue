@@ -5,17 +5,12 @@ import { computed, provide } from "vue";
 import { useRoute } from "vue-router";
 
 import Hero from "../sections/Hero.vue";
-import hero from "../assets/img/experience.jpg";
+import hero from "../assets/img/experience.webp";
 import { Icon } from "@iconify/vue";
-
-import mdoIcon from "../assets/img/icons/mdo.png";
-import ArchiveProjects from "../layouts/ProjectsLayout.vue";
-import Footer from "../sections/Footer.vue";
 import ProjectBrief from "../components/ProjectBrief.vue";
 
 const route = useRoute();
 const project = computed(() => Projects[route.params.slug]);
-const Component = computed(() => project.value?.component);
 
 if (project?.value?.title) {
   provide("slugLabel", project?.value?.title);

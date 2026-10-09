@@ -1,6 +1,6 @@
 <script setup>
 import { Icon } from "@iconify/vue";
-import experience from "../assets/img/experience.jpg";
+import experience from "../assets/img/experience.webp";
 </script>
 
 <template>

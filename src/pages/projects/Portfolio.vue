@@ -4,7 +4,7 @@ import ProjectSection from "../../components/ProjectSection.vue";
 import Stack from "../../components/Stack.vue";
 import { ProjectValidator } from "../../validation/ComponentValidators";
 
-import portfolio from "../../assets/img/portfolio.png";
+import portfolio from "../../assets/img/portfolio.webp";
 
 import VideoWithTimestamps from "../../components/VideoWithTimestamps.vue";
 
