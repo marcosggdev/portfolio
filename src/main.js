@@ -4,7 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./validation/ajv.js";
 
 //css fonts
-import "@fontsource/days-one";
+import "@fontsource/days-one/400.css";
 
 //tailwind and main css
 import "./assets/css/main.css";
