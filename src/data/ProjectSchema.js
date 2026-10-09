@@ -65,34 +65,78 @@ export default {
         },
 
         timestamps: {
-          type: "array",
+          type: "object",
 
-          items: {
-            type: "object",
+          required: ["desktop", "mobile"],
 
-            required: ["id", "start", "end", "title", "text"],
+          additionalProperties: false,
 
-            additionalProperties: false,
+          properties: {
+            desktop: {
+              type: "array",
 
-            properties: {
-              id: {
-                type: "number",
+              items: {
+                type: "object",
+
+                required: ["id", "start", "end", "title", "text"],
+
+                additionalProperties: false,
+
+                properties: {
+                  id: {
+                    type: "number",
+                  },
+
+                  start: {
+                    type: "number",
+                  },
+
+                  end: {
+                    type: "number",
+                  },
+
+                  title: {
+                    type: "string",
+                  },
+
+                  text: {
+                    type: "string",
+                  },
+                },
               },
+            },
 
-              start: {
-                type: "number",
-              },
+            mobile: {
+              type: "array",
 
-              end: {
-                type: "number",
-              },
+              items: {
+                type: "object",
 
-              title: {
-                type: "string",
-              },
+                required: ["id", "start", "end", "title", "text"],
 
-              text: {
-                type: "string",
+                additionalProperties: false,
+
+                properties: {
+                  id: {
+                    type: "number",
+                  },
+
+                  start: {
+                    type: "number",
+                  },
+
+                  end: {
+                    type: "number",
+                  },
+
+                  title: {
+                    type: "string",
+                  },
+
+                  text: {
+                    type: "string",
+                  },
+                },
               },
             },
           },
